@@ -18,4 +18,5 @@
             {{ $slot }}
         </div>
     </body>
+    <script src="https://kit.fontawesome.com/a81d9d9f8d.js" crossorigin="anonymous"></script>
 </html>
