@@ -4,16 +4,30 @@
         <div class="flex justify-between h-16">
             <div class="flex">
                 <!-- Logo -->
+<<<<<<< Updated upstream
                 <div class="shrink-0 flex items-center">
                     <a href="{{ route('shopping-lists') }}">
+=======
+                <div class="emerald-700 shrink-0 flex items-center">
+                    <a href="{{ route('dashboard') }}">
+>>>>>>> Stashed changes
                         <x-jet-application-mark class="block h-9 w-auto" />
                     </a>
                 </div>
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+<<<<<<< Updated upstream
                     <x-jet-nav-link href="{{ route('shopping-lists') }}" :active="request()->routeIs('shopping-lists')">
                         {{ __('Shopping Lists') }}
+=======
+
+                    <x-jet-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
+                       {{ __('Manage Lists') }}
+                    </x-jet-nav-link>
+                    <x-jet-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
+                        {{ __('View Products') }}
+>>>>>>> Stashed changes
                     </x-jet-nav-link>
                 </div>
             </div>
