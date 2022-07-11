@@ -34,7 +34,7 @@
         @endif
 
         <!-- Page Content -->
-        <main class="bg-[url('/public/img/shopping.jpg')]">
+        <main>
                 {{ $slot }}
         </main>
     </div>
