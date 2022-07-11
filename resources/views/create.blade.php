@@ -1,9 +1,10 @@
 <x-app-layout>
     <!-- Add List Nav -->
     <div class="navbar bg-emerald-700">
+        <div class="flex-1"></div>
         <!-- Search and Cart Button -->
-        <div class="flex-none">
-            <input type="text" placeholder="Search" class="input input-bordered bg-white w-lg h-8 max-h-xs max-w-lg rounded-full" />
+        <div>
+            <input type="text" placeholder="Search" class="input input-bordered bg-white w-96 h-8 rounded-full" />
             <div class="dropdown dropdown-end">
                 <label tabindex="0" class="btn btn-ghost btn-circle">
                     <div class="indicator">
