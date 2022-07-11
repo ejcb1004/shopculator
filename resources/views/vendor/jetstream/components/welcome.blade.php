@@ -6,7 +6,7 @@
                 <h1 class="text-4xl text-white font-bold">Make your shopping life easier with ShopCulator.</h1>
                 <p class="py-6 text-white">With ShopCulator, an easier shopping budget management experience is at your fingertips. Save more time and money with ShopCulator.</p>
                 <!-- Buttons -->
-                <div class="flex max-w-sm space-x-8 items-center mx-auto">
+                <div class="flex max-w-sm space-x-10 items-center mx-auto">
                     @if (Route::has('login'))
                     @auth
                     <button class="btn btn-ghost text-emerald-300 px-6 py-2 border-2 solid border-emerald-300 rounded-full hover:bg-gray-700 hover:opacity-75 hover:border-emerald-300">
@@ -14,7 +14,7 @@
                             <i class="fa-regular fa-eye"></i>&nbsp;View Lists
                         </a>
                     </button>
-                    <button class="btn btn-accent border-none text-emerald-800 px-6 py-2 bg-emerald-300 rounded-full hover:text-emerald-200">
+                    <button class="btn btn-accent border-none text-emerald-800 px-6 py-1.5 bg-emerald-300 rounded-full hover:text-emerald-200">
                         <a href="{{ route('create') }}">
                             <i class="fa-solid fa-plus"></i>&nbsp;Create a new list
                         </a>
