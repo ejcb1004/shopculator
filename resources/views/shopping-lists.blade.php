@@ -1,10 +1,11 @@
 <x-app-layout>
-<<<<<<< HEAD
     <!-- Search and Add Button -->
     <div>
-        <div class="flex space-x-5 py-5 px-20">
-            <button class="btn bg-emerald-700 text-white border-0 hover:bg-emerald-800 transition:1s"><i class="fa-solid fa-plus"> ADD LIST</i></button>
-            <input type="text" placeholder="Search" class="input input-bordered bg-white w-full max-w-xs" />
+        <div class="flex flex-row-reverse py-5 px-20">
+            <div class="flex space-x-5">
+                <input type="text" placeholder="Search" class="input input-bordered bg-white w-full max-w-xs" />
+                <button class="btn bg-emerald-700 text-white border-0 hover:bg-emerald-800 transition:1s"><i class="fa-solid fa-plus"> Add List</i></button>
+            </div>
         </div>
     </div>
     <!-- List Management Table -->
@@ -15,7 +16,11 @@
                     <!-- head -->
                     <thead class="text-white">
                         <tr>
-                            <th></th>
+                            <th>
+                                <label>
+                                    <input type="checkbox" class="checkbox" />
+                                </label>
+                            </th>
                             <th>LIST NAME</th>
                             <th>TOTAL</th>
                             <th>BUDGET</th>
@@ -26,7 +31,11 @@
                     <tbody>
                         <!-- row 1 -->
                         <tr class="hover">
-                            <th>1</th>
+                            <th>
+                                <label>
+                                    <input type="checkbox" class="checkbox" />
+                                </label>
+                            </th>
                             <td>Cy Ganderton</td>
                             <td>Quality Control Specialist</td>
                             <td>Blue</td>
@@ -34,7 +43,11 @@
                         </tr>
                         <!-- row 2 -->
                         <tr class="hover">
-                            <th>2</th>
+                            <th>
+                                <label>
+                                    <input type="checkbox" class="checkbox" />
+                                </label>
+                            </th>
                             <td>Hart Hagerty</td>
                             <td>Desktop Support Technician</td>
                             <td>Purple</td>
@@ -42,7 +55,11 @@
                         </tr>
                         <!-- row 3 -->
                         <tr class="hover">
-                            <th>3</th>
+                            <th>
+                                <label>
+                                    <input type="checkbox" class="checkbox" />
+                                </label>
+                            </th>
                             <td>Brice Swyre</td>
                             <td>Tax Accountant</td>
                             <td>Red</td>
@@ -52,7 +69,4 @@
                 </table>
             </div>
         </div>
-=======
-    
->>>>>>> main
 </x-app-layout>
