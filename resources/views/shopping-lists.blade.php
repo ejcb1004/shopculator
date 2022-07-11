@@ -1,4 +1,5 @@
 <x-app-layout>
+<<<<<<< HEAD
     <!-- Search and Add Button -->
     <div>
         <div class="flex space-x-5 py-5 px-20">
@@ -51,4 +52,7 @@
                 </table>
             </div>
         </div>
+=======
+    
+>>>>>>> main
 </x-app-layout>
