@@ -25,4 +25,7 @@ Route::middleware([
     Route::get('/shopping-lists', function () {
         return view('shopping-lists');
     })->name('shopping-lists');
+    Route::get('/products', function () {
+        return view('products');
+    })->name('products');
 });

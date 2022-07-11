@@ -13,14 +13,16 @@
                         <i class="fa-regular fa-eye"></i>&nbsp;View Lists
                     </button>
                     <button class="btn btn-accent border-none text-emerald-800 px-6 py-2 bg-emerald-300 rounded-full hover:text-emerald-200">
-                        <i class="fa-solid fa-plus"></i>&nbsp;Create a new list
+                        <a href="{{ route('products') }}">
+                            <i class="fa-solid fa-plus"></i>&nbsp;Create a new list
+                        </a>
                     </button>
                     @else
                     <button class="btn btn-ghost text-emerald-300 px-6 py-2 border-2 solid border-emerald-300 rounded-full hover:bg-gray-700 hover:opacity-75 hover:border-emerald-300">
-                        <a class="" href="{{ route('login') }}">Sign in</a>
+                        <a href="{{ route('login') }}">Sign in</a>
                     </button>
-                    <button class="btn btn-accent text-emerald-800 px-6 py-2 bg-emerald-300 rounded-full hover:text-emerald-200">
-                        <a class="" href="{{ route('register') }}">Create a free account</a>
+                    <button class="btn btn-accent border-none text-emerald-800 px-6 py-2 bg-emerald-300 rounded-full hover:text-emerald-200">
+                        <a href="{{ route('register') }}">Create a free account</a>
                     </button>
                     @endauth
                     @endif

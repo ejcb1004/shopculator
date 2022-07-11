@@ -39,8 +39,8 @@
                 </a>
                 @endif
                 &nbsp;&nbsp;
-                <button class="flex ml-1 rounded-full text-white bg-teal-600 hover:bg-teal-700 hover:transition hover:duration-300">
-                    <a class="px-6 py-1.5">{{ __('Log in') }}</a>
+                <button class="flex ml-1 px-6 py-1.5 rounded-full text-white bg-teal-600 hover:bg-teal-700 hover:transition hover:duration-300">
+                    {{ __('Log in') }}
                 </button>
             </div>
         </form>
