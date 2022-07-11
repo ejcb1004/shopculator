@@ -28,4 +28,7 @@ Route::middleware([
     Route::get('/products', function () {
         return view('products');
     })->name('products');
+    Route::get('/create', function () {
+        return view('create');
+    })->name('create');
 });

@@ -10,10 +10,12 @@
                     @if (Route::has('login'))
                     @auth
                     <button class="btn btn-ghost text-emerald-300 px-6 py-2 border-2 solid border-emerald-300 rounded-full hover:bg-gray-700 hover:opacity-75 hover:border-emerald-300">
-                        <i class="fa-regular fa-eye"></i>&nbsp;View Lists
+                        <a href="{{ route('shopping-lists') }}">
+                            <i class="fa-regular fa-eye"></i>&nbsp;View Lists
+                        </a>
                     </button>
                     <button class="btn btn-accent border-none text-emerald-800 px-6 py-2 bg-emerald-300 rounded-full hover:text-emerald-200">
-                        <a href="{{ route('products') }}">
+                        <a href="{{ route('create') }}">
                             <i class="fa-solid fa-plus"></i>&nbsp;Create a new list
                         </a>
                     </button>
