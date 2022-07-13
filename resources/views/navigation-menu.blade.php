@@ -15,7 +15,7 @@
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                     <x-jet-nav-link href="{{ route('shopping-lists') }}" :active="request()->routeIs('shopping-lists')">
-                        <b>{{ __('Manage Lists') }}</b>
+                        <b>{{ __('Your Lists') }}</b>
                     </x-jet-nav-link>
                 </div>
                 @endauth
@@ -140,7 +140,7 @@
             @endauth
             @endif
 
-            
+
 
             <!-- Hamburger -->
             <div class="-mr-2 flex items-center sm:hidden">
@@ -177,6 +177,10 @@
             </div>
 
             <div class="mt-3 space-y-1">
+                <x-jet-responsive-nav-link href="{{ route('shopping-lists') }}" :active="request()->routeIs('shopping-lists')">
+                    {{ __('Your Lists') }}
+                </x-jet-responsive-nav-link>
+                <hr />
                 <!-- Account Management -->
                 <x-jet-responsive-nav-link href="{{ route('profile.show') }}" :active="request()->routeIs('profile.show')">
                     {{ __('Profile') }}
