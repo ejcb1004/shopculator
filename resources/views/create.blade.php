@@ -32,5 +32,53 @@
             </div>
         </div>
     </div>
-
+    <!-- Content Page -->
+    <div class="max-w-7xl mx-auto px-4 py-10 sm:px-6 lg:px-8">
+        <!-- Market -->
+        <div class="relative flex justify-between">
+            <div>
+                <div class="dropdown">
+                    <label tabindex="0" class="btn btn-wide sm:btn-sm md:btn-md lg:btn-lg bg-white text-black border-none drop-shadow-md justify-between hover:bg-slate-300">
+                        <span>Market</span>
+                        <span><i class="fa-solid fa-angle-down"></i></span>
+                    </label>
+                    <ul tabindex="0" class="dropdown-content menu p-2 shadow bg-white rounded-box w-full text-black">
+                        <li class="hover:text-emerald-700"><a class="active:bg-slate-300 text-emerald-700">SM Supermarket</a></li>
+                        <li class="hover:text-emerald-700"><a class="active:bg-slate-300 text-emerald-700">AllDay Supermarket</a></li>
+                        <li class="hover:text-emerald-700"><a class="active:bg-slate-300 text-emerald-700">EasyMart Supermarket</a></li>
+                    </ul>
+                </div>
+            </div>
+            <!-- Category -->
+            <div>
+                <div class="dropdown">
+                    <label tabindex="1" class="btn btn-wide sm:btn-sm md:btn-md lg:btn-lg bg-white text-black border-none drop-shadow-md justify-between hover:bg-slate-300">
+                        <span>Category</span>
+                        <span><i class="fa-solid fa-angle-down"></i></span>
+                    </label>
+                    <ul tabindex="1" class="dropdown-content menu p-2 shadow bg-white rounded-box w-full text-black">
+                        <li class="hover:text-emerald-700"><a class="active:bg-slate-300 text-emerald-700"> Category 1</a></li>
+                        <li class="hover:text-emerald-700"><a class="active:bg-slate-300 text-emerald-700">Category 2</a></li>
+                        <li class="hover:text-emerald-700"><a class="active:bg-slate-300 text-emerald-700">Category 3</a></li>
+                    </ul>
+                </div>
+            </div>
+            <!-- Sort By -->
+            <div>
+                <div class="dropdown">
+                    <label tabindex="1" class="btn btn-wide sm:btn-sm md:btn-md lg:btn-lg bg-white text-black border-none drop-shadow-md justify-between hover:bg-slate-300">
+                        <span>Sort By</span>
+                        <span><i class="fa-solid fa-angle-down"></i></span>
+                    </label>
+                    <ul tabindex="1" class="dropdown-content menu p-2 shadow bg-white rounded-box w-full text-black">
+                        <li class="hover:text-emerald-700"><a class="active:bg-slate-300 text-emerald-700">SM Supermarket</a></li>
+                        <li class="hover:text-emerald-700"><a class="active:bg-slate-300 text-emerald-700">AllDay Supermarket</a></li>
+                        <li class="hover:text-emerald-700"><a class="active:bg-slate-300 text-emerald-700">EasyMart Supermarket</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- Product Table -->
+        <div class="py-5">Product Table</div>
+    </div>
 </x-app-layout>
