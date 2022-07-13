@@ -9,6 +9,7 @@
                         <i class="fa-solid fa-magnifying-glass z-99 pl-4 absolute"></i>
                         <input type="text" placeholder="Search" class="input input-bordered bg-white pl-10 w-72 rounded-full h-10" />
                     </div>
+                    <!-- Cart Dropdown -->
                     <div class="dropdown dropdown-end">
                         <label tabindex="0" class="btn btn-ghost btn-circle">
                             <div class="indicator">
@@ -18,9 +19,19 @@
                                 <span class="badge badge-sm badge-secondary indicator-item">1</span>
                             </div>
                         </label>
-                        <div tabindex="0" class="mt-3 card card-compact dropdown-content w-52 bg-base-100 shadow">
+                        <!-- Card Body/Shopping List Preview -->
+                        <div tabindex="0" class="mt-3 card card-compact dropdown-content w-96 bg-white shadow">
+                            <!-- Card Header -->
+                            <div class="font-bold text-lg bg-emerald-700 px-3 py-3 text-white flex justify-between">
+                                <span>Shopping List</span>
+                                <span><i class="fa-solid fa-x"></i></span>
+                            </div>
+                            <!-- Card Body -->
                             <div class="card-body">
-                                <span class="font-bold text-lg">1 Items</span>
+                                <div class="flex flex-row">
+                                    <span class="text-black">Budget: </span>
+                                    <input type="text" placeholder="Type here" class="input border-b w-full max-w-md" />
+                                </div>
                                 <span class="text-info">Subtotal: P69</span>
                                 <div class="card-actions">
                                     <button class="btn btn-success btn-block">Save</button>
@@ -158,6 +169,7 @@
                         <div><button class="flex ml-1 px-12 py-1.5 rounded-full text-white bg-teal-600 hover:bg-teal-700 hover:transition hover:duration-300">Add</button></div>
                     </div>
                 </div>
+
                 <div class="border">
                     <div class="grid grid-rows-6 grid-flow-col py-5 px-4 space-y-1 justify-items-center">
                         <div class="row-span-3">Image</div>
