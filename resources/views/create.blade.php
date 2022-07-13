@@ -79,6 +79,58 @@
             </div>
         </div>
         <!-- Product Table -->
-        <div class="py-5">Product Table</div>
+        <div class="py-5">
+            <div class="grid grid-cols-2 grid-flow-row border-2 sm:grid-cols-3 grid-flow-row md:grid-cols-3 grid-flow-row">
+                <!-- Products -->
+                <div class="border">
+                    <div class="grid grid-rows-6 grid-flow-col py-5 px-4 space-y-1 justify-items-center">
+                        <div class="row-span-3">Image</div>
+                        <div class="text-black">B2 Maling Chicken Luncheon Meat 397g</div>
+                        <div class="text-black">197.00</div>
+                        <div><button class="btn h-1 bg-emerald-700 border-none rounded-full hover:bg-emerald-80 sm:btn-sm md:btn-md lg:btn-wide">Add</button></div>
+                    </div>
+                </div>
+                <div class="border">
+                    <div class="grid grid-rows-6 grid-flow-col py-5 px-4 space-y-1 justify-items-center">
+                        <div class="row-span-3">Image</div>
+                        <div class="text-black">B2 Maling Chicken Luncheon Meat 397g</div>
+                        <div class="text-black">197.00</div>
+                        <div><button class="btn h-1 bg-emerald-700 border-none rounded-full hover:bg-emerald-80 sm:btn-sm md:btn-md lg:btn-wide">Add</button></div>
+                    </div>
+                </div>
+                <div class="border">
+                    <div class="grid grid-rows-6 grid-flow-col py-5 px-4 space-y-1 justify-items-center">
+                        <div class="row-span-3">Image</div>
+                        <div class="text-black">B2 Maling Chicken Luncheon Meat 397g</div>
+                        <div class="text-black">197.00</div>
+                        <div><button class="btn h-1 bg-emerald-700 border-none rounded-full hover:bg-emerald-80 sm:btn-sm md:btn-md lg:btn-wide">Add</button></div>
+                    </div>
+                </div>
+                <div class="border">
+                    <div class="grid grid-rows-6 grid-flow-col py-5 px-4 space-y-1 justify-items-center">
+                        <div class="row-span-3">Image</div>
+                        <div class="text-black">B2 Maling Chicken Luncheon Meat 397g</div>
+                        <div class="text-black">197.00</div>
+                        <div><button class="btn h-1 bg-emerald-700 border-none rounded-full hover:bg-emerald-80 sm:btn-sm md:btn-md lg:btn-wide">Add</button></div>
+                    </div>
+                </div>
+                <div class="border">
+                    <div class="grid grid-rows-6 grid-flow-col py-5 px-4 space-y-1 justify-items-center">
+                        <div class="row-span-3">Image</div>
+                        <div class="text-black">B2 Maling Chicken Luncheon Meat 397g</div>
+                        <div class="text-black">197.00</div>
+                        <div><button class="btn h-1 bg-emerald-700 border-none rounded-full hover:bg-emerald-80 sm:btn-sm md:btn-md lg:btn-wide">Add</button></div>
+                    </div>
+                </div>
+                <div class="border">
+                    <div class="grid grid-rows-6 grid-flow-col py-5 px-4 space-y-1 justify-items-center">
+                        <div class="row-span-3">Image</div>
+                        <div class="text-black">B2 Maling Chicken Luncheon Meat 397g</div>
+                        <div class="text-black">197.00</div>
+                        <div><button class="btn h-1 bg-emerald-700 border-none rounded-full hover:bg-emerald-80 sm:btn-sm md:btn-md lg:btn-wide">Add</button></div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </x-app-layout>
