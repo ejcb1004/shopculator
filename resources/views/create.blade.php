@@ -33,53 +33,89 @@
         </div>
     </div>
     <!-- Content Page -->
-    <div class="max-w-7xl mx-auto px-4 py-10 sm:px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8">
+
         <!-- Market -->
-        <div class="relative flex justify-between">
-            <div>
-                <div class="dropdown">
-                    <label tabindex="0" class="btn btn-wide sm:btn-sm md:btn-md lg:btn-lg bg-white text-black border-none drop-shadow-md justify-between hover:bg-slate-300">
-                        <span>Market</span>
-                        <span><i class="fa-solid fa-angle-down"></i></span>
-                    </label>
-                    <ul tabindex="0" class="dropdown-content menu p-2 shadow bg-white rounded-box w-full text-black">
-                        <li class="hover:text-emerald-700"><a class="active:bg-slate-300 text-emerald-700">SM Supermarket</a></li>
-                        <li class="hover:text-emerald-700"><a class="active:bg-slate-300 text-emerald-700">AllDay Supermarket</a></li>
-                        <li class="hover:text-emerald-700"><a class="active:bg-slate-300 text-emerald-700">EasyMart Supermarket</a></li>
-                    </ul>
+        <div class="flex justify-end space-x-4">
+            <!-- Categories -->
+            <div x-data="
+              {
+                dropdownOpen: false
+              }
+              " @click.outside="dropdownOpen = false" class="relative mb-8 inline-flex text-left">
+                <button @click="dropdownOpen = !dropdownOpen" class="flex bg-white px-4 py-1.5 lg:space-x-24 sm:space-x-6 space-x-4 border-none justify-between shadow-md rounded hover:bg-slate-200 hover:transition hover:duration-300 hover:ease-out">
+                    <span class="text-slate-600 font-semibold">Market</span>
+                    <span class="text-slate-600 "><i class="fa-solid fa-angle-down"></i></span>
+                </button>
+                <div :class="dropdownOpen ? 'top-full opacity-100 visible' : 'top-[110%] invisible opacity-0' " class="absolute left-0 z-40 mt-2 w-full rounded border-[.5px] border-light bg-white py-5 shadow-md transition-all">
+                    <a href="javascript:void(0)" class="block py-2 px-5 text-base text-slate-600 hover:bg-slate-200 hover:bg-opacity-50">
+                        All
+                    </a>
+                    <a href="javascript:void(0)" class="block py-2 px-5 text-base text-slate-600 hover:bg-slate-200 hover:bg-opacity-50">
+                        SM Supermarket
+                    </a>
+                    <a href="javascript:void(0)" class="block py-2 px-5 text-base text-slate-600 hover:bg-slate-200 hover:bg-opacity-50">
+                        AllDay Supermarket
+                    </a>
+                    <a href="javascript:void(0)" class="block py-2 px-5 text-base text-slate-600 hover:bg-slate-200 hover:bg-opacity-50">
+                        EasyMart
+                    </a>
                 </div>
             </div>
-            <!-- Category -->
-            <div>
-                <div class="dropdown">
-                    <label tabindex="1" class="btn btn-wide sm:btn-sm md:btn-md lg:btn-lg bg-white text-black border-none drop-shadow-md justify-between hover:bg-slate-300">
-                        <span>Category</span>
-                        <span><i class="fa-solid fa-angle-down"></i></span>
-                    </label>
-                    <ul tabindex="1" class="dropdown-content menu p-2 shadow bg-white rounded-box w-full text-black">
-                        <li class="hover:text-emerald-700"><a class="active:bg-slate-300 text-emerald-700"> Category 1</a></li>
-                        <li class="hover:text-emerald-700"><a class="active:bg-slate-300 text-emerald-700">Category 2</a></li>
-                        <li class="hover:text-emerald-700"><a class="active:bg-slate-300 text-emerald-700">Category 3</a></li>
-                    </ul>
+            <div x-data="
+              {
+                dropdownOpen: false
+              }
+              " @click.outside="dropdownOpen = false" class="relative mb-8 inline-flex text-left">
+                <button @click="dropdownOpen = !dropdownOpen" class="flex bg-white px-4 py-1.5 lg:space-x-24 sm:space-x-6 space-x-4 border-none justify-between shadow-md rounded hover:bg-slate-200 hover:transition hover:duration-300 hover:ease-out">
+                    <span class="text-slate-600 font-semibold">Categories</span>
+                    <span class="text-slate-600 "><i class="fa-solid fa-angle-down"></i></span>
+                </button>
+                <div :class="dropdownOpen ? 'top-full opacity-100 visible' : 'top-[110%] invisible opacity-0' " class="absolute left-0 z-40 mt-2 w-full rounded border-[.5px] border-light bg-white py-5 shadow-md transition-all">
+                    <a href="javascript:void(0)" class="block py-2 px-5 text-base text-slate-600 hover:bg-slate-200 hover:bg-opacity-50">
+                        All
+                    </a>
+                    <a href="javascript:void(0)" class="block py-2 px-5 text-base text-slate-600 hover:bg-slate-200 hover:bg-opacity-50">
+                        Food
+                    </a>
+                    <a href="javascript:void(0)" class="block py-2 px-5 text-base text-slate-600 hover:bg-slate-200 hover:bg-opacity-50">
+                        Frozen
+                    </a>
+                    <a href="javascript:void(0)" class="block py-2 px-5 text-base text-slate-600 hover:bg-slate-200 hover:bg-opacity-50">
+                        Beverages
+                    </a>
+                    <a href="javascript:void(0)" class="block py-2 px-5 text-base text-slate-600 hover:bg-slate-200 hover:bg-opacity-50">
+                        Dairy
+                    </a>
                 </div>
             </div>
-            <!-- Sort By -->
-            <div>
-                <div class="dropdown">
-                    <label tabindex="1" class="btn btn-wide sm:btn-sm md:btn-md lg:btn-lg bg-white text-black border-none drop-shadow-md justify-between hover:bg-slate-300">
-                        <span>Sort By</span>
-                        <span><i class="fa-solid fa-angle-down"></i></span>
-                    </label>
-                    <ul tabindex="1" class="dropdown-content menu p-2 shadow bg-white rounded-box w-full text-black">
-                        <li class="hover:text-emerald-700"><a class="active:bg-slate-300 text-emerald-700">SM Supermarket</a></li>
-                        <li class="hover:text-emerald-700"><a class="active:bg-slate-300 text-emerald-700">AllDay Supermarket</a></li>
-                        <li class="hover:text-emerald-700"><a class="active:bg-slate-300 text-emerald-700">EasyMart Supermarket</a></li>
-                    </ul>
+            <div x-data="
+              {
+                dropdownOpen: false
+              }
+              " @click.outside="dropdownOpen = false" class="relative mb-8 inline-flex text-left">
+                <button @click="dropdownOpen = !dropdownOpen" class="flex bg-white px-4 py-1.5 lg:space-x-24 sm:space-x-6 space-x-4 border-none justify-between shadow-md rounded hover:bg-slate-200 hover:transition hover:duration-300 hover:ease-out">
+                    <span class="text-slate-600 font-semibold">Sort by</span>
+                    <span class="text-slate-600 "><i class="fa-solid fa-angle-down"></i></span>
+                </button>
+                <div :class="dropdownOpen ? 'top-full opacity-100 visible' : 'top-[110%] invisible opacity-0' " class="absolute left-0 z-40 mt-2 w-full rounded border-[.5px] border-light bg-white py-5 shadow-md transition-all">
+                    <a href="javascript:void(0)" class="block py-2 px-5 text-base text-slate-600 hover:bg-slate-200 hover:bg-opacity-50">
+                        Alphabetical (A-Z)
+                    </a>
+                    <a href="javascript:void(0)" class="block py-2 px-5 text-base text-slate-600 hover:bg-slate-200 hover:bg-opacity-50">
+                        Alphabetical (Z-A)
+                    </a>
+                    <a href="javascript:void(0)" class="block py-2 px-5 text-base text-slate-600 hover:bg-slate-200 hover:bg-opacity-50">
+                        Price (Ascending)
+                    </a>
+                    <a href="javascript:void(0)" class="block py-2 px-5 text-base text-slate-600 hover:bg-slate-200 hover:bg-opacity-50">
+                        Price (Descending)
+                    </a>
                 </div>
             </div>
         </div>
         <!-- Product Table -->
-        <div class="py-5">
+        <div class="pt-1">
             <div class="grid grid-cols-2 grid-flow-row border-2 sm:grid-cols-3 grid-flow-row md:grid-cols-3 grid-flow-row">
                 <!-- Products -->
                 <div class="border">
@@ -87,7 +123,7 @@
                         <div class="row-span-3">Image</div>
                         <div class="text-black">B2 Maling Chicken Luncheon Meat 397g</div>
                         <div class="text-black">197.00</div>
-                        <div><button class="btn h-1 bg-emerald-700 border-none rounded-full hover:bg-emerald-80 sm:btn-sm md:btn-md lg:btn-wide">Add</button></div>
+                        <div><button class="flex ml-1 px-12 py-1.5 rounded-full text-white bg-teal-600 hover:bg-teal-700 hover:transition hover:duration-300">Add</button></div>
                     </div>
                 </div>
                 <div class="border">
@@ -95,7 +131,7 @@
                         <div class="row-span-3">Image</div>
                         <div class="text-black">B2 Maling Chicken Luncheon Meat 397g</div>
                         <div class="text-black">197.00</div>
-                        <div><button class="btn h-1 bg-emerald-700 border-none rounded-full hover:bg-emerald-80 sm:btn-sm md:btn-md lg:btn-wide">Add</button></div>
+                        <div><button class="flex ml-1 px-12 py-1.5 rounded-full text-white bg-teal-600 hover:bg-teal-700 hover:transition hover:duration-300">Add</button></div>
                     </div>
                 </div>
                 <div class="border">
@@ -103,7 +139,7 @@
                         <div class="row-span-3">Image</div>
                         <div class="text-black">B2 Maling Chicken Luncheon Meat 397g</div>
                         <div class="text-black">197.00</div>
-                        <div><button class="btn h-1 bg-emerald-700 border-none rounded-full hover:bg-emerald-80 sm:btn-sm md:btn-md lg:btn-wide">Add</button></div>
+                        <div><button class="flex ml-1 px-12 py-1.5 rounded-full text-white bg-teal-600 hover:bg-teal-700 hover:transition hover:duration-300">Add</button></div>
                     </div>
                 </div>
                 <div class="border">
@@ -111,7 +147,7 @@
                         <div class="row-span-3">Image</div>
                         <div class="text-black">B2 Maling Chicken Luncheon Meat 397g</div>
                         <div class="text-black">197.00</div>
-                        <div><button class="btn h-1 bg-emerald-700 border-none rounded-full hover:bg-emerald-80 sm:btn-sm md:btn-md lg:btn-wide">Add</button></div>
+                        <div><button class="flex ml-1 px-12 py-1.5 rounded-full text-white bg-teal-600 hover:bg-teal-700 hover:transition hover:duration-300">Add</button></div>
                     </div>
                 </div>
                 <div class="border">
@@ -119,7 +155,7 @@
                         <div class="row-span-3">Image</div>
                         <div class="text-black">B2 Maling Chicken Luncheon Meat 397g</div>
                         <div class="text-black">197.00</div>
-                        <div><button class="btn h-1 bg-emerald-700 border-none rounded-full hover:bg-emerald-80 sm:btn-sm md:btn-md lg:btn-wide">Add</button></div>
+                        <div><button class="flex ml-1 px-12 py-1.5 rounded-full text-white bg-teal-600 hover:bg-teal-700 hover:transition hover:duration-300">Add</button></div>
                     </div>
                 </div>
                 <div class="border">
@@ -127,7 +163,7 @@
                         <div class="row-span-3">Image</div>
                         <div class="text-black">B2 Maling Chicken Luncheon Meat 397g</div>
                         <div class="text-black">197.00</div>
-                        <div><button class="btn h-1 bg-emerald-700 border-none rounded-full hover:bg-emerald-80 sm:btn-sm md:btn-md lg:btn-wide">Add</button></div>
+                        <div><button class="flex ml-1 px-12 py-1.5 rounded-full text-white bg-teal-600 hover:bg-teal-700 hover:transition hover:duration-300">Add</button></div>
                     </div>
                 </div>
             </div>
