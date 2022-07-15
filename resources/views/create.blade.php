@@ -28,13 +28,46 @@
                             </div>
                             <!-- Card Body -->
                             <div class="card-body">
-                                <div class="flex flex-row">
+                                <!-- Card Header -->
+                                <div class="border-b-2 border-slate-400 py-3">
                                     <span class="text-black">Budget: </span>
-                                    <input type="text" placeholder="Type here" class="input border-b w-full max-w-md" />
+                                    <div class="border-2">
+                                        <span contenteditable="true">Enter Here</span>
+                                    </div>
                                 </div>
-                                <span class="text-info">Subtotal: P69</span>
-                                <div class="card-actions">
-                                    <button class="btn btn-success btn-block">Save</button>
+                                <!-- Card Content -->
+                                <div class="overflow-y-auto max-h-80">
+                                    <!-- Item -->
+                                    <div class="flex-row max-h-24 px-2 py-2">
+                                        <div class="flex space-x-5">
+                                            <div class="flex place-content-center space-x-2">
+                                                    <input type="checkbox" checked="checked" class="checkbox checkbox-accent checkbox-sm" />
+                                                <span>Image</span>
+                                            </div>
+                                            <div class="flex">
+                                                <span>Product Name</span>
+                                                <span>Price</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Card Total -->
+                                <div class="border-t-2 border-slate-400 py-3">
+                                    <div class="space-y-3">
+                                        <div class="flex justify-between">
+                                            <span class="text-black">Total:</span>
+                                            <span class="text-black">Php 69</span>
+                                        </div>
+                                        <!-- Card Remaining Budget -->
+                                        <div class="flex justify-between">
+                                            <span class="text-black">Remaining:</span>
+                                            <span class="text-black">Php 31</span>
+                                        </div>
+                                        <!-- Save Button -->
+                                        <div class="card-actions">
+                                            <button class="btn btn-success btn-block">Save</button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
