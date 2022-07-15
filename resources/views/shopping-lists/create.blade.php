@@ -55,12 +55,12 @@
                                                     <span>Product Name</span>
                                                     <div class="flex flex-row items-center space-x-2">
                                                         <span class="text-emerald-700"><i class="fa-solid fa-circle-minus"></i></span>
-                                                        <input type="text" class="input input-sm w-full bg-white border-slate-300 w-10" />
+                                                        <input type="text" class="input input-xs w-full bg-white border-slate-300 w-10" />
                                                         <span class="text-emerald-700">
                                                             <i class="fa-solid fa-circle-plus"></i></span>
                                                     </div>
                                                 </div>
-                                                <div>
+                                                <div class="flex items-center">
                                                     <span>
                                                         Price
                                                     </span>
@@ -76,12 +76,12 @@
                                     <div class="space-y-3">
                                         <div class="flex justify-between">
                                             <span class="text-black">Total:</span>
-                                            <span class="text-black">Php 69</span>
+                                            <span class="text-black"><i class="fa-solid fa-peso-sign"></i> 69</span>
                                         </div>
                                         <!-- Card Remaining Budget -->
                                         <div class="flex justify-between">
                                             <span class="text-black">Remaining:</span>
-                                            <span class="text-black">Php 31</span>
+                                            <span class="text-black"><i class="fa-solid fa-peso-sign"></i> 31</span>
                                         </div>
                                         <!-- Save Button -->
                                         <div class="card-actions">
