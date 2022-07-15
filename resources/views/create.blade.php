@@ -29,12 +29,15 @@
                             <!-- Card Body -->
                             <div class="card-body">
                                 <!-- Card Header -->
-                                <div class="border-b-2 border-slate-400 py-3">
-                                    <span class="text-black">Budget: </span>
-                                    <div class="border-2">
-                                        <span contenteditable="true">Enter Here</span>
+                                <div class="flex flex-nowrap py-1 space-x-5">
+                                    <div>
+                                    <input type="text" placeholder="Type here" class="input input-bordered input-sm w-full max-w-xs" />
+                                    </div>
+                                    <div>
+
                                     </div>
                                 </div>
+                                <hr>
                                 <!-- Card Content -->
                                 <div class="overflow-y-auto max-h-80">
                                     <!-- Item -->
@@ -51,8 +54,9 @@
                                         </div>
                                     </div>
                                 </div>
+                                <hr>
                                 <!-- Card Total -->
-                                <div class="border-t-2 border-slate-400 py-3">
+                                <div class="py-3">
                                     <div class="space-y-3">
                                         <div class="flex justify-between">
                                             <span class="text-black">Total:</span>
