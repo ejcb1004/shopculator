@@ -24,14 +24,14 @@
                             <!-- Card Header -->
                             <div class="font-bold text-lg bg-emerald-700 px-3 py-3 text-white flex justify-between">
                                 <span>Shopping List</span>
-                                <span><i class="fa-solid fa-x"></i></span>
+                                <span><i class="fa-solid fa-xmark"></i></span>
                             </div>
                             <!-- Card Body -->
                             <div class="card-body">
                                 <!-- Card Header -->
-                                <div class="flex flex-nowrap py-1 space-x-5">
-                                    <div>
-                                    <input type="text" placeholder="Type here" class="input input-bordered input-sm w-full max-w-xs" />
+                                <div class="flex flex-nowrap py-1">
+                                    <div class="w-full">
+                                    <input type="text" placeholder="Enter budget here" class="input input-bordered input-sm bg-white w-full" />
                                     </div>
                                     <div>
 
@@ -43,11 +43,11 @@
                                     <!-- Item -->
                                     <div class="flex-row max-h-24 px-2 py-2">
                                         <div class="flex space-x-5">
-                                            <div class="flex place-content-center space-x-2">
+                                            <div class="flex space-x-2">
                                                     <input type="checkbox" checked="checked" class="checkbox checkbox-accent checkbox-sm" />
                                                 <span>Image</span>
                                             </div>
-                                            <div class="flex">
+                                            <div class="flex w-full justify-between">
                                                 <span>Product Name</span>
                                                 <span>Price</span>
                                             </div>
@@ -81,8 +81,7 @@
         </div>
     </div>
     <!-- Content Page -->
-    <div class="max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8">
-
+    <div class="max-w-7xl mx-auto px-3 py-4 sm:px-6 lg:px-8">
         <!-- Market -->
         <div class="flex justify-end space-x-4">
             <!-- Categories -->
@@ -91,7 +90,7 @@
                 dropdownOpen: false
               }
               " @click.outside="dropdownOpen = false" class="relative mb-8 inline-flex text-left">
-                <button @click="dropdownOpen = !dropdownOpen" class="flex bg-white px-4 py-1.5 lg:space-x-24 sm:space-x-6 space-x-4 border-none justify-between shadow-md rounded hover:bg-slate-200 hover:transition hover:duration-300 hover:ease-out">
+                <button @click="dropdownOpen = !dropdownOpen" class="flex bg-white px-4 py-1.5 lg:space-x-24 sm:space-x-6 space-x-4 border-none justify-between shadow-md rounded hover:bg-slate-100 hover:transition hover:duration-300 hover:ease-out">
                     <span class="text-slate-600 font-semibold">Market</span>
                     <span class="text-slate-600 "><i class="fa-solid fa-angle-down"></i></span>
                 </button>
@@ -115,7 +114,7 @@
                 dropdownOpen: false
               }
               " @click.outside="dropdownOpen = false" class="relative mb-8 inline-flex text-left">
-                <button @click="dropdownOpen = !dropdownOpen" class="flex bg-white px-4 py-1.5 lg:space-x-24 sm:space-x-6 space-x-4 border-none justify-between shadow-md rounded hover:bg-slate-200 hover:transition hover:duration-300 hover:ease-out">
+                <button @click="dropdownOpen = !dropdownOpen" class="flex bg-white px-4 py-1.5 lg:space-x-24 sm:space-x-6 space-x-4 border-none justify-between shadow-md rounded hover:bg-slate-100 hover:transition hover:duration-300 hover:ease-out">
                     <span class="text-slate-600 font-semibold">Categories</span>
                     <span class="text-slate-600 "><i class="fa-solid fa-angle-down"></i></span>
                 </button>
@@ -142,7 +141,7 @@
                 dropdownOpen: false
               }
               " @click.outside="dropdownOpen = false" class="relative mb-8 inline-flex text-left">
-                <button @click="dropdownOpen = !dropdownOpen" class="flex bg-white px-4 py-1.5 lg:space-x-24 sm:space-x-6 space-x-4 border-none justify-between shadow-md rounded hover:bg-slate-200 hover:transition hover:duration-300 hover:ease-out">
+                <button @click="dropdownOpen = !dropdownOpen" class="flex bg-white px-4 py-1.5 lg:space-x-24 sm:space-x-6 space-x-4 border-none justify-between shadow-md rounded hover:bg-slate-100 hover:transition hover:duration-300 hover:ease-out">
                     <span class="text-slate-600 font-semibold">Sort by</span>
                     <span class="text-slate-600 "><i class="fa-solid fa-angle-down"></i></span>
                 </button>
@@ -206,7 +205,54 @@
                         <div><button class="flex ml-1 px-12 py-1.5 rounded-full text-white bg-teal-600 hover:bg-teal-700 hover:transition hover:duration-300">Add</button></div>
                     </div>
                 </div>
-
+                <div class="border">
+                    <div class="grid grid-rows-6 grid-flow-col py-5 px-4 space-y-1 justify-items-center">
+                        <div class="row-span-3">Image</div>
+                        <div class="text-black">B2 Maling Chicken Luncheon Meat 397g</div>
+                        <div class="text-black">197.00</div>
+                        <div><button class="flex ml-1 px-12 py-1.5 rounded-full text-white bg-teal-600 hover:bg-teal-700 hover:transition hover:duration-300">Add</button></div>
+                    </div>
+                </div>
+                <div class="border">
+                    <div class="grid grid-rows-6 grid-flow-col py-5 px-4 space-y-1 justify-items-center">
+                        <div class="row-span-3">Image</div>
+                        <div class="text-black">B2 Maling Chicken Luncheon Meat 397g</div>
+                        <div class="text-black">197.00</div>
+                        <div><button class="flex ml-1 px-12 py-1.5 rounded-full text-white bg-teal-600 hover:bg-teal-700 hover:transition hover:duration-300">Add</button></div>
+                    </div>
+                </div>
+                <div class="border">
+                    <div class="grid grid-rows-6 grid-flow-col py-5 px-4 space-y-1 justify-items-center">
+                        <div class="row-span-3">Image</div>
+                        <div class="text-black">B2 Maling Chicken Luncheon Meat 397g</div>
+                        <div class="text-black">197.00</div>
+                        <div><button class="flex ml-1 px-12 py-1.5 rounded-full text-white bg-teal-600 hover:bg-teal-700 hover:transition hover:duration-300">Add</button></div>
+                    </div>
+                </div>
+                <div class="border">
+                    <div class="grid grid-rows-6 grid-flow-col py-5 px-4 space-y-1 justify-items-center">
+                        <div class="row-span-3">Image</div>
+                        <div class="text-black">B2 Maling Chicken Luncheon Meat 397g</div>
+                        <div class="text-black">197.00</div>
+                        <div><button class="flex ml-1 px-12 py-1.5 rounded-full text-white bg-teal-600 hover:bg-teal-700 hover:transition hover:duration-300">Add</button></div>
+                    </div>
+                </div>
+                <div class="border">
+                    <div class="grid grid-rows-6 grid-flow-col py-5 px-4 space-y-1 justify-items-center">
+                        <div class="row-span-3">Image</div>
+                        <div class="text-black">B2 Maling Chicken Luncheon Meat 397g</div>
+                        <div class="text-black">197.00</div>
+                        <div><button class="flex ml-1 px-12 py-1.5 rounded-full text-white bg-teal-600 hover:bg-teal-700 hover:transition hover:duration-300">Add</button></div>
+                    </div>
+                </div>
+                <div class="border">
+                    <div class="grid grid-rows-6 grid-flow-col py-5 px-4 space-y-1 justify-items-center">
+                        <div class="row-span-3">Image</div>
+                        <div class="text-black">B2 Maling Chicken Luncheon Meat 397g</div>
+                        <div class="text-black">197.00</div>
+                        <div><button class="flex ml-1 px-12 py-1.5 rounded-full text-white bg-teal-600 hover:bg-teal-700 hover:transition hover:duration-300">Add</button></div>
+                    </div>
+                </div>
                 <div class="border">
                     <div class="grid grid-rows-6 grid-flow-col py-5 px-4 space-y-1 justify-items-center">
                         <div class="row-span-3">Image</div>
