@@ -44,15 +44,30 @@
                                     <!-- Item -->
                                     <div class="flex-row max-h-24 px-2 py-2">
                                         <div class="flex space-x-5">
-                                            <div class="flex space-x-2">
+                                            <div class="flex items-center space-x-2">
                                                 <input type="checkbox" checked="checked" class="checkbox checkbox-accent checkbox-sm" />
-                                                <span>Image</span>
+                                                <div class="w-20">
+                                                    <span>Image</span>
+                                                </div>
                                             </div>
-                                            <div class="flex w-full justify-between">
-                                                <span>Product Name</span>
-                                                <span>Price</span>
+                                            <div class="flex justify-between w-full">
+                                                <div class="flex flex-col">
+                                                    <span>Product Name</span>
+                                                    <div class="flex flex-row items-center space-x-2">
+                                                        <span class="text-emerald-700"><i class="fa-solid fa-circle-minus"></i></span>
+                                                        <input type="text" class="input input-sm w-full bg-white border-slate-300 w-10" />
+                                                        <span class="text-emerald-700">
+                                                            <i class="fa-solid fa-circle-plus"></i></span>
+                                                    </div>
+                                                </div>
+                                                <div>
+                                                    <span>
+                                                        Price
+                                                    </span>
+                                                </div>
                                             </div>
                                         </div>
+
                                     </div>
                                 </div>
                                 <hr>
