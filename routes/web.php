@@ -23,12 +23,12 @@ Route::middleware([
     'verified'
 ])->group(function () {
     Route::get('/shopping-lists', function () {
-        return view('shopping-lists');
+        return view('shopping-lists/index');
     })->name('shopping-lists');
-    Route::get('/products', function () {
-        return view('products');
-    })->name('products');
-    Route::get('/create', function () {
-        return view('create');
-    })->name('create');
+    Route::get('/shopping-lists/products', function () {
+        return view('shopping-lists/products');
+    })->name('shopping-lists/products');
+    Route::get('/shopping-lists/create', function () {
+        return view('shopping-lists/create');
+    })->name('/shopping-lists/create');
 });

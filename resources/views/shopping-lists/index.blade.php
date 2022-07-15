@@ -8,7 +8,7 @@
                     <input type="text" placeholder="Search" class="input input-bordered bg-white pl-10 w-full rounded-full h-10" />
                 </div>
                 <button class="bg-emerald-700 px-6 py-1.5 text-white border-none rounded-full hover:bg-emerald-800 transition:1s"><i class="fa-solid fa-plus"></i>
-                    <a href="{{ route('create') }}">
+                    <a href="{{ route('/shopping-lists/create') }}">
                         &nbsp;Add List
                     </a>
                 </button>
