@@ -31,4 +31,7 @@ Route::middleware([
     Route::get('/shopping-lists/create', function () {
         return view('shopping-lists/create');
     })->name('/shopping-lists/create');
+    Route::get('/shopping-lists/edit', function () {
+        return view('shopping-lists/edit');
+    })->name('/shopping-lists/edit');
 });
