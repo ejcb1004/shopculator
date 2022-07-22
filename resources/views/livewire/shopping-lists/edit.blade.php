@@ -46,8 +46,15 @@
                                                 <span>{{$product['image']}}</span>
                                             </div>
                                             <div class="flex w-full justify-between">
-                                                <span>{{$product['name']}}</span>
-                                                <span>{{$product['price']}}</span>
+                                                <div class="flex flex-col">
+                                                    <span>{{$product['name']}}</span>
+                                                    <div class="flex flex-row items-center space-x-2">
+                                                    <i class="fa-solid fa-circle-minus text-emerald-500"></i><input type="text" class="input flex border-t-1 bg-white input-sm w-10 max-w-xs" /><i class="fa-solid fa-circle-plus text-emerald-500"></i>
+                                                    </div>
+                                                </div>
+                                                <div>
+                                                    <span>{{$product['price']}}</span>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
