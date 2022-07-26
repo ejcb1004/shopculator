@@ -1,4 +1,5 @@
 <x-app-layout>
+<<<<<<< Updated upstream
     <!-- Add List Nav -->
     <div class="bg-emerald-700 min-w-full">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -280,4 +281,7 @@
             </div>
         </div>
     </div>
+=======
+    <livewire:shopping-lists.create />
+>>>>>>> Stashed changes
 </x-app-layout>

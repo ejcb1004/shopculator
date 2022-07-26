@@ -6,7 +6,7 @@ use App\Models\Product;
 use Illuminate\Support\Arr;
 use Livewire\Component;
 
-class Edit extends Component
+class Create extends Component
 {
     public $budget;
     public $prefix = 'http://127.0.0.1:3000';
@@ -31,6 +31,6 @@ class Edit extends Component
     public function render()
     {
         $this->products = Product::all()->toArray();
-        return view('livewire.shopping-lists.edit');
+        return view('livewire.shopping-lists.create');
     }
 }

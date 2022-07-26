@@ -22,7 +22,7 @@
                         <div tabindex="0" class="mt-3 card card-compact dropdown-content w-96 bg-white shadow">
                             <!-- Card Header -->
                             <div class="font-bold text-lg bg-emerald-700 px-3 py-3 text-white flex justify-between">
-                                <input type="text" placeholder="Shopping List Name" class="input bg-white w-full max-w-xs" />
+                                <span class="pl-2">Shopping List</span>
                                 <span class="pr-2"><i class="fa-solid fa-xmark"></i></span>
                             </div>
                             <!-- Card Body -->
@@ -177,18 +177,6 @@
         <div class="pt-1">
             <div class="grid grid-cols-2 grid-flow-row border-2 sm:grid-cols-3 grid-flow-row md:grid-cols-4 grid-flow-row">
                 <!-- Products -->
-<<<<<<< Updated upstream
-                @foreach($products as $product)
-                <div class="border">
-                    <div class="grid grid-rows-6 grid-flow-col py-5 px-4 space-y-1 justify-items-center">
-                        <div class="row-span-3">{{$product['image']}}</div>
-                        <div class="text-black">{{$product['product_name']}}</div>
-                        <div class="text-black">{{$product['price']}}</div>
-                        <div><button class="flex ml-1 px-12 py-1.5 rounded-full text-white bg-teal-600 hover:bg-teal-700 hover:transition hover:duration-300" wire:click="addProduct">Add</button></div>
-                    </div>
-                </div>
-                @endforeach
-=======
                 @for ($i = 0; $i < count($products); $i++) 
                 <div class="border bg-white">
                     <div class="flex flex-col min-h-full py-5 px-4 space-y-1 items-center">
@@ -201,7 +189,6 @@
                     </div>
                 </div>
                 @endfor
->>>>>>> Stashed changes
             </div>
         </div>
     </div>
