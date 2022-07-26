@@ -2,16 +2,15 @@
 
 namespace App\Http\Livewire\ShoppingLists;
 
+use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 
+$users = DB::table('users')->get();
 class Edit extends Component
 {
     public $budget;
     public $total = 69;
     public $items = 1;
-    public $term;
-
-
     public $products = [
         [
             'image' => 'Photo',
@@ -19,6 +18,7 @@ class Edit extends Component
             'price' => '197.00',
         ]
     ];
+
 
 
     public function addProduct()

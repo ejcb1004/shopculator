@@ -29,9 +29,9 @@
                             <div class="card-body">
                                 <!-- Card Header -->
                                 <div class="flex flex-nowrap py-1">
-                                    <div class="w-full">
-                                        <input type="text" placeholder="Enter budget here" class="input input-bordered input-sm bg-white w-full" wire:model.lazy="budget" />
-                                        @error('budget') <span class="text-red-500 text-xs">Please enter a budget</span>@enderror
+                                    <div class="flex w-full items-center">
+                                        <i class="fa-solid fa-peso-sign pl-3 absolute"></i>
+                                        <input type="text" placeholder="Enter budget here" class="input input-bordered input-sm bg-white w-full pl-8" wire:model.lazy="budget" />
                                     </div>
                                 </div>
                                 <hr>
@@ -49,10 +49,10 @@
                                                 <div class="flex flex-col">
                                                     <span>{{$product['name']}}</span>
                                                     <div class="flex flex-row items-center space-x-2">
-                                                    <i class="fa-solid fa-circle-minus text-emerald-500"></i><input type="text" class="input flex border-t-1 bg-white input-sm w-10 max-w-xs" /><i class="fa-solid fa-circle-plus text-emerald-500"></i>
+                                                        <i class="fa-solid fa-circle-minus text-emerald-500"></i><input type="text" class="input flex border-t-1 bg-white input-sm w-10 max-w-xs" /><i class="fa-solid fa-circle-plus text-emerald-500"></i>
                                                     </div>
                                                 </div>
-                                                <div>
+                                                <div class="flex flex-wrap">
                                                     <span>{{$product['price']}}</span>
                                                 </div>
                                             </div>
@@ -66,12 +66,12 @@
                                     <div class="space-y-3">
                                         <div class="flex justify-between">
                                             <span class="text-black">Total:</span>
-                                            <span class="text-black">{{$total}} Php</span>
+                                            <span class="text-black"><i class="fa-solid fa-peso-sign"></i> {{$total}}</span>
                                         </div>
                                         <!-- Card Remaining Budget -->
                                         <div class="flex justify-between">
                                             <span class="text-black">Remaining:</span>
-                                            <span class="text-black">{{$budget - $total}} Php</span>
+                                            <span class="text-black"><i class="fa-solid fa-peso-sign"></i> {{$budget - $total}}</span>
                                         </div>
                                         <!-- Save Button -->
                                         <div class="card-actions">
@@ -178,8 +178,8 @@
                         <div class="text-black">197.00</div>
                         <div><button class="flex ml-1 px-12 py-1.5 rounded-full text-white bg-teal-600 hover:bg-teal-700 hover:transition hover:duration-300" wire:click="addProduct">Add</button></div>
                     </div>
-
                 </div>
+
                 <div class="border">
                     <div class="grid grid-rows-6 grid-flow-col py-5 px-4 space-y-1 justify-items-center">
                         <div class="row-span-3">Image</div>
