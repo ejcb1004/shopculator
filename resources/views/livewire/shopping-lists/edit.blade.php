@@ -38,22 +38,22 @@
                                 <!-- Card Content -->
                                 <div class="overflow-y-auto max-h-80">
                                     <!-- Item -->
-                                    @foreach($products as $product)
+                                    @foreach($list_details as $list_detail)
                                     <div class="flex-row max-h-24 px-2 py-2">
                                         <div class="flex space-x-5">
                                             <div class="flex space-x-2">
                                                 <input type="checkbox" checked="checked" class="checkbox checkbox-accent checkbox-sm" />
-                                                <span>{{$product['image']}}</span>
+                                                <span>{{$list_detail['image_path']}}</span>
                                             </div>
                                             <div class="flex w-full justify-between">
                                                 <div class="flex flex-col">
-                                                    <span>{{$product['name']}}</span>
+                                                    <span>{{$list_detail['product_name']}}</span>
                                                     <div class="flex flex-row items-center space-x-2">
                                                         <i class="fa-solid fa-circle-minus text-emerald-500"></i><input type="text" class="input flex border-t-1 bg-white input-sm w-10 max-w-xs" /><i class="fa-solid fa-circle-plus text-emerald-500"></i>
                                                     </div>
                                                 </div>
                                                 <div class="flex flex-wrap">
-                                                    <span>{{$product['price']}}</span>
+                                                    <span>{{$list_detail['price']}}</span>
                                                 </div>
                                             </div>
                                         </div>

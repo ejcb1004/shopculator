@@ -2,33 +2,28 @@
 
 namespace App\Http\Livewire\ShoppingLists;
 
-use Illuminate\Support\Facades\DB;
+use App\Models\Product;
+use Illuminate\Support\Arr;
 use Livewire\Component;
 
-$users = DB::table('users')->get();
 class Edit extends Component
 {
     public $budget;
     public $total = 69;
-    public $items = 1;
-    public $products = [
-        [
-            'image' => 'Photo',
-            'name' => 'Maling',
-            'price' => '197.00',
-        ]
-    ];
-
-
+    public $items = 0;
+    public $products = [];
+    public $list_details = [];
+    public $index = 1;
 
     public function addProduct()
     {
-        $this->products[] = [
-            'image' => 'Photo',
-            'name' => 'New Product',
-            'price' => '000.00',
-            $this->items++
+        $added = Product::where('id', $this->index)->get()->toArray();
+        $this->list_details[] = [
+            'image_path' => Arr::get($added, '0.image_path'),
+            'product_name' => Arr::get($added, '0.product_name'),
+            'price' => Arr::get($added, '0.price')
         ];
+        $this->items++;
     }
 
     public function render()
