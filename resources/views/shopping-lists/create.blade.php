@@ -23,7 +23,7 @@
                         <div tabindex="0" class="mt-3 card card-compact dropdown-content w-96 bg-white shadow">
                             <!-- Card Header -->
                             <div class="font-bold text-lg bg-emerald-700 px-3 py-3 text-white flex justify-between">
-                                <span class="pl-2">Shopping List</span>
+                            <input type="text" placeholder="Shopping List Name" class="input bg-white w-full max-w-xs" />
                                 <span class="pr-2"><i class="fa-solid fa-xmark"></i></span>
                             </div>
                             <!-- Card Body -->
