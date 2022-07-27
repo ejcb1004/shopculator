@@ -31,7 +31,7 @@
                                 <div class="flex flex-nowrap py-1">
                                     <div class="flex w-full items-center">
                                         <i class="fa-solid fa-peso-sign pl-3 absolute"></i>
-                                        <input type="text" placeholder="Enter budget here" class="input input-bordered input-sm bg-white w-full pl-8" wire:model.lazy="budget" />
+                                        <input type="text" placeholder="Enter budget here" value="0" class="input input-bordered input-sm bg-white w-full pl-8" wire:model.lazy="budget" />
                                     </div>
                                 </div>
                                 <hr>
@@ -49,11 +49,11 @@
                                                 <div class="flex flex-col">
                                                     <span>{{$list_detail['product_name']}}</span>
                                                     <div class="flex flex-row items-center space-x-2">
-                                                        <button>
+                                                        <button wire:click="quantity_sub">
                                                             <i class="fa-solid fa-circle-minus text-emerald-500"></i>
                                                         </button>
-                                                        <input type="text" class="input flex border-t-1 bg-white input-sm w-10 max-w-xs" />
-                                                        <button>
+                                                        <span class="text-center w-8">{{$list_detail['quantity']}}</span>
+                                                        <button wire:click="quantity_add">
                                                             <i class="fa-solid fa-circle-plus text-emerald-500"></i>
                                                         </button>
                                                     </div>
@@ -185,7 +185,7 @@
                         </div>
                         <div class="h-1/4 text-black text-center">{{ $products[$i]['product_name'] }}</div>
                         <div class="h-1/4 text-black text-center">PHP {{ $products[$i]['price'] }}</div>
-                        <div><button class="flex ml-1 px-12 py-1.5 rounded-full text-white bg-teal-600 hover:bg-teal-700 hover:transition hover:duration-300" wire:click="addProduct">Add</button></div>
+                        <div><button class="flex ml-1 px-12 py-1.5 rounded-full text-white bg-teal-600 hover:bg-teal-700 hover:transition hover:duration-300" wire:click="product_add({{ $products[$i]['id'] }})">Add</button></div>
                     </div>
                 </div>
                 @endfor
