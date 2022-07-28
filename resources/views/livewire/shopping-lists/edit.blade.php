@@ -47,19 +47,19 @@
                                             </div>
                                             <div class="flex w-full justify-between">
                                                 <div class="flex flex-col">
-                                                    <span>{{$list_detail['product_name']}}</span>
+                                                    <span>{{ $list_detail['product_name'] }}</span>
                                                     <div class="flex flex-row items-center space-x-2">
                                                         <button wire:click="quantity_sub">
                                                             <i class="fa-solid fa-circle-minus text-emerald-500"></i>
                                                         </button>
-                                                        <span class="text-center w-8">{{$list_detail['quantity']}}</span>
+                                                        <span class="text-center w-8">{{ $list_detail['quantity'] }}</span>
                                                         <button wire:click="quantity_add">
                                                             <i class="fa-solid fa-circle-plus text-emerald-500"></i>
                                                         </button>
                                                     </div>
                                                 </div>
                                                 <div class="flex flex-wrap items-center">
-                                                    <span>₱{{$list_detail['price']}}</span>
+                                                    <span>₱{{ $list_detail['price'] }}</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -177,18 +177,18 @@
         <div class="pt-1">
             <div class="grid grid-cols-2 grid-flow-row border-2 sm:grid-cols-3 grid-flow-row md:grid-cols-4 grid-flow-row">
                 <!-- Products -->
-                @for ($i = 0; $i < count($products); $i++) 
+                @foreach ($products as $product) 
                 <div class="border bg-white">
                     <div class="flex flex-col min-h-full py-5 px-4 space-y-1 items-center">
                         <div class="flex flex-auto items-center">
-                            <img src="{{ $prefix . $products[$i]['image_path']}}" width="200" alt="Image" />
+                            <img src="{{ $prefix . $product->image_path }}" alt="Image" />
                         </div>
-                        <div class="h-1/4 text-black text-center">{{ $products[$i]['product_name'] }}</div>
-                        <div class="h-1/4 text-black text-center">PHP {{ $products[$i]['price'] }}</div>
-                        <div><button class="flex ml-1 px-12 py-1.5 rounded-full text-white bg-teal-600 hover:bg-teal-700 hover:transition hover:duration-300" wire:click="product_add({{ $products[$i]['id'] }})">Add</button></div>
+                        <div class="h-1/4 text-black text-center">{{ $product->product_name }}</div>
+                        <div class="h-1/4 text-black text-center">PHP {{ $product->price }}</div>
+                        <div><button class="flex ml-1 px-12 py-1.5 rounded-full text-white bg-teal-600 hover:bg-teal-700 hover:transition hover:duration-300" wire:click="product_add({{ $product->id }})">Add</button></div>
                     </div>
                 </div>
-                @endfor
+                @endforeach
             </div>
         </div>
     </div>

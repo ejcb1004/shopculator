@@ -14,19 +14,20 @@ class Edit extends Component
     public $prefix = 'http://127.0.0.1:3000';
     public $total = 69;
     public $items = 0;
-    public $products = [];
+    public $products;
     public $list_details = [];
+    public $new_detail;
 
     public function product_add($id)
     {
-        $new_detail = Product::where('id', $id)->get();
+        $this->new_detail = Product::where('id', $id)->get();
         $this->list_details[] = [
-            'id' => Arr::get($new_detail, '0.id'),
-            'product_id' => Arr::get($new_detail, '0.product_id'),
-            'image_path' => Arr::get($new_detail, '0.image_path'),
+            'id' => Arr::get($this->new_detail, '0.id'),
+            'product_id' => Arr::get($this->new_detail, '0.product_id'),
+            'image_path' => Arr::get($this->new_detail, '0.image_path'),
             'quantity' => 1,
-            'product_name' => Arr::get($new_detail, '0.product_name'),
-            'price' => Arr::get($new_detail, '0.price')
+            'product_name' => Arr::get($this->new_detail, '0.product_name'),
+            'price' => Arr::get($this->new_detail, '0.price')
         ];
         $this->items++;
     }
@@ -37,12 +38,16 @@ class Edit extends Component
 
     public function quantity_add() {
         // Add quantity of specific list detail
-        dd($this->products);
+        dd($this->new_detail);
+    }
+
+    public function mount() {
+        $this->products = Product::all();
     }
 
     public function render()
     {
-        $this->products = Product::all()->toArray();
+        
         return view('livewire.shopping-lists.edit');
     }   
 }
