@@ -44,5 +44,5 @@ class Edit extends Component
     {
         $this->products = Product::all()->toArray();
         return view('livewire.shopping-lists.edit');
-    }
+    }   
 }
