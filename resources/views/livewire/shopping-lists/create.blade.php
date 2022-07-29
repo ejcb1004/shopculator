@@ -6,7 +6,7 @@
                 <div class="space-x-2">
                     <div class="flex rounded-full bg-white w-full h-10 items-center">
                         <i class="fa-solid fa-magnifying-glass z-99 pl-4 absolute"></i>
-                        <input type="text" placeholder="Search" class="input input-bordered bg-white pl-10 w-72 rounded-full h-10" />
+                        <input type="text" placeholder="Search" class="input input-bordered bg-white pl-10 w-72 rounded-full h-10" wire:model = 'itemsearch' />
                     </div>
                     <!-- Cart Dropdown -->
                     <div class="dropdown dropdown-end">
@@ -38,6 +38,7 @@
                                 <!-- Card Content -->
                                 <div class="overflow-y-auto max-h-80">
                                     <!-- Item -->
+                                    @if($products && $products->count() > 0)
                                     @foreach($list_details as $list_detail)
                                     <div class="flex-row max-h-24 px-2 py-2">
                                         <div class="flex space-x-5 items-center">
@@ -65,6 +66,10 @@
                                         </div>
                                     </div>
                                     @endforeach
+                                    @else
+                                    <div class="flex justify-center w-full">
+                                    </div>
+                                    @endif
                                 </div>
                                 <hr>
                                 <!-- Card Total -->
@@ -177,7 +182,7 @@
         <div class="pt-1">
             <div class="grid grid-cols-2 grid-flow-row border-2 sm:grid-cols-3 grid-flow-row md:grid-cols-4 grid-flow-row">
                 <!-- Products -->
-                @foreach ($products as $product) 
+                @foreach ($products as $product)
                 <div class="border bg-white">
                     <div class="flex flex-col min-h-full py-5 px-4 space-y-1 items-center">
                         <div class="flex flex-auto items-center">

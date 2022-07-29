@@ -18,6 +18,10 @@ class Create extends Component
     public $list_details = [];
     public $new_detail;
 
+    // search filters
+    public $itemsearch = '';
+    
+
     public function product_add($id)
     {
         $this->new_detail = Product::where('id', $id)->get();
@@ -47,7 +51,7 @@ class Create extends Component
 
     public function render()
     {
-        
+        $this->products = Product::where('product_name','like','%'.$this->itemsearch.'%')->get();
         return view('livewire.shopping-lists.create');
     }   
 }
