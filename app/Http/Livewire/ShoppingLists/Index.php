@@ -17,6 +17,7 @@ class Index extends Component
 
     public function render()
     {
+            
         $this->shoppinglists = ShoppingList::where('list_name','like','%'.$this->searchterm.'%')->get();
         return view('livewire.shopping-lists.index');
     }

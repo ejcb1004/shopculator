@@ -2,6 +2,8 @@
 
 namespace App\Http\Livewire\ShoppingLists;
 
+use App\Models\Category;
+use App\Models\Market;
 use App\Models\Product;
 use Illuminate\Support\Arr;
 use Livewire\Component;
@@ -15,11 +17,15 @@ class Create extends Component
     public $total = 69;
     public $items = 0;
     public $products;
+    public $markets;
+    public $categories;
     public $list_details = [];
     public $new_detail;
 
     // search filters
     public $itemsearch = '';
+    public $marketsearch = '';
+    public $categorysearch = '';
     
 
     public function product_add($id)
@@ -47,11 +53,14 @@ class Create extends Component
 
     public function mount() {
         $this->products = Product::all();
+        $this->markets = Market::all();
+        $this->categories = Category::all();
     }
 
     public function render()
     {
-        $this->products = Product::where('product_name','like','%'.$this->itemsearch.'%')->get();
+            $this->products = Product::where('product_name','like','%'.$this->itemsearch.'%')->get();
+    
         return view('livewire.shopping-lists.create');
     }   
 }
