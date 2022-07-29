@@ -5,7 +5,7 @@
                 <!-- Search and Cart Button -->
                 <div class="space-x-2">
                     <div class="flex rounded-full bg-white w-full h-10 items-center">
-                        <i class="fa-solid fa-magnifying-glass z-99 pl-4 absolute"></i>
+                        <i class="fa-solid fa-magnifying-glass z-1 pl-4 absolute"></i>
                         <input type="text" placeholder="Search" class="input input-bordered bg-white pl-10 w-72 rounded-full h-10" />
                     </div>
                     <!-- Cart Dropdown -->
@@ -172,8 +172,6 @@
                     </a>
                 </div>
             </div>
-            <button wire:click="inspect_ld">Inspect List Details</button>
-            <button wire:click="inspect_pr">Inspect Product Data</button>
         </div>
         <!-- Product Table -->
         <div class="pt-1">
