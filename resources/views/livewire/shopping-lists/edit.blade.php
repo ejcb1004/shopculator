@@ -1,5 +1,5 @@
 <div>
-    <div class="bg-emerald-700 min-w-full sticky top-[64px]">
+    <div class="bg-emerald-700 min-w-full top-[64px]">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="navbar flex flex-row-reverse">
                 <!-- Search and Cart Button -->
@@ -30,7 +30,7 @@
                                 <!-- Card Header -->
                                 <div class="flex flex-nowrap py-1">
                                     <div class="flex w-full items-center">
-                                        <i class="fa-solid fa-peso-sign pl-3 absolute"></i>
+                                        <i class="fa-solid fa-peso-sign pl-3 relative z-1"></i>
                                         <input type="text" placeholder="Enter budget here" value="0" class="input input-bordered input-sm bg-white w-full pl-8" wire:model.lazy="budget" />
                                     </div>
                                 </div>
@@ -95,7 +95,7 @@
     <!-- Content Page -->
     <div class="max-w-7xl mx-auto px-3 pb-4 sm:px-6 lg:px-8">
         <!-- Market -->
-        <div class="flex justify-start space-x-4 sticky top-32 py-3 z">
+        <div class="inline-flex justify-start space-x-4 sticky top-32 py-3 z-1">
             <!-- Categories -->
             <div x-data="
                 {
@@ -172,6 +172,8 @@
                     </a>
                 </div>
             </div>
+            <button wire:click="inspect_ld">Inspect List Details</button>
+            <button wire:click="inspect_pr">Inspect Product Data</button>
         </div>
         <!-- Product Table -->
         <div class="pt-1">

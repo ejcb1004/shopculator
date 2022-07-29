@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\ShoppingLists;
 
+use App\Models\ListDetail;
 use App\Models\Product;
 use Illuminate\Support\Arr;
 use Livewire\Component;
@@ -18,6 +19,16 @@ class Edit extends Component
     public $list_details = [];
     public $new_detail;
 
+    public function inspect_ld()
+    {
+        dd($this->list_details);
+    }
+
+    public function inspect_pr()
+    {
+        dd($this->products);
+    }
+
     public function product_add($id)
     {
         $this->new_detail = Product::where('id', $id)->get();
@@ -32,22 +43,25 @@ class Edit extends Component
         $this->items++;
     }
 
-    public function quantity_sub() {
+    public function quantity_sub()
+    {
         // Subtract quantity of specific list detail
     }
 
-    public function quantity_add() {
+    public function quantity_add()
+    {
         // Add quantity of specific list detail
-        dd($this->new_detail);
     }
 
-    public function mount() {
+    public function mount()
+    {
         $this->products = Product::all();
+        $this->list_details = collect();
     }
 
     public function render()
     {
-        
+
         return view('livewire.shopping-lists.edit');
-    }   
+    }
 }
