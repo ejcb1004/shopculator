@@ -22,7 +22,7 @@
                         <div tabindex="0" class="mt-3 card card-compact dropdown-content w-96 bg-white shadow">
                             <!-- Card Header -->
                             <div class="font-bold text-lg bg-emerald-700 px-3 py-3 text-white flex justify-between">
-                                <span class="pl-2">Shopping List</span>
+                                <input type="text" placeholder="Shopping List Name" class="input bg-white w-full max-w-xs" />
                                 <span class="pr-2"><i class="fa-solid fa-xmark"></i></span>
                             </div>
                             <!-- Card Body -->
@@ -31,7 +31,7 @@
                                 <div class="flex flex-nowrap py-1">
                                     <div class="flex w-full items-center">
                                         <i class="fa-solid fa-peso-sign pl-3 absolute"></i>
-                                        <input type="text" placeholder="Enter budget here" class="input input-bordered input-sm bg-white w-full pl-8" wire:model.lazy="budget" />
+                                        <input type="text" placeholder="Enter budget here" value="0" class="input input-bordered input-sm bg-white w-full pl-8" wire:model.lazy="budget" />
                                     </div>
                                 </div>
                                 <hr>
@@ -47,19 +47,19 @@
                                             </div>
                                             <div class="flex w-full justify-between">
                                                 <div class="flex flex-col">
-                                                    <span>{{$list_detail['product_name']}}</span>
+                                                    <span>{{ $list_detail['product_name'] }}</span>
                                                     <div class="flex flex-row items-center space-x-2">
-                                                        <button>
+                                                        <button wire:click="quantity_sub">
                                                             <i class="fa-solid fa-circle-minus text-emerald-500"></i>
                                                         </button>
-                                                        <input type="text" class="input flex border-t-1 bg-white input-sm w-10 max-w-xs" />
-                                                        <button>
+                                                        <span class="text-center w-8">{{ $list_detail['quantity'] }}</span>
+                                                        <button wire:click="quantity_add">
                                                             <i class="fa-solid fa-circle-plus text-emerald-500"></i>
                                                         </button>
                                                     </div>
                                                 </div>
                                                 <div class="flex flex-wrap items-center">
-                                                    <span>₱{{$list_detail['price']}}</span>
+                                                    <span>₱{{ $list_detail['price'] }}</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -177,18 +177,18 @@
         <div class="pt-1">
             <div class="grid grid-cols-2 grid-flow-row border-2 sm:grid-cols-3 grid-flow-row md:grid-cols-4 grid-flow-row">
                 <!-- Products -->
-                @for ($i = 0; $i < count($products); $i++) 
+                @foreach ($products as $product) 
                 <div class="border bg-white">
                     <div class="flex flex-col min-h-full py-5 px-4 space-y-1 items-center">
                         <div class="flex flex-auto items-center">
-                            <img src="{{ $prefix . $products[$i]['image_path']}}" width="200" alt="Image" />
+                            <img src="{{ $prefix . $product->image_path }}" alt="Image" />
                         </div>
-                        <div class="h-1/4 text-black text-center">{{ $products[$i]['product_name'] }}</div>
-                        <div class="h-1/4 text-black text-center">PHP {{ $products[$i]['price'] }}</div>
-                        <div><button class="flex ml-1 px-12 py-1.5 rounded-full text-white bg-teal-600 hover:bg-teal-700 hover:transition hover:duration-300" wire:click="addProduct">Add</button></div>
+                        <div class="h-1/4 text-black text-center">{{ $product->product_name }}</div>
+                        <div class="h-1/4 text-black text-center">PHP {{ $product->price }}</div>
+                        <div><button class="flex ml-1 px-12 py-1.5 rounded-full text-white bg-teal-600 hover:bg-teal-700 hover:transition hover:duration-300" wire:click="product_add({{ $product->id }})">Add</button></div>
                     </div>
                 </div>
-                @endfor
+                @endforeach
             </div>
         </div>
     </div>
