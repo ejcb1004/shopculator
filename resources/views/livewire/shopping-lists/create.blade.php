@@ -6,7 +6,7 @@
                 <div class="space-x-2">
                     <div class="flex rounded-full bg-white w-full h-10 items-center">
                         <i class="fa-solid fa-magnifying-glass z-1 pl-4 absolute"></i>
-                        <input type="text" placeholder="Search" class="input input-bordered bg-white pl-10 w-72 rounded-full h-10" />
+                        <input type="text" placeholder="Search" class="input input-bordered bg-white pl-10 w-72 rounded-full h-10" wire:model="search"/>
                     </div>
                     <!-- Cart Dropdown -->
                     <div class="dropdown dropdown-end">
@@ -100,7 +100,7 @@
             <div class="flex justify-start space-x-4 sticky top-32 py-3">
                 <!-- Categories -->
                 <div>
-                    <select class="select bg-white text-black w-full max-w-xs" >
+                    <select class="select bg-white text-black w-full max-w-xs" wire:model="bymarket">
                         <option value="">Markets (All)</option>
                         @foreach($markets as $market)
                         <option value="{{ $market->market_id }}" class="block py-2 px-5 break-words text-base text-slate-600 hover:bg-slate-200 hover:bg-opacity-50">
@@ -111,8 +111,7 @@
                 </div>
 
                 <div>
-                    <select class="select bg-white text-black w-full max-w-xs" wire:model="">
-                        <option value="">Category (All)</option>
+                    <select class="select bg-white text-black w-full max-w-xs" wire:model="bycategory">
                         @foreach($categories as $category)
                         <option value="{{ $category->category_id }}" class="block py-2 px-5 break-words text-base text-slate-600 hover:bg-slate-200 hover:bg-opacity-50">
                             {{$category->category_name}}
@@ -122,12 +121,12 @@
                 </div>
 
                 <div>
-                    <select class="select bg-white text-black w-full max-w-xs" wire:model="">
+                    <select class="select bg-white text-black w-full max-w-xs" wire:model="sortby">
                         <option selected>Sort By</option>
                         <option value="asc">Alphabetical (A-Z)</option>
                         <option value="desc">Alphabetical (Z-A)</option>
-                        <option value="asc">Price (Highest-Lowest)</option>
-                        <option value="desc">Price (Lowest-Highest)</option>
+                        <option value="desc">Price (Highest-Lowest)</option>
+                        <option value="asc">Price (Lowest-Highest)</option>
                     </select>
                 </div>
             </div>
@@ -149,7 +148,7 @@
                 </div>
                 @endforeach
             </div>
-        </div>
+        </div> 
         @if(count($products))
         {{ $products->links() }}
         @endif

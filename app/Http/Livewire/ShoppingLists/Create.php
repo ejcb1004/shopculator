@@ -24,10 +24,10 @@ class Create extends Component
     public $new_detail;
 
     // search filters
-    public $itemsearch;
-    public $marketfilter;
-    public $categoryfilter; 
-    public $sortfilter = 'asc';
+    public $search;
+    public $bymarket = null;
+    public $bycategory = null;
+    public $sortby = 'asc';
     
     public function render()
     {    
