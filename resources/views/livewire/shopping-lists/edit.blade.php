@@ -1,5 +1,5 @@
 <div>
-    <div class="bg-emerald-700 min-w-full top-[64px]">
+    <div class="bg-emerald-700 min-w-full">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="navbar flex flex-row-reverse">
                 <!-- Search and Cart Button -->
@@ -15,7 +15,7 @@
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="white">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
                                 </svg>
-                                <span class="badge badge-sm badge-secondary indicator-item">{{$items}}</span>
+                                <span class="badge badge-sm badge-secondary indicator-item">{{ $items }}</span>
                             </div>
                         </label>
                         <!-- Card Body/Shopping List Preview -->
@@ -95,7 +95,7 @@
     <!-- Content Page -->
     <div class="max-w-7xl mx-auto px-3 pb-4 sm:px-6 lg:px-8">
         <!-- Market -->
-        <div class="inline-flex justify-start space-x-4 sticky top-32 py-3 z-1">
+        <div class="inline-flex justify-start space-x-4 py-3">
             <!-- Categories -->
             <div x-data="
                 {
@@ -175,13 +175,13 @@
         </div>
         <!-- Product Table -->
         <div class="pt-1">
-            <div class="grid grid-cols-2 grid-flow-row border-2 sm:grid-cols-3 grid-flow-row md:grid-cols-4 grid-flow-row">
+            <div class="grid grid-cols-2 border-2 sm:grid-cols-3 md:grid-cols-4">
                 <!-- Products -->
                 @foreach ($products as $product) 
                 <div class="border bg-white">
                     <div class="flex flex-col min-h-full py-5 px-4 space-y-1 items-center">
                         <div class="flex flex-auto items-center">
-                            <img src="{{ $prefix . $product->image_path }}" alt="Image" />
+                            <img src="{{ $prefix . $product->image_path }}" alt="{{ $product->product_name }}" width="125" />
                         </div>
                         <div class="h-1/4 text-black text-center">{{ $product->product_name }}</div>
                         <div class="h-1/4 text-black text-center">PHP {{ $product->price }}</div>
