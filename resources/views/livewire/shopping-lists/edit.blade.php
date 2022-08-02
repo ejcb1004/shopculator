@@ -175,6 +175,8 @@
                     </a>
                 </div>
             </div>
+            <button wire:click="inspect_ld">dd list</button>
+            <button wire:click="inspect_pr">dd prod</button>
         </div>
         <!-- Product Table -->
         <div class="pt-1">
@@ -188,7 +190,9 @@
                         </div>
                         <div class="h-1/4 text-black text-center">{{ $product->product_name }}</div>
                         <div class="h-1/4 text-black text-center">PHP {{ $product->price }}</div>
-                        <div><button class="flex ml-1 px-12 py-1.5 rounded-full text-white bg-emerald-600 hover:bg-emerald-700 hover:transition hover:duration-300" wire:click="product_add({{ $product->id }})">Add</button></div>
+                        <div class="flex w-28 h-9 rounded-full text-white bg-emerald-600 hover:bg-emerald-700 hover:transition hover:duration-300">
+                            <button class="rounded-full w-full" wire:click="product_add({{ $product->id }})">Add</button>
+                        </div>
                     </div>
                 </div>
                 @endforeach
