@@ -1,20 +1,22 @@
 <div>
-    <div class="bg-emerald-700 min-w-full sticky top-[64px]">
+    <div class="bg-emerald-700 min-w-full">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="navbar flex flex-row-reverse">
                 <!-- Search and Cart Button -->
                 <div class="space-x-2">
                     <div class="flex rounded-full bg-white w-full h-10 items-center">
-                        <i class="fa-solid fa-magnifying-glass z-99 pl-4 absolute"></i>
-                        <input type="text" placeholder="Search" class="input input-bordered bg-white pl-10 w-72 rounded-full h-10" wire:model='itemsearch' />
+                        <i class="fa-solid fa-magnifying-glass z-1 pl-4 absolute"></i>
+                        <input type="text" placeholder="Search" class="input input-bordered bg-white pl-10 w-72 rounded-full h-10" />
                     </div>
                     <!-- Cart Dropdown -->
                     <div class="dropdown dropdown-end">
                         <label tabindex="0" class="btn btn-ghost btn-circle">
+                            <div class="indicator">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="white">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
                                 </svg>
-                                <span>{{$items}}</span>
+                                <span class="badge badge-sm badge-secondary indicator-item">{{ $items }}</span>
+                            </div>
                         </label>
                         <!-- Card Body/Shopping List Preview -->
                         <div tabindex="0" class="mt-3 card card-compact dropdown-content w-96 bg-white shadow">
@@ -28,7 +30,7 @@
                                 <!-- Card Header -->
                                 <div class="flex flex-nowrap py-1">
                                     <div class="flex w-full items-center">
-                                        <i class="fa-solid fa-peso-sign pl-3 absolute"></i>
+                                        <i class="fa-solid fa-peso-sign pl-3 relative z-1"></i>
                                         <input type="text" placeholder="Enter budget here" value="0" class="input input-bordered input-sm bg-white w-full pl-8" wire:model.lazy="budget" />
                                     </div>
                                 </div>
@@ -36,7 +38,6 @@
                                 <!-- Card Content -->
                                 <div class="overflow-y-auto max-h-80">
                                     <!-- Item -->
-                                    @if($products && $products->count() > 0)
                                     @foreach($list_details as $list_detail)
                                     <div class="flex-row max-h-24 px-2 py-2">
                                         <div class="flex space-x-5 items-center">
@@ -64,7 +65,6 @@
                                         </div>
                                     </div>
                                     @endforeach
-                                    @endif
                                 </div>
                                 <hr>
                                 <!-- Card Total -->
@@ -72,12 +72,12 @@
                                     <div class="space-y-3">
                                         <div class="flex justify-between">
                                             <span class="text-black">Total:</span>
-                                            <span class="text-black"><i class="fa-solid fa-peso-sign"></i> {{ $total }}</span>
+                                            <span class="text-black"><i class="fa-solid fa-peso-sign"></i> {{$total}}</span>
                                         </div>
                                         <!-- Card Remaining Budget -->
                                         <div class="flex justify-between">
                                             <span class="text-black">Remaining:</span>
-                                            <span class="text-black"><i class="fa-solid fa-peso-sign"></i> {{ $budget - $total }}</span>
+                                            <span class="text-black"><i class="fa-solid fa-peso-sign"></i> {{$budget - $total}}</span>
                                         </div>
                                         <!-- Save Button -->
                                         <div class="card-actions">
@@ -95,60 +95,63 @@
     <!-- Content Page -->
     <div class="max-w-7xl mx-auto px-3 pb-4 sm:px-6 lg:px-8">
         <!-- Market -->
-        <div class="flex justify-start space-x-4 sticky top-32 py-3">
+        <div class="inline-flex justify-start space-x-4 py-3">
             <!-- Categories -->
-            <div>
-                <select class="select bg-white text-black w-full max-w-xs">
-                    <option value="">Markets (All)</option>
-                    @foreach($markets as $market)
-                    <option value="{{ $market->market_id }}" class="block py-2 px-5 break-words text-base text-slate-600 hover:bg-slate-200 hover:bg-opacity-50">
-                        {{$market->market_name}}
-                    </option>
-                    @endforeach
-                </select>
-            </div>
+            <div class="flex justify-start space-x-4 sticky top-32 py-3">
+                <!-- Categories -->
+                <div>
+                    <select class="select bg-white text-black w-full max-w-xs" >
+                        <option value="">Markets (All)</option>
+                        @foreach($markets as $market)
+                        <option value="{{ $market->market_id }}" class="block py-2 px-5 break-words text-base text-slate-600 hover:bg-slate-200 hover:bg-opacity-50">
+                            {{$market->market_name}}
+                        </option>
+                        @endforeach
+                    </select>
+                </div>
 
-            <div>
-                <select class="select bg-white text-black w-full max-w-xs">
-                    <option value="">Category (All)</option>
-                    @foreach($categories as $category)
-                    <option value="{{ $category->category_id }}" class="block py-2 px-5 break-words text-base text-slate-600 hover:bg-slate-200 hover:bg-opacity-50">
-                        {{$category->category_name}}
-                    </option>
-                    @endforeach
-                </select>
-            </div>
+                <div>
+                    <select class="select bg-white text-black w-full max-w-xs" wire:model="">
+                        <option value="">Category (All)</option>
+                        @foreach($categories as $category)
+                        <option value="{{ $category->category_id }}" class="block py-2 px-5 break-words text-base text-slate-600 hover:bg-slate-200 hover:bg-opacity-50">
+                            {{$category->category_name}}
+                        </option>
+                        @endforeach
+                    </select>
+                </div>
 
-            <div>
-                <select class="select bg-white text-black w-full max-w-xs">
-                    <option value="">Alphabetical (A-Z)</option>
-                    <option value="">Alphabetical (Z-A)</option>
-                    <option value="">Price (Highest-Lowest)</option>
-                    <option value="">Price (Lowest-Highest)</option>
-                </select>
-            </div>
-
-
-        </div>
-
-    </div>
-    <!-- Product Table -->
-    <div class="pt-1">
-        <div class="grid grid-cols-2 grid-flow-row border-2 sm:grid-cols-3 grid-flow-row md:grid-cols-4 grid-flow-row">
-            <!-- Products -->
-            @foreach ($products as $product)
-            <div class="border bg-white">
-                <div class="flex flex-col min-h-full py-5 px-4 space-y-1 items-center">
-                    <div class="flex flex-auto items-center">
-                        <img src="{{ $prefix . $product->image_path }}" alt="Image" />
-                    </div>
-                    <div class="h-1/4 text-black text-center">{{ $product->product_name }}</div>
-                    <div class="h-1/4 text-black text-center">PHP {{ $product->price }}</div>
-                    <div><button class="flex ml-1 px-12 py-1.5 rounded-full text-white bg-teal-600 hover:bg-teal-700 hover:transition hover:duration-300" wire:click="product_add({{ $product->id }})">Add</button></div>
+                <div>
+                    <select class="select bg-white text-black w-full max-w-xs" wire:model="">
+                        <option selected>Sort By</option>
+                        <option value="asc">Alphabetical (A-Z)</option>
+                        <option value="desc">Alphabetical (Z-A)</option>
+                        <option value="asc">Price (Highest-Lowest)</option>
+                        <option value="desc">Price (Lowest-Highest)</option>
+                    </select>
                 </div>
             </div>
-            @endforeach
         </div>
+        <!-- Product Table -->
+        <div class="pt-1">
+            <div class="grid grid-cols-2 border-2 sm:grid-cols-3 md:grid-cols-4">
+                <!-- Products -->
+                @foreach ($products as $product)
+                <div class="border bg-white">
+                    <div class="flex flex-col min-h-full py-5 px-4 space-y-1 items-center">
+                        <div class="flex flex-auto items-center">
+                            <img src="{{ $prefix . $product->image_path }}" alt="{{ $product->product_name }}" width="125" />
+                        </div>
+                        <div class="h-1/4 text-black text-center">{{ $product->product_name }}</div>
+                        <div class="h-1/4 text-black text-center">PHP {{ $product->price }}</div>
+                        <div><button class="flex ml-1 px-12 py-1.5 rounded-full text-white bg-teal-600 hover:bg-teal-700 hover:transition hover:duration-300" wire:click="product_add({{ $product->id }})">Add</button></div>
+                    </div>
+                </div>
+                @endforeach
+            </div>
+        </div>
+        @if(count($products))
+        {{ $products->links() }}
+        @endif
     </div>
-</div>
 </div>

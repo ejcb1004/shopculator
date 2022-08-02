@@ -44,8 +44,8 @@
                                     <input type="checkbox" class="checkbox checkbox-sm checkbox-accent" />
                                 </td>
                                 <td class="table-item">{{ $shoppinglist->list_name }}</td>
-                                <td class="table-item">{{ $shoppinglist->budget }}</td>
                                 <td class="table-item">{{ $shoppinglist->total }}</td>
+                                <td class="table-item">{{ $shoppinglist->budget }}</td>
                                 <td class="table-item">{{ $shoppinglist->updated_at }}</td>
                             </tr>
                             @endforeach

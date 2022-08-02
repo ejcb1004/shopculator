@@ -7,26 +7,34 @@ use App\Models\Market;
 use App\Models\Product;
 use Illuminate\Support\Arr;
 use Livewire\Component;
+use Livewire\WithPagination;
 
 class Create extends Component
 {
+    use WithPagination;
     protected $listeners = ['product_add' => 'product_add'];
 
     public $budget = 0;
     public $prefix = 'http://127.0.0.1:3000';
     public $total = 69;
     public $items = 0;
-    public $products;
     public $markets;
     public $categories;
     public $list_details = [];
     public $new_detail;
 
     // search filters
-    public $itemsearch = '';
-    public $marketsearch = '';
-    public $categorysearch = '';
+    public $itemsearch;
+    public $marketfilter;
+    public $categoryfilter; 
+    public $sortfilter = 'asc';
     
+    public function render()
+    {    
+        return view('livewire.shopping-lists.create',[
+            'products'=>Product::orderBy('product_name','asc')->paginate(8)
+        ]);
+    } 
 
     public function product_add($id)
     {
@@ -50,17 +58,8 @@ class Create extends Component
         // Add quantity of specific list detail
         dd($this->new_detail);
     }
-
-    public function mount() {
-        $this->products = Product::all();
+    public function mount(){
         $this->markets = Market::all();
         $this->categories = Category::all();
     }
-
-    public function render()
-    {
-            $this->products = Product::where('product_name','like','%'.$this->itemsearch.'%')->get();
-    
-        return view('livewire.shopping-lists.create');
-    }   
 }
