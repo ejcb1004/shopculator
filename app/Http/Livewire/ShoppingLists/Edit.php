@@ -32,8 +32,17 @@ class Edit extends Component
     public function product_add($id)
     {
         $this->new_detail = Product::where('id', $id)->get();
+        if (empty($this->list_details))
         $this->list_details[] = [
-            'id' => Arr::get($this->new_detail, '0.id'),
+            'index' => 0,
+            'product_id' => Arr::get($this->new_detail, '0.product_id'),
+            'image_path' => Arr::get($this->new_detail, '0.image_path'),
+            'quantity' => 1,
+            'product_name' => Arr::get($this->new_detail, '0.product_name'),
+            'price' => Arr::get($this->new_detail, '0.price')
+        ];
+        else $this->list_details[] = [
+            'index' => array_key_last($this->list_details) + 1,
             'product_id' => Arr::get($this->new_detail, '0.product_id'),
             'image_path' => Arr::get($this->new_detail, '0.image_path'),
             'quantity' => 1,
@@ -43,20 +52,28 @@ class Edit extends Component
         $this->items++;
     }
 
-    public function quantity_sub()
+    public function quantity_sub($index)
     {
-        // Subtract quantity of specific list detail
+        $this->list_details[$index]['quantity'];
+        if ($this->list_details[$index]['quantity'] > 1) $this->list_details[$index]['quantity']--;
+        else {
+            $this->remove_item($index);
+        }
     }
 
-    public function quantity_add()
+    public function quantity_add($index)
     {
-        // Add quantity of specific list detail
+        $this->list_details[$index]['quantity']++;
+    }
+
+    public function remove_item($index) {
+        unset($this->list_details[$index]);
+        $this->items--;
     }
 
     public function mount()
     {
         $this->products = Product::all();
-        $this->list_details = collect();
     }
 
     public function render()
