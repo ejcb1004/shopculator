@@ -25,10 +25,28 @@ class Create extends Component
     public $prices;
 
     // search filters
-    public $search;
-    public $bymarket = null;
-    public $bycategory = null;
-    public $sortby = 'asc';
+    public $selectedmarket = null;
+    public $selectedcategory = null;
+    public $selectedsort = "asc";
+    public $searchproduct = "";
+    
+    
+    public function render()
+    {    
+        return view('livewire.shopping-lists.create',[
+            'products' => Product::with(['market','category'])
+            ->when($this->selectedmarket,function($query){
+                $query -> where('market_id',$this->selectedmarket);
+            })
+            ->when($this->selectedcategory,function($query){
+                $query -> where('category_id',$this->selectedcategory);
+            })
+            ->orderBy('price', $this->selectedsort)
+            ->search(trim($this->searchproduct))    
+            ->paginate(8)
+        ]);
+    } 
+
 
     public function inspect_ld()
     {
@@ -100,13 +118,4 @@ class Create extends Component
         $this->prefix = 'http://127.0.0.1:3000';
     }
 
-    public function render()
-    {
-        return view(
-            'livewire.shopping-lists.create',
-            [
-                'products' => Product::orderBy('product_name', 'asc')->paginate(8)
-            ]
-        );
-    }
 }
