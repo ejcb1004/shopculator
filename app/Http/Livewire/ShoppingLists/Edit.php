@@ -2,24 +2,36 @@
 
 namespace App\Http\Livewire\ShoppingLists;
 
+use App\Models\Category;
+use App\Models\Market;
 use App\Models\Product;
 use Livewire\Component;
+use Livewire\WithPagination;
 
 class Edit extends Component
 {
+    use WithPagination;
     protected $listeners = ['product_add' => 'product_add'];
 
+    // int
     public $budget, $total, $items;
+
+    // string
     public $prefix;
-    public $products;
+
+    // array
     public $list_details;
     public $new_detail;
     public $prices;
 
+    // search filters
+    public $search;
+    public $bymarket = null;
+    public $bycategory = null;
+    public $sortby = 'asc';
+
     public function inspect_ld()
     {
-        //$index = array_search($this->new_detail['product_id'], array_column($this->list_details, 'product_id'));
-        //dd(in_array($this->new_detail['product_id'], $this->list_details[$index]));
         dd($this->list_details);
     }
 
@@ -78,7 +90,8 @@ class Edit extends Component
 
     public function mount()
     {
-        $this->products = Product::all();
+        $this->markets = Market::all();
+        $this->categories = Category::all();
         $this->list_details = [];
         $this->prices = [];
         $this->budget = 0;
@@ -89,6 +102,11 @@ class Edit extends Component
 
     public function render()
     {
-        return view('livewire.shopping-lists.edit');
+        return view(
+            'livewire.shopping-lists.edit',
+            [
+                'products' => Product::orderBy('product_name', 'asc')->paginate(8)
+            ]
+        );
     }
 }

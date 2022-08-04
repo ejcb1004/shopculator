@@ -6,7 +6,7 @@
                 <div class="space-x-2">
                     <div class="flex rounded-full bg-white w-full h-10 items-center">
                         <i class="fa-solid fa-magnifying-glass z-1 pl-4 absolute"></i>
-                        <input type="text" placeholder="Search" class="input input-bordered bg-white pl-10 w-72 rounded-full h-10" wire:model="search"/>
+                        <input type="text" placeholder="Search" class="input input-bordered bg-white pl-10 w-72 rounded-full h-10" />
                     </div>
                     <!-- Cart Dropdown -->
                     <div class="dropdown dropdown-end">
@@ -15,7 +15,7 @@
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="white">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
                                 </svg>
-                                <span class="badge badge-sm badge-secondary indicator-item">{{ $items }}</span>
+                                <span class="badge badge-sm bg-emerald-400 border-none text-white indicator-item">{{ $items }}</span>
                             </div>
                         </label>
                         <!-- Card Body/Shopping List Preview -->
@@ -30,36 +30,40 @@
                                 <!-- Card Header -->
                                 <div class="flex flex-nowrap py-1">
                                     <div class="flex w-full items-center">
-                                        <i class="fa-solid fa-peso-sign pl-3 relative z-1"></i>
-                                        <input type="text" placeholder="Enter budget here" value="0" class="input input-bordered input-sm bg-white w-full pl-8" wire:model.lazy="budget" />
+                                        <i class="fa-solid fa-peso-sign pl-3 absolute"></i>
+                                        <input type="number" placeholder="Enter budget here" class="input input-bordered input-sm bg-white w-full pl-8" wire:model.lazy="budget" />
                                     </div>
                                 </div>
                                 <hr>
                                 <!-- Card Content -->
                                 <div class="overflow-y-auto max-h-80">
                                     <!-- Item -->
-                                    @foreach($list_details as $list_detail)
+                                    @foreach ($list_details as $list_detail)
                                     <div class="flex-row max-h-24 px-2 py-2">
                                         <div class="flex space-x-5 items-center">
-                                            <div class="flex space-x-2">
-                                                <input type="checkbox" class="checkbox checkbox-accent checkbox-sm" />
-                                                <span><img src="{{ $prefix . $list_detail['image_path']}}" width="75" alt="Image" /></span>
+                                            <div class="flex space-x-2 items-center">
+                                                <span class="relative h-2/3 flex rounded-full px-1 bg-emerald-600 text-xs text-white items-center">{{ $list_detail['index'] + 1 }}</span>
+                                                <input type="checkbox" class="checkbox checkbox-accent checkbox-sm" value="{{ $list_detail['price'] * $list_detail['quantity'] }}" wire:model="prices" />
+                                                <span><img src="{{ $prefix . $list_detail['image_path'] }}" width="100" alt="Image" /></span>
                                             </div>
                                             <div class="flex w-full justify-between">
                                                 <div class="flex flex-col">
                                                     <span>{{ $list_detail['product_name'] }}</span>
                                                     <div class="flex flex-row items-center space-x-2">
-                                                        <button wire:click="quantity_sub">
-                                                            <i class="fa-solid fa-circle-minus text-emerald-500"></i>
+                                                    <button wire:click="quantity_sub( {{ $list_detail['index'] }} )">
+                                                            <i class="fa-solid fa-minus text-emerald-500"></i>
                                                         </button>
                                                         <span class="text-center w-8">{{ $list_detail['quantity'] }}</span>
-                                                        <button wire:click="quantity_add">
-                                                            <i class="fa-solid fa-circle-plus text-emerald-500"></i>
+                                                        <button wire:click="quantity_add( {{ $list_detail['index'] }} )">
+                                                            <i class="fa-solid fa-plus text-emerald-500"></i>
                                                         </button>
                                                     </div>
                                                 </div>
-                                                <div class="flex flex-wrap items-center">
-                                                    <span>₱{{ $list_detail['price'] }}</span>
+                                                <div class="flex flex-col items-end">
+                                                    <button wire:click="remove_item( {{ $list_detail['index'] }} )">
+                                                        <i class="fa-solid fa-xmark text-emerald-500"></i>
+                                                    </button>
+                                                    <span>₱&nbsp;{{ number_format($list_detail['price'] * $list_detail['quantity'], 2) }}</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -72,12 +76,12 @@
                                     <div class="space-y-3">
                                         <div class="flex justify-between">
                                             <span class="text-black">Total:</span>
-                                            <span class="text-black"><i class="fa-solid fa-peso-sign"></i> {{$total}}</span>
+                                            <span class="text-black"><i class="fa-solid fa-peso-sign"></i>&nbsp;{{ number_format(array_sum($prices), 2) }}</span>
                                         </div>
                                         <!-- Card Remaining Budget -->
                                         <div class="flex justify-between">
                                             <span class="text-black">Remaining:</span>
-                                            <span class="text-black"><i class="fa-solid fa-peso-sign"></i> {{$budget - $total}}</span>
+                                            <span class="text-black"><i class="fa-solid fa-peso-sign"></i>&nbsp;{{ number_format($budget - array_sum($prices), 2) }}</span>
                                         </div>
                                         <!-- Save Button -->
                                         <div class="card-actions">
@@ -143,12 +147,16 @@
                         </div>
                         <div class="h-1/4 text-black text-center">{{ $product->product_name }}</div>
                         <div class="h-1/4 text-black text-center">PHP {{ $product->price }}</div>
-                        <div><button class="flex ml-1 px-12 py-1.5 rounded-full text-white bg-teal-600 hover:bg-teal-700 hover:transition hover:duration-300" wire:click="product_add({{ $product->id }})">Add</button></div>
+                        <div class="flex w-28 h-9 rounded-full text-white bg-emerald-600 hover:bg-emerald-700 hover:transition hover:duration-300">
+                            <button class="rounded-full w-full" wire:click="product_add({{ $product->id }})">
+                                Add
+                            </button>
+                        </div>
                     </div>
                 </div>
                 @endforeach
             </div>
-        </div> 
+        </div>
         @if(count($products))
         {{ $products->links() }}
         @endif

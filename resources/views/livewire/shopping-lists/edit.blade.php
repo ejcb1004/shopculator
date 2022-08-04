@@ -101,83 +101,39 @@
         <!-- Market -->
         <div class="inline-flex justify-start space-x-4 py-3">
             <!-- Categories -->
-            <div x-data="
-                {
-                    dropdownOpen: false
-                }
-                " @click.outside="dropdownOpen = false" class="relative inline-flex text-left">
-                <button @click="dropdownOpen = !dropdownOpen" class="flex bg-white px-4 py-1.5 lg:space-x-24 sm:space-x-6 space-x-4 border-none justify-between shadow-md rounded hover:bg-slate-100 hover:transition hover:duration-300 hover:ease-out">
-                    <span class="text-slate-600 font-semibold">Market</span>
-                    <span class="text-slate-600 "><i class="fa-solid fa-angle-down"></i></span>
-                </button>
-                <div :class="dropdownOpen ? 'top-full opacity-100 visible' : 'top-[110%] invisible opacity-0' " class="absolute left-0 z-40 mt-2 w-full rounded border-[.5px] border-light bg-white py-5 shadow-md transition-all">
-                    <a href="javascript:void(0)" class="block py-2 px-5 text-base text-slate-600 hover:bg-slate-200 hover:bg-opacity-50">
-                        All
-                    </a>
-                    <a href="javascript:void(0)" class="block py-2 px-5 text-base text-slate-600 hover:bg-slate-200 hover:bg-opacity-50">
-                        SM Supermarket
-                    </a>
-                    <a href="javascript:void(0)" class="block py-2 px-5 text-base text-slate-600 hover:bg-slate-200 hover:bg-opacity-50">
-                        AllDay Supermarket
-                    </a>
-                    <a href="javascript:void(0)" class="block py-2 px-5 text-base text-slate-600 hover:bg-slate-200 hover:bg-opacity-50">
-                        EasyMart
-                    </a>
+            <div class="flex justify-start space-x-4 sticky top-32 py-3">
+                <!-- Categories -->
+                <div>
+                    <select class="select bg-white text-black w-full max-w-xs" wire:model="bymarket">
+                        <option value="">Markets (All)</option>
+                        @foreach($markets as $market)
+                        <option value="{{ $market->market_id }}" class="block py-2 px-5 break-words text-base text-slate-600 hover:bg-slate-200 hover:bg-opacity-50">
+                            {{$market->market_name}}
+                        </option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <div>
+                    <select class="select bg-white text-black w-full max-w-xs" wire:model="bycategory">
+                        @foreach($categories as $category)
+                        <option value="{{ $category->category_id }}" class="block py-2 px-5 break-words text-base text-slate-600 hover:bg-slate-200 hover:bg-opacity-50">
+                            {{$category->category_name}}
+                        </option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <div>
+                    <select class="select bg-white text-black w-full max-w-xs" wire:model="sortby">
+                        <option selected>Sort By</option>
+                        <option value="asc">Alphabetical (A-Z)</option>
+                        <option value="desc">Alphabetical (Z-A)</option>
+                        <option value="desc">Price (Highest-Lowest)</option>
+                        <option value="asc">Price (Lowest-Highest)</option>
+                    </select>
                 </div>
             </div>
-            <div x-data="
-                {
-                    dropdownOpen: false
-                }
-                " @click.outside="dropdownOpen = false" class="relative inline-flex text-left">
-                <button @click="dropdownOpen = !dropdownOpen" class="flex bg-white px-4 py-1.5 lg:space-x-24 sm:space-x-6 space-x-4 border-none justify-between shadow-md rounded hover:bg-slate-100 hover:transition hover:duration-300 hover:ease-out">
-                    <span class="text-slate-600 font-semibold">Categories</span>
-                    <span class="text-slate-600 "><i class="fa-solid fa-angle-down"></i></span>
-                </button>
-                <div :class="dropdownOpen ? 'top-full opacity-100 visible' : 'top-[110%] invisible opacity-0' " class="absolute left-0 z-40 mt-2 w-full rounded border-[.5px] border-light bg-white py-5 shadow-md transition-all">
-                    <a href="javascript:void(0)" class="block py-2 px-5 text-base text-slate-600 hover:bg-slate-200 hover:bg-opacity-50">
-                        All
-                    </a>
-                    <a href="javascript:void(0)" class="block py-2 px-5 text-base text-slate-600 hover:bg-slate-200 hover:bg-opacity-50">
-                        Food
-                    </a>
-                    <a href="javascript:void(0)" class="block py-2 px-5 text-base text-slate-600 hover:bg-slate-200 hover:bg-opacity-50">
-                        Frozen
-                    </a>
-                    <a href="javascript:void(0)" class="block py-2 px-5 text-base text-slate-600 hover:bg-slate-200 hover:bg-opacity-50">
-                        Beverages
-                    </a>
-                    <a href="javascript:void(0)" class="block py-2 px-5 text-base text-slate-600 hover:bg-slate-200 hover:bg-opacity-50">
-                        Dairy
-                    </a>
-                </div>
-            </div>
-            <div x-data="
-                {
-                    dropdownOpen: false
-                }
-                " @click.outside="dropdownOpen = false" class="relative inline-flex text-left">
-                <button @click="dropdownOpen = !dropdownOpen" class="flex bg-white px-4 py-1.5 lg:space-x-24 sm:space-x-6 space-x-4 border-none justify-between shadow-md rounded hover:bg-slate-100 hover:transition hover:duration-300 hover:ease-out">
-                    <span class="text-slate-600 font-semibold">Sort by</span>
-                    <span class="text-slate-600 "><i class="fa-solid fa-angle-down"></i></span>
-                </button>
-                <div :class="dropdownOpen ? 'top-full opacity-100 visible' : 'top-[110%] invisible opacity-0' " class="absolute left-0 z-40 mt-2 w-full rounded border-[.5px] border-light bg-white py-5 shadow-md transition-all">
-                    <a href="javascript:void(0)" class="block py-2 px-5 text-base text-slate-600 hover:bg-slate-200 hover:bg-opacity-50">
-                        Alphabetical (A-Z)
-                    </a>
-                    <a href="javascript:void(0)" class="block py-2 px-5 text-base text-slate-600 hover:bg-slate-200 hover:bg-opacity-50">
-                        Alphabetical (Z-A)
-                    </a>
-                    <a href="javascript:void(0)" class="block py-2 px-5 text-base text-slate-600 hover:bg-slate-200 hover:bg-opacity-50">
-                        Price (Ascending)
-                    </a>
-                    <a href="javascript:void(0)" class="block py-2 px-5 text-base text-slate-600 hover:bg-slate-200 hover:bg-opacity-50">
-                        Price (Descending)
-                    </a>
-                </div>
-            </div>
-            <button wire:click="inspect_ld">dd list</button>
-            <button wire:click="inspect_pr">dd prod</button>
         </div>
         <!-- Product Table -->
         <div class="pt-1">
@@ -201,5 +157,8 @@
                 @endforeach
             </div>
         </div>
+        @if(count($products))
+        {{ $products->links() }}
+        @endif
     </div>
 </div>
