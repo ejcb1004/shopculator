@@ -41,7 +41,7 @@
                             <tr class="hover table-group">
 
                                 <td class="table-item">
-                                    <input type="checkbox" class="checkbox checkbox-sm checkbox-accent" />
+                                    <input type="checkbox" class="checkbox checkbox-sm checkbox-accent"/>
                                 </td>
                                 <td class="table-item">{{ $shoppinglist->list_name }}</td>
                                 <td class="table-item">{{ $shoppinglist->total }}</td>
@@ -61,7 +61,7 @@
             </div>
         </div>
         <!-- Options Menu when Checkbox Ticked -->
-        <div id="contextmenu" class="sticky bottom-0 bg-white p-3 bg-shadow w-full hidden">
+        <div class="sticky bottom-0 bg-white p-3 bg-shadow w-full">
             <div class="flex justify-center space-x-10">
                 <button class="btn btn-sm bg-emerald-700 text-white border-none hover:bg-emerald-500"><i class="fa-solid fa-pen"></i>&nbsp;Edit</button>
                 <button class="btn btn-sm bg-yellow-700 text-white border-none hover:bg-yellow-500"><i class="fa-solid fa-folder"></i>&nbsp;Archive</button>
