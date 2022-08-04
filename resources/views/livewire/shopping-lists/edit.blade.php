@@ -31,38 +31,39 @@
                                 <div class="flex flex-nowrap py-1">
                                     <div class="flex w-full items-center">
                                         <i class="fa-solid fa-peso-sign pl-3 absolute"></i>
-                                        <input type="text" placeholder="Enter budget here" value="0" class="input input-bordered input-sm bg-white w-full pl-8" wire:model.lazy="budget" />
+                                        <input type="number" placeholder="Enter budget here" class="input input-bordered input-sm bg-white w-full pl-8" wire:model.lazy="budget" />
                                     </div>
                                 </div>
                                 <hr>
                                 <!-- Card Content -->
                                 <div class="overflow-y-auto max-h-80">
                                     <!-- Item -->
-                                    @foreach($list_details as $list_detail)
+                                    @foreach ($list_details as $list_detail)
                                     <div class="flex-row max-h-24 px-2 py-2">
                                         <div class="flex space-x-5 items-center">
-                                            <div class="flex space-x-2">
-                                                <input type="checkbox" class="checkbox checkbox-accent checkbox-sm" />
-                                                <span><img src="{{ $prefix . $list_detail['image_path']}}" width="75" alt="Image" /></span>
+                                            <div class="flex space-x-2 items-center">
+                                                <span class="relative h-2/3 flex rounded-full px-1 bg-emerald-600 text-xs text-white items-center">{{ $list_detail['index'] + 1 }}</span>
+                                                <input type="checkbox" class="checkbox checkbox-accent checkbox-sm" value="{{ $list_detail['price'] * $list_detail['quantity'] }}" wire:model="prices" />
+                                                <span><img src="{{ $prefix . $list_detail['image_path'] }}" width="100" alt="Image" /></span>
                                             </div>
                                             <div class="flex w-full justify-between">
                                                 <div class="flex flex-col">
                                                     <span>{{ $list_detail['product_name'] }}</span>
                                                     <div class="flex flex-row items-center space-x-2">
-                                                        <button wire:click="quantity_sub({{ $list_detail['index'] }})">
-                                                            <i class="fa-solid fa-circle-minus text-emerald-500"></i>
+                                                        <button wire:click="quantity_sub( {{ $list_detail['index'] }} )">
+                                                            <i class="fa-solid fa-minus text-emerald-500"></i>
                                                         </button>
                                                         <span class="text-center w-8">{{ $list_detail['quantity'] }}</span>
-                                                        <button wire:click="quantity_add({{ $list_detail['index'] }})">
-                                                            <i class="fa-solid fa-circle-plus text-emerald-500"></i>
+                                                        <button wire:click="quantity_add( {{ $list_detail['index'] }} )">
+                                                            <i class="fa-solid fa-plus text-emerald-500"></i>
                                                         </button>
                                                     </div>
                                                 </div>
                                                 <div class="flex flex-col items-end">
-                                                    <button wire:click="remove_item( {{ $list_detail['index']}} )">
+                                                    <button wire:click="remove_item( {{ $list_detail['index'] }} )">
                                                         <i class="fa-solid fa-xmark text-emerald-500"></i>
                                                     </button>
-                                                    <span>₱{{ $list_detail['price'] }}</span>
+                                                    <span>₱&nbsp;{{ number_format($list_detail['price'] * $list_detail['quantity'], 2) }}</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -75,12 +76,12 @@
                                     <div class="space-y-3">
                                         <div class="flex justify-between">
                                             <span class="text-black">Total:</span>
-                                            <span class="text-black"><i class="fa-solid fa-peso-sign"></i> {{$total}}</span>
+                                            <span class="text-black"><i class="fa-solid fa-peso-sign"></i>&nbsp;{{ number_format(array_sum($prices), 2) }}</span>
                                         </div>
                                         <!-- Card Remaining Budget -->
                                         <div class="flex justify-between">
                                             <span class="text-black">Remaining:</span>
-                                            <span class="text-black"><i class="fa-solid fa-peso-sign"></i> {{$budget - $total}}</span>
+                                            <span class="text-black"><i class="fa-solid fa-peso-sign"></i>&nbsp;{{ number_format($budget - array_sum($prices), 2) }}</span>
                                         </div>
                                         <!-- Save Button -->
                                         <div class="card-actions">
@@ -191,7 +192,9 @@
                         <div class="h-1/4 text-black text-center">{{ $product->product_name }}</div>
                         <div class="h-1/4 text-black text-center">PHP {{ $product->price }}</div>
                         <div class="flex w-28 h-9 rounded-full text-white bg-emerald-600 hover:bg-emerald-700 hover:transition hover:duration-300">
-                            <button class="rounded-full w-full" wire:click="product_add({{ $product->id }})">Add</button>
+                            <button class="rounded-full w-full" wire:click="product_add({{ $product->id }})">
+                                Add
+                            </button>
                         </div>
                     </div>
                 </div>
