@@ -77,6 +77,7 @@ class Create extends Component
         // Retrieve record based on id
         $this->new_detail = Product::where('id', $id)->get()->toArray()[0];
 
+        
         // if product id of new detail matches an existing record in the array
         $index = array_search($this->new_detail['product_id'], array_column($this->list_details, 'product_id'));
         if (!empty($this->new_detail) && !empty($this->list_details)) {
