@@ -25,7 +25,7 @@
                             <tr>
                                 <th>
                                     <label>
-                                        <input type="checkbox" class="checkbox checkbox-sm checkbox-accent" />
+                                        <input type="checkbox" class="checkbox checkbox-sm checkbox-accent" wire:model="selectall"/>
                                     </label>
                                 </th>
                                 <th>LIST NAME</th>
@@ -41,7 +41,7 @@
                             <tr class="hover table-group">
 
                                 <td class="table-item">
-                                    <input type="checkbox" class="checkbox checkbox-sm checkbox-accent"/>
+                                    <input type="checkbox" value="{{ $shoppinglist->id }}" class="checkbox checkbox-sm checkbox-accent" wire:model="checkboxticked"/>
                                 </td>
                                 <td class="table-item">{{ $shoppinglist->list_name }}</td>
                                 <td class="table-item">{{ $shoppinglist->total }}</td>
@@ -55,12 +55,14 @@
                             </tr>
                             @endif
                         </tbody>
-
+                        
                     </table>
+                    
                 </div>
             </div>
         </div>
         <!-- Options Menu when Checkbox Ticked -->
+        @if(count($checkboxticked) == 1)
         <div class="sticky bottom-0 bg-white p-3 bg-shadow w-full">
             <div class="flex justify-center space-x-10">
                 <button class="btn btn-sm bg-emerald-700 text-white border-none hover:bg-emerald-500"><i class="fa-solid fa-pen"></i>&nbsp;Edit</button>
@@ -68,5 +70,14 @@
                 <button class="btn btn-sm bg-orange-700 text-white border-none hover:bg-orange-500"><i class="fa-solid fa-file-import"></i>&nbsp;Import</button>
             </div>
         </div>
+        @elseif(count($checkboxticked) >= 2)
+        <div class="sticky bottom-0 bg-white p-3 bg-shadow w-full">
+            <div class="flex justify-center space-x-10">
+                <button class="btn btn-sm bg-emerald-700 text-white border-none hover:bg-emerald-500" disabled="disabled"><i class="fa-solid fa-pen"></i>&nbsp;Edit</button>
+                <button class="btn btn-sm bg-yellow-700 text-white border-none hover:bg-yellow-500"><i class="fa-solid fa-folder"></i>&nbsp;Archive</button>
+                <button class="btn btn-sm bg-orange-700 text-white border-none hover:bg-orange-500"><i class="fa-solid fa-file-import"></i>&nbsp;Import</button>
+            </div>
+        </div>
+        @endif
     </div>
 </div>

@@ -133,6 +133,9 @@
                         <option value="asc">Price (Lowest-Highest)</option>
                     </select>
                 </div>
+
+                <button class="btn" wire:click="inspect_ld">Check Ld</button>
+                <button class="btn" wire:click="inspect_pr">Check Pr</button>
             </div>
         </div>
         <!-- Product Table -->
