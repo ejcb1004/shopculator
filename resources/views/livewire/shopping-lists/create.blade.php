@@ -30,8 +30,11 @@
                         <option value="desc">Price (Highest-Lowest)</option>
                     </select>
                 </div>
-                <button class="sc-btn-primary" wire:click="inspect_si">
-                    <a>Selected Items</a>
+                <button class="sc-btn-primary" wire:click="inspect_ld">
+                    <a>Details Array</a>
+                </button>
+                <button class="sc-btn-primary" wire:click="inspect_pr">
+                    <a>Prices Array</a>
                 </button>
             </div>
         </div>
