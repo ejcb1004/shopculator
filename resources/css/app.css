@@ -42,3 +42,34 @@ select:focus {
     border-radius: 20px;
     border: 2px solid white;
 }
+
+.sc-btn-primary {
+    @apply flex items-center bg-emerald-700 text-white border-none rounded-full hover:bg-emerald-800 transition duration-300;
+}
+
+.sc-btn-secondary {
+    @apply flex items-center bg-emerald-300 text-emerald-700 border-none rounded-full hover:bg-emerald-700 hover:text-emerald-300 transition duration-300;
+}
+
+.sc-btn-action {
+    @apply flex items-center rounded-full text-white bg-gradient-to-r from-emerald-300 to-teal-700 hover:bg-gradient-to-r hover:from-emerald-400 hover:to-teal-800;
+}
+
+.sc-btn-ghost {
+    @apply flex items-center border-2 border-emerald-600 rounded-full text-emerald-600 hover:bg-gray-200 hover:border-emerald-700 hover:text-emerald-700 transition duration-300;
+}
+
+.sc-btn-wisp {
+    @apply flex items-center border-2 border-emerald-300 rounded-full text-emerald-300 hover:bg-gray-800 hover:opacity-75 transition duration-300;
+}
+
+.sc-btn-ghost > *,
+.sc-btn-wisp > * {
+    @apply px-6 py-1.5;
+}
+
+.sc-btn-primary > *,
+.sc-btn-secondary > *,
+.sc-btn-action > * {
+    @apply px-6 py-1.5;
+}

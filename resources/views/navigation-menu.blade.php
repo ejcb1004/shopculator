@@ -129,7 +129,7 @@
             @else
             <div class="flex justify-items-end">
                 <div class="flex px-4 items-center">
-                    <button class="flex mr-1 border-2 solid border-emerald-600 rounded-full text-emerald-600 hover:bg-gray-200 hover:border-emerald-700 hover:text-emerald-700 transition duration-300">
+                    <button class="sc-btn-ghost">
                         <a class="px-6 py-1.5" href="{{ route('login') }}">Log in</a>
                     </button>
                     <button class="flex ml-1 rounded-full text-white bg-gradient-to-r from-emerald-300 to-teal-700 hover:bg-gradient-to-r hover:from-emerald-400 hover:to-teal-800">

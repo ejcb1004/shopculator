@@ -7,9 +7,9 @@
                     <i class="fa-solid fa-magnifying-glass z-1 pl-4 absolute"></i>
                     <input type="text" placeholder="Search" class="input bg-white pl-10 w-full rounded-full h-10" wire:model='searchterm' />
                 </div>
-                <button class="bg-emerald-700 px-6 py-1.5 text-white border-none rounded-full hover:bg-emerald-800 transition:1s"><i class="fa-solid fa-plus"></i>
+                <button class="sc-btn-primary">
                     <a href="{{ route('/shopping-lists/create') }}">
-                        &nbsp;Add List
+                        <i class="fa-solid fa-plus"></i>&nbsp;Add List
                     </a>
                 </button>
 
@@ -25,23 +25,23 @@
                             <tr>
                                 <th>
                                     <label>
-                                        <input type="checkbox" class="checkbox checkbox-sm checkbox-accent" wire:model="selectall"/>
+                                        <input type="checkbox" class="checkbox checkbox-sm checkbox-accent" wire:model="selectall" />
                                     </label>
                                 </th>
-                                <th>LIST NAME</th>
-                                <th>TOTAL</th>
-                                <th>BUDGET</th>
-                                <th>UPDATED AT</th>
+                                <th>List Name</th>
+                                <th>Total</th>
+                                <th>Budget</th>
+                                <th>Updated at</th>
                             </tr>
                         </thead>
 
                         <tbody>
-                            @if($shoppinglists && $shoppinglists->count() > 0)
-                            @foreach($shoppinglists as $shoppinglist)
+                            @if ($shoppinglists && $shoppinglists->count() > 0)
+                            @foreach ($shoppinglists as $shoppinglist)
                             <tr class="hover table-group">
 
                                 <td class="table-item">
-                                    <input type="checkbox" value="{{ $shoppinglist->id }}" class="checkbox checkbox-sm checkbox-accent" wire:model="checkboxticked"/>
+                                    <input type="checkbox" value="{{ $shoppinglist->id }}" class="checkbox checkbox-sm checkbox-accent" wire:model="checkboxticked" />
                                 </td>
                                 <td class="table-item">{{ $shoppinglist->list_name }}</td>
                                 <td class="table-item">{{ $shoppinglist->total }}</td>
@@ -55,27 +55,27 @@
                             </tr>
                             @endif
                         </tbody>
-                        
+
                     </table>
-                    
+
                 </div>
             </div>
         </div>
         <!-- Options Menu when Checkbox Ticked -->
-        @if(count($checkboxticked) == 1)
+        @if (count($checkboxticked) == 1)
         <div class="sticky bottom-0 bg-white p-3 bg-shadow w-full">
             <div class="flex justify-center space-x-10">
-                <button class="btn btn-sm bg-emerald-700 text-white border-none hover:bg-emerald-500"><i class="fa-solid fa-pen"></i>&nbsp;Edit</button>
-                <button class="btn btn-sm bg-yellow-700 text-white border-none hover:bg-yellow-500"><i class="fa-solid fa-folder"></i>&nbsp;Archive</button>
-                <button class="btn btn-sm bg-orange-700 text-white border-none hover:bg-orange-500"><i class="fa-solid fa-file-import"></i>&nbsp;Import</button>
+                <button class="shop-button"><i class="fa-solid fa-pen"></i>&nbsp;Edit</button>
+                <button class="shop-button"><i class="fa-solid fa-folder"></i>&nbsp;Archive</button>
+                <button class="shop-button"><i class="fa-solid fa-file-import"></i>&nbsp;Import</button>
             </div>
         </div>
-        @elseif(count($checkboxticked) >= 2)
+        @elseif (count($checkboxticked) >= 2)
         <div class="sticky bottom-0 bg-white p-3 bg-shadow w-full">
             <div class="flex justify-center space-x-10">
-                <button class="btn btn-sm bg-emerald-700 text-white border-none hover:bg-emerald-500" disabled="disabled"><i class="fa-solid fa-pen"></i>&nbsp;Edit</button>
-                <button class="btn btn-sm bg-yellow-700 text-white border-none hover:bg-yellow-500"><i class="fa-solid fa-folder"></i>&nbsp;Archive</button>
-                <button class="btn btn-sm bg-orange-700 text-white border-none hover:bg-orange-500"><i class="fa-solid fa-file-import"></i>&nbsp;Import</button>
+                <button class="shop-button" disabled><i class="fa-solid fa-pen"></i>&nbsp;Edit</button>
+                <button class="shop-button"><i class="fa-solid fa-folder"></i>&nbsp;Archive</button>
+                <button class="shop-button"><i class="fa-solid fa-file-import"></i>&nbsp;Import</button>
             </div>
         </div>
         @endif

@@ -30,6 +30,9 @@
                         <option value="desc">Price (Highest-Lowest)</option>
                     </select>
                 </div>
+                <button class="sc-btn-primary" wire:click="inspect_si">
+                    <a>Selected Items</a>
+                </button>
             </div>
         </div>
     </div>
@@ -153,11 +156,9 @@
                                 </div>
                                 <div class="h-1/4 text-black text-center">{{ $product->product_name }}</div>
                                 <div class="h-1/4 text-black text-center">PHP {{ $product->price }}</div>
-                                <div class="flex w-28 h-9 rounded-full text-white bg-emerald-600 hover:bg-emerald-700 hover:transition hover:duration-300">
-                                    <button class="rounded-full w-full" wire:click="product_add({{ $product->id }})">
-                                        Add
-                                    </button>
-                                </div>
+                                <button class="sc-btn-primary" wire:click="product_add({{ $product->id }})">
+                                    <span>Add</span>
+                                </button>
                             </div>
                         </div>
                         @endforeach
