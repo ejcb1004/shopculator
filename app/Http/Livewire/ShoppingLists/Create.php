@@ -23,6 +23,8 @@ class Create extends Component
     public $list_details;
     public $new_detail;
     public $prices;
+    public $productchecked;
+    
 
     // search filters
     public $selectedmarket = null;
@@ -56,6 +58,10 @@ class Create extends Component
     public function inspect_pr()
     {
         dd($this->prices);
+    }
+    public function inspect_prid()
+    {
+        dd($this->productchecked);
     }
 
     public function populate()
@@ -113,6 +119,7 @@ class Create extends Component
         $this->categories = Category::all();
         $this->list_details = [];
         $this->prices = [];
+        $this->productchecked = [];
         $this->budget = 0;
         $this->items = 0;
         $this->total = 0;

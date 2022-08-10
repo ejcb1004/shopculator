@@ -65,17 +65,17 @@
         @if (count($checkboxticked) == 1)
         <div class="sticky bottom-0 bg-white p-3 bg-shadow w-full">
             <div class="flex justify-center space-x-10">
-                <button class="shop-button"><i class="fa-solid fa-pen"></i>&nbsp;Edit</button>
-                <button class="shop-button"><i class="fa-solid fa-folder"></i>&nbsp;Archive</button>
-                <button class="shop-button"><i class="fa-solid fa-file-import"></i>&nbsp;Import</button>
+                <a class="btn btn-sm bg-emerald-700 text-white border-none" href="{{ route('/shopping-lists/edit') }}"><i class="fa-solid fa-pen"></i>&nbsp;Edit</a>
+                <button class="btn btn-sm bg-yellow-700 text-white border-none"><i class="fa-solid fa-folder"></i>&nbsp;Archive</button>
+                <a class="btn btn-sm bg-orange-700 text-white border-none" href="{{ route('user.pdf') }}"><i class="fa-solid fa-file-import"></i>&nbsp;Export PDF</a>
             </div>
         </div>
         @elseif (count($checkboxticked) >= 2)
         <div class="sticky bottom-0 bg-white p-3 bg-shadow w-full">
             <div class="flex justify-center space-x-10">
-                <button class="shop-button" disabled><i class="fa-solid fa-pen"></i>&nbsp;Edit</button>
-                <button class="shop-button"><i class="fa-solid fa-folder"></i>&nbsp;Archive</button>
-                <button class="shop-button"><i class="fa-solid fa-file-import"></i>&nbsp;Import</button>
+                <button class="btn btn-sm bg-emerald-700 text-white border-none" disabled><i class="fa-solid fa-pen"></i>&nbsp;Edit</button>
+                <button class="btn btn-sm bg-yellow-700 text-white border-none"><i class="fa-solid fa-folder"></i>&nbsp;Archive</button>
+                <a class="btn btn-sm bg-orange-700 text-white border-none" href="{{ route('user.pdf') }}"><i class="fa-solid fa-file-import"></i>&nbsp;Export PDF</a>
             </div>
         </div>
         @endif

@@ -36,6 +36,9 @@
                 <button class="sc-btn-primary" wire:click="inspect_pr">
                     <a>Prices Array</a>
                 </button>
+                <button class="sc-btn-primary" wire:click="inspect_prid">
+                    <a>Product ID Array</a>
+                </button>
             </div>
         </div>
     </div>
@@ -53,13 +56,14 @@
                     </label>
                     <div tabindex="0" class="card card-compact dropdown-content w-96 bg-white shadow-md ml-3 rounded-full">
                         <!-- Card Body -->
-                        <div class="card-body">
-                            <!-- Card Content -->
-                            <div class="flex rounded-full bg-white w-full h-6 items-center">
-                                <i class="fa-solid fa-magnifying-glass z-1 pl-4 absolute"></i>
-                                <input type="text" placeholder="Search for products" class="input input-bordered bg-white pl-10 w-full rounded-full h-10" wire:model.debounce.150ms="searchproduct" />
+                        <form>
+                            <div class="card-body">
+                                <!-- Card Content -->
+                                <div class="flex rounded-full bg-white w-full h-6 items-center">
+                                    <i class="fa-solid fa-magnifying-glass z-1 pl-4 absolute"></i>
+                                    <input type="text" placeholder="Search for products" class="input input-bordered bg-white pl-10 w-full rounded-full h-10" wire:model.debounce.150ms="searchproduct" />
+                                </div>
                             </div>
-                        </div>
                     </div>
                 </div>
                 <div class="dropdown dropdown-right">
@@ -89,14 +93,14 @@
                             </div>
                             <hr>
                             <!-- Card Content -->
-                            <div class="overflow-y-auto max-h-80">
+                            <div class="overflow-y-auto max-h-28">
                                 <!-- Item -->
                                 @foreach ($list_details as $list_detail)
                                 <div class="flex-row max-h-24 px-2 py-2">
                                     <div class="flex space-x-5 items-center">
                                         <div class="flex space-x-2 items-center">
                                             <span class="relative h-2/3 flex rounded-full px-1 bg-emerald-600 text-xs text-white items-center">{{ $list_detail['index'] + 1 }}</span>
-                                            <input type="checkbox" class="checkbox checkbox-accent checkbox-sm" value="{{ $list_detail['price'] * $list_detail['quantity'] }}" wire:model="prices" />
+                                            <input type="checkbox" class="checkbox checkbox-accent checkbox-sm" value="{{ $list_detail['product_id'] }}" wire:model="productchecked" />
                                             <span><img src="{{ $prefix . $list_detail['image_path'] }}" width="100" alt="Image" /></span>
                                         </div>
                                         <div class="flex w-full justify-between">
@@ -138,10 +142,11 @@
                                     </div>
                                     <!-- Save Button -->
                                     <div class="card-actions">
-                                        <button class="btn btn-success bg-emerald-600 btn-block text-white">Save</button>
+                                        <button class="btn btn-success bg-emerald-600 btn-block text-white" type="submit">Save</button>
                                     </div>
                                 </div>
                             </div>
+                            </form>
                         </div>
                     </div>
                 </div>
