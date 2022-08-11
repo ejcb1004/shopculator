@@ -9,10 +9,7 @@ use PDF;
 
 class UserController extends Controller
 {
-    public function index(){
-        $data = ShoppingList::all();
-        return view('pages.user',['data'=>$data]);
-    }
+    
 
     public function generatepdf(){
         $data = ShoppingList::all();
