@@ -13,6 +13,7 @@ class Index extends Component
     public $selectall = false;
     public $shoppinglists;
     public $checkboxticked;
+    public $countcheck;
 
     public function check_listid()
     {
@@ -27,16 +28,16 @@ class Index extends Component
     public function mount()
     {
         $this->checkboxticked = [];
+        $this->countcheck = count($this->checkboxticked);
     }
 
     public function generatepdf(){
-        
-        $data = ShoppingList::where('list_id', $this->checkboxticked);
+        $data = ShoppingList::all();
         $pdf = PDF::loadView('pages.list',['data' => $data]);
-
         return $pdf->download('Lists.pdf');
-    
     }
+        
+    
 
     public function render()
     {
