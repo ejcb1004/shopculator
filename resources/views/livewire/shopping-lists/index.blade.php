@@ -13,6 +13,8 @@
                     </a>
                 </button>
 
+                <button class="sc-btn-primary" wire:click = "check_listid">Check List ID</button>
+
             </div>
         </div>
         <!-- List Management Table -->
@@ -41,7 +43,7 @@
                             <tr class="hover table-group">
 
                                 <td class="table-item">
-                                    <input type="checkbox" value="{{ $shoppinglist->id }}" class="checkbox checkbox-sm checkbox-accent" wire:model="checkboxticked" />
+                                    <input type="checkbox" value="{{ $shoppinglist->list_id }}" class="checkbox checkbox-sm checkbox-accent" wire:model="checkboxticked" />
                                 </td>
                                 <td class="table-item">{{ $shoppinglist->list_name }}</td>
                                 <td class="table-item">{{ $shoppinglist->total }}</td>
@@ -65,17 +67,17 @@
         @if (count($checkboxticked) == 1)
         <div class="sticky bottom-0 bg-white p-3 bg-shadow w-full">
             <div class="flex justify-center space-x-10">
-                <a class="btn btn-sm bg-emerald-700 text-white border-none" href="{{ route('/shopping-lists/edit') }}"><i class="fa-solid fa-pen"></i>&nbsp;Edit</a>
-                <button class="btn btn-sm bg-yellow-700 text-white border-none"><i class="fa-solid fa-folder"></i>&nbsp;Archive</button>
-                <a class="btn btn-sm bg-orange-700 text-white border-none" href="{{ route('user.pdf') }}"><i class="fa-solid fa-file-import"></i>&nbsp;Export PDF</a>
+                <a class="btn btn-sm bg-emerald-700 text-white border-none hover:bg-emerald-800" href="{{ route('/shopping-lists/edit') }}"><i class="fa-solid fa-pen"></i>&nbsp;Edit</a>
+                <button class="btn btn-sm bg-indigo-700 text-white border-none hover:bg-indigo-800"><i class="fa-solid fa-folder"></i>&nbsp;Archive</button>
+                <a class="btn btn-sm bg-red-700 text-white border-none hover:bg-red-800" href="{{ route('list.pdf') }}"><i class="fa-solid fa-file-import"></i>&nbsp;Export PDF</a>
             </div>
         </div>
         @elseif (count($checkboxticked) >= 2)
         <div class="sticky bottom-0 bg-white p-3 bg-shadow w-full">
             <div class="flex justify-center space-x-10">
-                <button class="btn btn-sm bg-emerald-700 text-white border-none" disabled><i class="fa-solid fa-pen"></i>&nbsp;Edit</button>
-                <button class="btn btn-sm bg-yellow-700 text-white border-none"><i class="fa-solid fa-folder"></i>&nbsp;Archive</button>
-                <a class="btn btn-sm bg-orange-700 text-white border-none" href="{{ route('user.pdf') }}"><i class="fa-solid fa-file-import"></i>&nbsp;Export PDF</a>
+                <button class="btn btn-sm bg-emerald-700 text-white border-none hover:bg-emerald-800" disabled><i class="fa-solid fa-pen"></i>&nbsp;Edit</button>
+                <button class="btn btn-sm bg-indigo-700 text-white border-none hover:bg-indigo-800"><i class="fa-solid fa-folder"></i>&nbsp;Archive</button>
+                <a class="btn btn-sm bg-red-700 text-white border-none hover:bg-red-800" href="{{ route('list.pdf') }}"><i class="fa-solid fa-file-import"></i>&nbsp;Export PDF</a>
             </div>
         </div>
         @endif
