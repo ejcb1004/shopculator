@@ -48,7 +48,6 @@ class Create extends Component
         ]);
     }
 
-
     public function inspect_ld()
     {
         dd($this->list_details);
