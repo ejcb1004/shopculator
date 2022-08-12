@@ -38,8 +38,7 @@
                         </thead>
 
                         <tbody>
-                            @if ($shoppinglists && $shoppinglists->count() > 0)
-                            @foreach ($shoppinglists as $shoppinglist)
+                            @forelse ($shoppinglists as $shoppinglist)
                             <tr class="hover table-group">
 
                                 <td class="table-item">
@@ -50,12 +49,11 @@
                                 <td class="table-item">{{ $shoppinglist->budget }}</td>
                                 <td class="table-item">{{ $shoppinglist->updated_at }}</td>
                             </tr>
-                            @endforeach
-                            @else
+                            @empty
                             <tr>
                                 <td>No Result</td>
                             </tr>
-                            @endif
+                            @endforelse
                         </tbody>
 
                     </table>
