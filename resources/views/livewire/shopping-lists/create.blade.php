@@ -30,15 +30,6 @@
                         <option value="desc">Price (Highest-Lowest)</option>
                     </select>
                 </div>
-                <button class="sc-btn-primary" wire:click="inspect_ld">
-                    <a>Details Array</a>
-                </button>
-                <button class="sc-btn-primary" wire:click="inspect_pr">
-                    <a>Prices Array</a>
-                </button>
-                <button class="sc-btn-primary" wire:click="inspect_prid">
-                    <a>Product ID Array</a>
-                </button>
             </div>
         </div>
     </div>
@@ -78,8 +69,8 @@
                     </label>
                     <div tabindex="1" class="card card-compact dropdown-content w-96 bg-white shadow ml-3">
                         <!-- Card Header -->
-                        <div class="font-bold text-lg bg-emerald-700 px-3 py-3 text-white flex justify-between">
-                            <input type="text" placeholder="Shopping List Name" class="input bg-white w-full max-w-xs" />
+                        <div class="font-bold text-lg bg-emerald-700 px-3 py-3 flex justify-between">
+                            <input type="text" placeholder="Shopping List Name" class="input input-sm bg-white w-full max-w-xs" />
                             <span class="pr-2"><i class="fa-solid fa-xmark"></i></span>
                         </div>
                         <!-- Card Body -->
@@ -88,15 +79,15 @@
                             <div class="flex flex-nowrap py-1">
                                 <div class="flex w-full items-center">
                                     <i class="fa-solid fa-peso-sign pl-3 absolute"></i>
-                                    <input type="number" placeholder="Enter budget here" class="input input-bordered input-sm bg-white w-full pl-8" wire:model.lazy="budget" />
+                                    <input type="number" placeholder="Enter budget here" min="0" class="input input-bordered input-sm bg-white w-full pl-8" wire:model.lazy="budget" />
                                 </div>
                             </div>
                             <hr>
                             <!-- Card Content -->
                             <div class="overflow-y-auto max-h-28">
                                 <!-- Item -->
-                                @foreach ($list_details as $list_detail)
-                                <div class="flex-row max-h-24 px-2 py-2">
+                                @forelse ($list_details as $list_detail)
+                                <div class="flex flex-row max-h-24 px-2 py-2">
                                     <div class="flex space-x-5 items-center">
                                         <div class="flex space-x-2 items-center">
                                             <span class="relative h-2/3 flex rounded-full px-1 bg-emerald-600 text-xs text-white items-center">{{ $list_detail['index'] + 1 }}</span>
@@ -125,7 +116,9 @@
                                         </div>
                                     </div>
                                 </div>
-                                @endforeach
+                                @empty
+                                <span class="flex-row max-h-24 px-2 py-2 italic flex justify-center">Add items here</span>
+                                @endforelse
                             </div>
                             <hr>
                             <!-- Card Total -->
@@ -133,16 +126,22 @@
                                 <div class="space-y-3">
                                     <div class="flex justify-between">
                                         <span class="text-black">Total:</span>
-                                        <span class="text-black"><i class="fa-solid fa-peso-sign"></i>&nbsp;{{ number_format(array_sum($prices), 2) }}</span>
+                                        <span class="text-black"><i class="fa-solid fa-peso-sign"></i>&nbsp;{{ number_format($total, 2) }}</span>
                                     </div>
                                     <!-- Card Remaining Budget -->
                                     <div class="flex justify-between">
                                         <span class="text-black">Remaining:</span>
-                                        <span class="text-black"><i class="fa-solid fa-peso-sign"></i>&nbsp;{{ number_format($budget - array_sum($prices), 2) }}</span>
+                                        <span><i class="fa-solid fa-peso-sign text-black"></i>
+                                            @if (number_format($budget - $total, 2) < 0)
+                                            <span class="text-red-600">{{ number_format($budget - $total, 2) }}</span>
+                                            @else
+                                            <span class="text-black">{{ number_format($budget - $total, 2) }}</span>
+                                            @endif
+                                        </span>
                                     </div>
                                     <!-- Save Button -->
                                     <div class="card-actions">
-                                        <button class="btn btn-success bg-emerald-600 btn-block text-white" type="submit">Save</button>
+                                        <button type="submit" class="btn btn-success bg-emerald-600 btn-block text-white">Save</button>
                                     </div>
                                 </div>
                             </div>

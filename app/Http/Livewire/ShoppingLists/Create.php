@@ -22,32 +22,31 @@ class Create extends Component
     // array
     public $list_details;
     public $new_detail;
-    public $prices;
     public $productchecked;
-    
+
 
     // search filters
     public $selectedmarket = null;
     public $selectedcategory = null;
     public $selectedsort = "asc";
     public $searchproduct = "";
-    
-    
+
+
     public function render()
-    {    
-        return view('livewire.shopping-lists.create',[
-            'products' => Product::with(['market','category'])
-            ->when($this->selectedmarket,function($query){
-                $query -> where('market_id',$this->selectedmarket);
-            })
-            ->when($this->selectedcategory,function($query){
-                $query -> where('category_id',$this->selectedcategory);
-            })
-            ->orderBy('price', $this->selectedsort)
-            ->search(trim($this->searchproduct))    
-            ->paginate(8)
+    {
+        return view('livewire.shopping-lists.create', [
+            'products' => Product::with(['market', 'category'])
+                ->when($this->selectedmarket, function ($query) {
+                    $query->where('market_id', $this->selectedmarket);
+                })
+                ->when($this->selectedcategory, function ($query) {
+                    $query->where('category_id', $this->selectedcategory);
+                })
+                ->orderBy('price', $this->selectedsort)
+                ->search(trim($this->searchproduct))
+                ->paginate(8)
         ]);
-    } 
+    }
 
 
     public function inspect_ld()
@@ -83,7 +82,6 @@ class Create extends Component
         // Retrieve record based on id
         $this->new_detail = Product::where('id', $id)->get()->toArray()[0];
 
-        
         // if product id of new detail matches an existing record in the array
         $index = array_search($this->new_detail['product_id'], array_column($this->list_details, 'product_id'));
         if (!empty($this->new_detail) && !empty($this->list_details)) {
@@ -93,24 +91,51 @@ class Create extends Component
         } else {
             $this->populate();
         }
+
+        // array_push($this->prices, $this->list_details[$index]['price'] * $this->list_details[$index]['quantity']);
+    }
+
+    public function updatedProductChecked() 
+    {
+        $this->totalize();
+    }
+
+    public function totalize()
+    {
+        $this->total = 0;
+        foreach ($this->list_details as $detail) {
+            if(in_array($detail['product_id'], $this->productchecked)) {
+                $this->total += ($detail['price'] * $detail['quantity']);
+            }
+        }
     }
 
     public function quantity_sub($index)
     {
         ($this->list_details[$index]['quantity'] > 1) ? $this->list_details[$index]['quantity']-- : $this->remove_item($index);
+        $this->totalize();
     }
 
     public function quantity_add($index)
     {
         $this->list_details[$index]['quantity']++;
+        $this->totalize();
     }
 
     public function remove_item($index)
     {
         unset($this->list_details[$index]);
+        unset($this->productchecked[$index]);
         $this->items--;
+
+        // Serialize $this->list_details array for error trapping
         $this->list_details = array_values($this->list_details);
         for ($i = 0; $i < count($this->list_details); $i++) $this->list_details[$i]['index'] = $i;
+
+        // Serialize $this->productchecked array for error trapping
+        $this->productchecked = array_values($this->productchecked);
+        
+        $this->totalize();
     }
 
     public function mount()
@@ -125,5 +150,4 @@ class Create extends Component
         $this->total = 0;
         $this->prefix = 'http://127.0.0.1:3000';
     }
-
 }
