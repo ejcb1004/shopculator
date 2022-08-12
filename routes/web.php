@@ -1,6 +1,7 @@
 <?php
 
-use App\Http\Controllers\UserController;
+use App\Http\Livewire\ShoppingLists\Create;
+use App\Http\Livewire\ShoppingLists\Edit;
 use App\Http\Livewire\ShoppingLists\Index;
 use Illuminate\Support\Facades\Route;
 
@@ -19,24 +20,13 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-
-Route::get('generatepdf', [Index::class,'generatepdf'])->name('list.pdf');
-
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
     'verified'
 ])->group(function () {
-    Route::get('/shopping-lists', function () {
-        return view('shopping-lists/index');
-    })->name('shopping-lists');
-    Route::get('/shopping-lists/products', function () {
-        return view('shopping-lists/products');
-    })->name('shopping-lists/products');
-    Route::get('/shopping-lists/create', function () {
-        return view('shopping-lists/create');
-    })->name('/shopping-lists/create');
-    Route::get('/shopping-lists/edit', function () {
-        return view('shopping-lists/edit');
-    })->name('/shopping-lists/edit');
+    Route::get('shopping-lists', Index::class)->name('shopping-lists');
+    Route::get('shopping-lists/create', Create::class)->name('shopping-lists/create');
+    Route::get('shopping-lists/edit', Edit::class)->name('shopping-lists/edit');
+    Route::get('generatepdf', [Index::class,'generatepdf'])->name('list.pdf');
 });
