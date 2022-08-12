@@ -9,13 +9,15 @@ class ListDetail extends Model
 {
     use HasFactory;
 
+    protected $table = 'list_details';
+    
+    protected $primaryKey = 'id';
     /**
      * The attributes that are mass assignable.
      *
      * @var string[]
      */
     protected $fillable = [
-        'id',
         'detail_id',
         'list_id',
         'product_id',
