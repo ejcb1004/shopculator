@@ -8,7 +8,7 @@
                     <input type="text" placeholder="Search" class="input bg-white pl-10 w-full rounded-full h-10" wire:model='searchterm' />
                 </div>
                 <button class="sc-btn-primary">
-                    <a href="{{ route('/shopping-lists/create') }}">
+                    <a href="{{ route('shopping-lists/create') }}">
                         <i class="fa-solid fa-plus"></i>&nbsp;Add List
                     </a>
                 </button>
@@ -45,8 +45,8 @@
                                     <input type="checkbox" value="{{ $shoppinglist->list_id }}" class="checkbox checkbox-sm checkbox-accent" wire:model="checkboxticked" />
                                 </td>
                                 <td class="table-item">{{ $shoppinglist->list_name }}</td>
-                                <td class="table-item">{{ $shoppinglist->total }}</td>
-                                <td class="table-item">{{ $shoppinglist->budget }}</td>
+                                <td class="table-item"><i class="fa-solid fa-peso-sign text-black"></i>&nbsp;{{ number_format($shoppinglist->total, 2, '.') }}</td>
+                                <td class="table-item"><i class="fa-solid fa-peso-sign text-black"></i>&nbsp;{{ number_format($shoppinglist->budget, 2, '.') }}</td>
                                 <td class="table-item">{{ $shoppinglist->updated_at }}</td>
                             </tr>
                             @empty
@@ -65,7 +65,7 @@
         @if (count($checkboxticked) == 1)
         <div class="sticky bottom-0 bg-white p-3 bg-shadow w-full">
             <div class="flex justify-center space-x-10">
-                <a class="btn btn-sm bg-emerald-700 text-white border-none hover:bg-emerald-800" href="{{ route('/shopping-lists/edit') }}"><i class="fa-solid fa-pen"></i>&nbsp;Edit</a>
+                <a class="btn btn-sm bg-emerald-700 text-white border-none hover:bg-emerald-800" href="{{ route('shopping-lists/edit') }}"><i class="fa-solid fa-pen"></i>&nbsp;Edit</a>
                 <button class="btn btn-sm bg-indigo-700 text-white border-none hover:bg-indigo-800"><i class="fa-solid fa-folder"></i>&nbsp;Archive</button>
                 <a class="btn btn-sm bg-red-700 text-white border-none hover:bg-red-800" href="{{ route('list.pdf') }}"><i class="fa-solid fa-file-import"></i>&nbsp;Export PDF</a>
             </div>
