@@ -3,8 +3,11 @@
 namespace App\Http\Livewire\ShoppingLists;
 
 use App\Models\Category;
+use App\Models\ListDetail;
 use App\Models\Market;
 use App\Models\Product;
+use App\Models\ShoppingList;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -14,16 +17,20 @@ class Create extends Component
     protected $listeners = ['product_add' => 'product_add'];
 
     // int
-    public $budget, $total, $items;
+    public $budget, $total, $items = 0;
 
     // string
     public $prefix;
+    public $list_name;
 
     // array
-    public $list_details;
-    public $new_detail;
-    public $productchecked;
+    public $list_details = [];
+    public $new_detail = [];
+    public $productchecked = [];
 
+    // collections
+    public $markets;
+    public $categories;
 
     // search filters
     public $selectedmarket = null;
@@ -31,6 +38,32 @@ class Create extends Component
     public $selectedsort = "asc";
     public $searchproduct = "";
 
+    // rules
+    protected $rules = [
+        'list_name' => [
+            'required',
+            'unique:shopping_lists,list_name',
+            'min:3',
+            'max:30'
+        ],
+        'budget' => [
+            'required',
+            'min:0'
+        ]
+    ];
+
+    // livewire methods
+    public function mount()
+    {
+        $this->markets = Market::all();
+        $this->categories = Category::all();
+        $this->list_details = [];
+        $this->productchecked = [];
+        $this->budget = 0;
+        $this->items = 0;
+        $this->total = 0;
+        $this->prefix = 'http://127.0.0.1:3000';
+    }
 
     public function render()
     {
@@ -48,15 +81,66 @@ class Create extends Component
         ]);
     }
 
+    public function updated($property_name)
+    {
+        $this->validateOnly($property_name);
+    }
+
+    public function updatedProductChecked()
+    {
+        $this->totalize();
+    }
+
+    public function store()
+    {
+        $list = ShoppingList::create([
+            'list_id'   => '',
+            'email'     => Auth::user()->email,
+            'list_name' => $this->list_name,
+            'budget'    => $this->budget,
+            'total'     => $this->total,
+        ]);
+
+        $list->list_id = "L" . str_pad($list->id, 8, "0", STR_PAD_LEFT);
+
+        foreach ($this->list_details as $detail) {
+            $list_detail = ListDetail::create([
+                'detail_id' => '',
+                'list_id' => $list->list_id,
+                'product_id' => $detail['product_id'],
+                'image_path' => $detail['image_path'],
+                'quantity' => $detail['quantity'],
+                'price' => $detail['quantity'] * $detail['price']
+            ]);
+            $list_detail->detail_id = "D" . str_pad($list_detail->id, 12, "0", STR_PAD_LEFT);
+            $list_detail->save();
+        }
+
+        $list->save();
+
+        $this->reset(
+            'list_details',
+            'list_name',
+            'budget',
+            'total',
+            'items',
+            'productchecked',
+            'selectedmarket',
+            'selectedcategory'
+        );
+        
+        session()->flash('flash.banner', 'List successfully created!');
+        session()->flash('flash.bannerStyle', 'success');
+        
+        return redirect('shopping-lists');
+    }
+
+    // user-defined methods
     public function inspect_ld()
     {
         dd($this->list_details);
     }
 
-    public function inspect_pr()
-    {
-        dd($this->prices);
-    }
     public function inspect_prid()
     {
         dd($this->productchecked);
@@ -66,12 +150,12 @@ class Create extends Component
     {
         // Populate array with list details
         $this->list_details[] = [
-            'index' => empty($this->list_details) ? 0 : array_key_last($this->list_details) + 1,
-            'product_id' => $this->new_detail['product_id'],
-            'image_path' => $this->new_detail['image_path'],
-            'quantity' => 1,
-            'product_name' => $this->new_detail['product_name'],
-            'price' => $this->new_detail['price'],
+            'index'         => empty($this->list_details) ? 0 : array_key_last($this->list_details) + 1,
+            'product_id'    => $this->new_detail['product_id'],
+            'image_path'    => $this->new_detail['image_path'],
+            'quantity'      => 1,
+            'product_name'  => $this->new_detail['product_name'],
+            'price'         => $this->new_detail['price'],
         ];
         $this->items++;
     }
@@ -90,20 +174,13 @@ class Create extends Component
         } else {
             $this->populate();
         }
-
-        // array_push($this->prices, $this->list_details[$index]['price'] * $this->list_details[$index]['quantity']);
-    }
-
-    public function updatedProductChecked() 
-    {
-        $this->totalize();
     }
 
     public function totalize()
     {
         $this->total = 0;
         foreach ($this->list_details as $detail) {
-            if(in_array($detail['product_id'], $this->productchecked)) {
+            if (in_array($detail['product_id'], $this->productchecked)) {
                 $this->total += ($detail['price'] * $detail['quantity']);
             }
         }
@@ -133,20 +210,7 @@ class Create extends Component
 
         // Serialize $this->productchecked array for error trapping
         $this->productchecked = array_values($this->productchecked);
-        
-        $this->totalize();
-    }
 
-    public function mount()
-    {
-        $this->markets = Market::all();
-        $this->categories = Category::all();
-        $this->list_details = [];
-        $this->prices = [];
-        $this->productchecked = [];
-        $this->budget = 0;
-        $this->items = 0;
-        $this->total = 0;
-        $this->prefix = 'http://127.0.0.1:3000';
+        $this->totalize();
     }
 }

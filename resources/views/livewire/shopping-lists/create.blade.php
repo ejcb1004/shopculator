@@ -1,4 +1,13 @@
 <div>
+    @if ($errors->any())
+    <div class="flex min-w-full bg-red-300 justify-center items-center">
+        <ul>
+            @foreach ($errors->all() as $error)
+            <li class="text-red-800"><i class="fa-solid fa-circle-xmark"></i>&nbsp;{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+    @endif
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="navbar flex flex-row justify-between">
             <div class="flex justify-start space-x-2 pl-[75px]">
@@ -47,14 +56,13 @@
                     </label>
                     <div tabindex="0" class="card card-compact dropdown-content w-96 bg-white shadow-md ml-3 rounded-full">
                         <!-- Card Body -->
-                        <form>
-                            <div class="card-body">
-                                <!-- Card Content -->
-                                <div class="flex rounded-full bg-white w-full h-6 items-center">
-                                    <i class="fa-solid fa-magnifying-glass z-1 pl-4 absolute"></i>
-                                    <input type="text" placeholder="Search for products" class="input input-bordered bg-white pl-10 w-full rounded-full h-10" wire:model.debounce.150ms="searchproduct" />
-                                </div>
+                        <div class="card-body">
+                            <!-- Card Content -->
+                            <div class="flex rounded-full bg-white w-full h-6 items-center">
+                                <i class="fa-solid fa-magnifying-glass z-1 pl-4 absolute"></i>
+                                <input type="text" placeholder="Search for products" class="input input-bordered bg-white pl-10 w-full rounded-full h-10" wire:model.debounce.150ms="searchproduct" />
                             </div>
+                        </div>
                     </div>
                 </div>
                 <div class="dropdown dropdown-right">
@@ -68,85 +76,89 @@
                         <span class="relative top-5 right-4 text-xs normal-case leading-none">Cart</span>
                     </label>
                     <div tabindex="1" class="card card-compact dropdown-content w-96 bg-white shadow ml-3">
-                        <!-- Card Header -->
-                        <div class="font-bold text-lg bg-emerald-700 px-3 py-3 flex justify-between">
-                            <input type="text" placeholder="Shopping List Name" class="input input-sm bg-white w-full max-w-xs" />
-                            <span class="pr-2"><i class="fa-solid fa-xmark"></i></span>
-                        </div>
-                        <!-- Card Body -->
-                        <div class="card-body">
+                        <form wire:submit.prevent="store">
                             <!-- Card Header -->
-                            <div class="flex flex-nowrap py-1">
-                                <div class="flex w-full items-center">
-                                    <i class="fa-solid fa-peso-sign pl-3 absolute"></i>
-                                    <input type="number" placeholder="Enter budget here" min="0" class="input input-bordered input-sm bg-white w-full pl-8" wire:model.lazy="budget" />
-                                </div>
+                            <div class="font-bold text-lg bg-emerald-700 px-3 py-3 flex justify-between">
+                                <input type="text" name="list_name" id="list_name" placeholder="Shopping List Name" class="input input-sm bg-white w-full max-w-xs" wire:model.lazy="list_name" />
+                                <span class="pr-2"></span>
                             </div>
-                            <hr>
-                            <!-- Card Content -->
-                            <div class="overflow-y-auto max-h-28">
-                                <!-- Item -->
-                                @forelse ($list_details as $list_detail)
-                                <div class="flex flex-row max-h-24 px-2 py-2">
-                                    <div class="flex space-x-5 items-center">
-                                        <div class="flex space-x-2 items-center">
-                                            <span class="relative h-2/3 flex rounded-full px-1 bg-emerald-600 text-xs text-white items-center">{{ $list_detail['index'] + 1 }}</span>
-                                            <input type="checkbox" class="checkbox checkbox-accent checkbox-sm" value="{{ $list_detail['product_id'] }}" wire:model="productchecked" />
-                                            <span><img src="{{ $prefix . $list_detail['image_path'] }}" width="100" alt="Image" /></span>
-                                        </div>
-                                        <div class="flex w-full justify-between">
-                                            <div class="flex flex-col">
-                                                <span>{{ $list_detail['product_name'] }}</span>
-                                                <div class="flex flex-row items-center space-x-2">
-                                                    <button wire:click="quantity_sub( {{ $list_detail['index'] }} )">
-                                                        <i class="fa-solid fa-minus text-emerald-500"></i>
+                            <!-- Card Body -->
+                            <div class="card-body">
+                                <!-- Card Header -->
+                                <div class="flex flex-nowrap py-1">
+                                    <div class="flex w-full items-center">
+                                        <i class="fa-solid fa-peso-sign pl-3 absolute"></i>
+                                        <input type="number" name="budget" id="budget" placeholder="Enter budget here" min="0" class="input input-bordered input-sm bg-white w-full pl-8" wire:model.lazy="budget" />
+                                    </div>
+                                </div>
+                                <hr>
+                                <!-- Card Content -->
+                                <div class="overflow-y-auto max-h-28">
+                                    <!-- Item -->
+                                    @forelse ($list_details as $list_detail)
+                                    <div class="flex flex-row max-h-24 px-2 py-2">
+                                        <div class="flex space-x-5 items-center">
+                                            <div class="flex space-x-2 items-center">
+                                                <span class="relative h-2/3 flex rounded-full px-1 bg-emerald-600 text-xs text-white items-center">{{ $list_detail['index'] + 1 }}</span>
+                                                <input type="checkbox" class="checkbox checkbox-accent checkbox-sm" value="{{ $list_detail['product_id'] }}" wire:model="productchecked" />
+                                                <span><img src="{{ $prefix . $list_detail['image_path'] }}" width="100" alt="Image" /></span>
+                                            </div>
+                                            <div class="flex w-full justify-between">
+                                                <div class="flex flex-col">
+                                                    <span>{{ $list_detail['product_name'] }}</span>
+                                                    <div class="flex flex-row items-center space-x-2">
+                                                        <button type="button" wire:click="quantity_sub( {{ $list_detail['index'] }} )">
+                                                            <i class="fa-solid fa-minus text-emerald-500"></i>
+                                                        </button>
+                                                        <span class="text-center w-8">{{ $list_detail['quantity'] }}</span>
+                                                        <button type="button" wire:click="quantity_add( {{ $list_detail['index'] }} )">
+                                                            <i class="fa-solid fa-plus text-emerald-500"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                                <div class="flex flex-col items-end">
+                                                    <button type="button" wire:click="remove_item( {{ $list_detail['index'] }} )">
+                                                        <i class="fa-solid fa-xmark text-emerald-500"></i>
                                                     </button>
-                                                    <span class="text-center w-8">{{ $list_detail['quantity'] }}</span>
-                                                    <button wire:click="quantity_add( {{ $list_detail['index'] }} )">
-                                                        <i class="fa-solid fa-plus text-emerald-500"></i>
-                                                    </button>
+                                                    <span>₱&nbsp;{{ number_format($list_detail['price'] * $list_detail['quantity'], 2) }}</span>
                                                 </div>
                                             </div>
-                                            <div class="flex flex-col items-end">
-                                                <button wire:click="remove_item( {{ $list_detail['index'] }} )">
-                                                    <i class="fa-solid fa-xmark text-emerald-500"></i>
-                                                </button>
-                                                <span>₱&nbsp;{{ number_format($list_detail['price'] * $list_detail['quantity'], 2) }}</span>
-                                            </div>
+                                        </div>
+                                    </div>
+                                    @empty
+                                    <span class="flex-row max-h-24 px-2 py-2 italic flex justify-center">Add items here</span>
+                                    @endforelse
+                                </div>
+                                <hr>
+                                <!-- Card Total -->
+                                <div class="py-3">
+                                    <div class="space-y-3">
+                                        <div class="flex justify-between">
+                                            <span class="text-black">Total:</span>
+                                            <span class="text-black"><i class="fa-solid fa-peso-sign"></i>&nbsp;{{ number_format($total, 2) }}</span>
+                                        </div>
+                                        <!-- Card Remaining Budget -->
+                                        <div class="flex justify-between">
+                                            <span class="text-black">Remaining:</span>
+                                            <span><i class="fa-solid fa-peso-sign text-black"></i>
+                                            @if( !empty($budget) )
+                                                @if (number_format($budget - $total, 2) < 0) <span class="text-red-600">{{ number_format($budget - $total, 2) }}</span>
+                                                @else <span class="text-black">{{ number_format($budget - $total, 2) }}</span>
+                                                @endif
+                                            @else <span class="text-black">0.00</span>
+                                            @endif
+                                            </span>
+                                        </div>
+                                        <!-- Save Button -->
+                                        <div class="card-actions flex justify-center">
+                                            <button type="submit" wire:target="store" wire:loading.attr="disabled" :disabled="$disabled" class="sc-btn-primary">
+                                                <span>{{ __('Save')}}</span>
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
-                                @empty
-                                <span class="flex-row max-h-24 px-2 py-2 italic flex justify-center">Add items here</span>
-                                @endforelse
                             </div>
-                            <hr>
-                            <!-- Card Total -->
-                            <div class="py-3">
-                                <div class="space-y-3">
-                                    <div class="flex justify-between">
-                                        <span class="text-black">Total:</span>
-                                        <span class="text-black"><i class="fa-solid fa-peso-sign"></i>&nbsp;{{ number_format($total, 2) }}</span>
-                                    </div>
-                                    <!-- Card Remaining Budget -->
-                                    <div class="flex justify-between">
-                                        <span class="text-black">Remaining:</span>
-                                        <span><i class="fa-solid fa-peso-sign text-black"></i>
-                                            @if (number_format($budget - $total, 2) < 0)
-                                            <span class="text-red-600">{{ number_format($budget - $total, 2) }}</span>
-                                            @else
-                                            <span class="text-black">{{ number_format($budget - $total, 2) }}</span>
-                                            @endif
-                                        </span>
-                                    </div>
-                                    <!-- Save Button -->
-                                    <div class="card-actions">
-                                        <button type="submit" class="btn btn-success bg-emerald-600 btn-block text-white">Save</button>
-                                    </div>
-                                </div>
-                            </div>
-                            </form>
-                        </div>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -163,7 +175,7 @@
                                 </div>
                                 <div class="h-1/4 text-black text-center">{{ $product->product_name }}</div>
                                 <div class="h-1/4 text-black text-center">PHP {{ $product->price }}</div>
-                                <button class="sc-btn-primary" wire:click="product_add({{ $product->id }})">
+                                <button type="button" class="sc-btn-primary" wire:click="product_add({{ $product->id }})">
                                     <span>Add</span>
                                 </button>
                             </div>
