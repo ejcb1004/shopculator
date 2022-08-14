@@ -44,11 +44,23 @@ select:focus {
 }
 
 .sc-btn-primary {
-    @apply flex items-center bg-emerald-700 text-white border-none rounded-full hover:bg-emerald-800 transition duration-300;
+    @apply flex items-center bg-emerald-600 text-white border-none rounded-full hover:bg-emerald-700 transition duration-300;
 }
 
 .sc-btn-secondary {
     @apply flex items-center bg-emerald-300 text-emerald-700 border-none rounded-full hover:bg-emerald-700 hover:text-emerald-300 transition duration-300;
+}
+
+.sc-btn-disabled {
+    @apply flex items-center bg-gray-300 text-gray-600 border-none rounded-full transition duration-300;
+}
+
+.sc-btn-archive {
+    @apply flex items-center bg-indigo-600 text-white border-none rounded-full hover:bg-indigo-700 transition duration-300;
+}
+
+.sc-btn-danger {
+    @apply flex items-center bg-red-600 text-white border-none rounded-full hover:bg-red-700 transition duration-300;
 }
 
 .sc-btn-action {
@@ -63,13 +75,21 @@ select:focus {
     @apply flex items-center border-2 border-emerald-300 rounded-full text-emerald-300 hover:bg-gray-800 hover:opacity-75 transition duration-300;
 }
 
+.sc-btn-pdf {
+    @apply flex items-center border-2 border-red-600 rounded-full text-red-600 hover:bg-stone-200 hover:border-red-700 hover:text-red-700 transition duration-300;
+}
+
 .sc-btn-ghost > *,
-.sc-btn-wisp > * {
-    @apply px-6 py-1.5;
+.sc-btn-wisp > *,
+.sc-btn-pdf > * {
+    @apply px-6 py-1;
 }
 
 .sc-btn-primary > *,
 .sc-btn-secondary > *,
+.sc-btn-disabled > *,
+.sc-btn-archive > *,
+.sc-btn-danger > *,
 .sc-btn-action > * {
-    @apply px-6 py-1.5;
+    @apply px-6 py-1;
 }
