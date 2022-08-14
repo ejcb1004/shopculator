@@ -15,7 +15,7 @@
                         </a>
                     </button>
                     <button class="sc-btn-action">
-                        <a href="{{ route('/shopping-lists/create') }}">
+                        <a href="{{ route('shopping-lists/create') }}">
                             <i class="fa-solid fa-plus"></i>&nbsp;Create a new list
                         </a>
                     </button>
