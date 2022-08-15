@@ -27,6 +27,6 @@ Route::middleware([
 ])->group(function () {
     Route::get('shopping-lists', Index::class)->name('shopping-lists');
     Route::get('shopping-lists/create', Create::class)->name('shopping-lists/create');
-    Route::get('shopping-lists/edit', Edit::class)->name('shopping-lists/edit');
-    Route::get('generatepdf', [Index::class,'generatepdf'])->name('list.pdf');
+    Route::get('shopping-lists/edit/{list_id}', Edit::class);
+    Route::get('shopping-lists/download/{list_id}', [Index::class,'generatepdf']);
 });
