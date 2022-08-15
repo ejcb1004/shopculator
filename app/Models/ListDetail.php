@@ -18,12 +18,14 @@ class ListDetail extends Model
      * @var string[]
      */
     protected $fillable = [
+        'is_checked',
+        'list_index',
         'detail_id',
         'list_id',
         'product_id',
         'image_path',
         'quantity',
-        'price',
+        'is_deleted'
     ];
 
     /**
@@ -35,4 +37,14 @@ class ListDetail extends Model
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];
+
+    public function product()
+    {
+        return $this->belongsTo(Product::class, 'product_id');
+    }
+
+    public function lists()
+    {
+        return $this->belongsTo(ShoppingList::class, 'list_id', 'id');
+    }
 }

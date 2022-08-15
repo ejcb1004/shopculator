@@ -22,7 +22,9 @@ class ShoppingList extends Model
         'email',
         'list_name',
         'budget',
-        'total'
+        'total',
+        'is_archived',
+        'is_deleted'
     ];
 
     /**
@@ -34,4 +36,9 @@ class ShoppingList extends Model
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];
+
+    public function email()
+    {
+        return $this->belongsTo(User::class, 'email');
+    }
 }

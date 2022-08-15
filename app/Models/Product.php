@@ -40,9 +40,15 @@ class Product extends Model
     {
         return $this->belongsTo(Market::class, 'market_id');
     }
+
     public function category()
     {
         return $this->belongsTo(Category::class, 'category_id');
+    }
+
+    public function detail()
+    {
+        return $this->hasMany(ListDetail::class, 'product_id');
     }
     
     public function scopeSearch($query,$term){
