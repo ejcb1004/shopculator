@@ -8,6 +8,28 @@
         </ul>
     </div>
     @endif
+    <form wire:submit.prevent="store" enctype="multipart/form-data">
+        @csrf
+        <x-jet-confirmation-modal wire:model="to_confirm">
+            <x-slot name="title">
+                Save List
+            </x-slot>
+
+            <x-slot name="content">
+                Are you sure you want to save this list?
+            </x-slot>
+
+            <x-slot name="footer">
+                <button class="sc-btn-ghost" type="button" wire:click="$toggle('to_confirm')" wire:loading.attr="disabled">
+                    <span>No</span>
+                </button>
+
+                <button class="sc-btn-primary ml-3" type="submit" wire:target="store" wire:loading.attr="disabled">
+                    <span>Save</span>
+                </button>
+            </x-slot>
+        </x-jet-confirmation-modal>
+    </form>
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="navbar flex flex-row justify-between">
             <div class="flex justify-start space-x-2 pl-[75px]">
@@ -39,6 +61,12 @@
                         <option value="desc">Price (Highest-Lowest)</option>
                     </select>
                 </div>
+                <button type="button" wire:click="inspect_ld" class="sc-btn-primary">
+                    <span>Inspect List</span>
+                </button>
+                <button type="button" wire:click="inspect_checked" class="sc-btn-ghost">
+                    <span>Checked Products</span>
+                </button>
             </div>
         </div>
     </div>
@@ -76,89 +104,87 @@
                         <span class="relative top-5 right-4 text-xs normal-case leading-none">Cart</span>
                     </label>
                     <div tabindex="1" class="card card-compact dropdown-content w-96 bg-white shadow ml-3">
-                        <form wire:submit.prevent="store">
+                        <!-- Card Header -->
+                        <div class="font-bold text-lg bg-emerald-700 px-3 py-3 flex justify-between">
+                            <input type="text" name="list_name" id="list_name" placeholder="Shopping List Name" class="input input-sm bg-white w-full max-w-xs" wire:model.lazy="list_name" />
+                            <span class="pr-2"></span>
+                        </div>
+                        <!-- Card Body -->
+                        <div class="card-body">
                             <!-- Card Header -->
-                            <div class="font-bold text-lg bg-emerald-700 px-3 py-3 flex justify-between">
-                                <input type="text" name="list_name" id="list_name" placeholder="Shopping List Name" class="input input-sm bg-white w-full max-w-xs" wire:model.lazy="list_name" />
-                                <span class="pr-2"></span>
-                            </div>
-                            <!-- Card Body -->
-                            <div class="card-body">
-                                <!-- Card Header -->
-                                <div class="flex flex-nowrap py-1">
-                                    <div class="flex w-full items-center">
-                                        <i class="fa-solid fa-peso-sign pl-3 absolute"></i>
-                                        <input type="number" name="budget" id="budget" placeholder="Enter budget here" min="0" class="input input-bordered input-sm bg-white w-full pl-8" wire:model.lazy="budget" />
-                                    </div>
+                            <div class="flex flex-nowrap py-1">
+                                <div class="flex w-full items-center">
+                                    <i class="fa-solid fa-peso-sign pl-3 absolute"></i>
+                                    <input type="number" name="budget" id="budget" placeholder="Enter budget here" min="0" class="input input-bordered input-sm bg-white w-full pl-8" wire:model.lazy="budget" />
                                 </div>
-                                <hr>
-                                <!-- Card Content -->
-                                <div class="overflow-y-auto max-h-28">
-                                    <!-- Item -->
-                                    @forelse ($list_details as $list_detail)
-                                    <div class="flex flex-row max-h-24 px-2 py-2">
-                                        <div class="flex space-x-5 items-center">
-                                            <div class="flex space-x-2 items-center">
-                                                <span class="relative h-2/3 flex rounded-full px-1 bg-emerald-600 text-xs text-white items-center">{{ $list_detail['index'] + 1 }}</span>
-                                                <input type="checkbox" class="checkbox checkbox-accent checkbox-sm" value="{{ $list_detail['product_id'] }}" wire:model="productchecked" />
-                                                <span><img src="{{ $prefix . $list_detail['image_path'] }}" width="100" alt="Image" /></span>
-                                            </div>
-                                            <div class="flex w-full justify-between">
-                                                <div class="flex flex-col">
-                                                    <span>{{ $list_detail['product_name'] }}</span>
-                                                    <div class="flex flex-row items-center space-x-2">
-                                                        <button type="button" wire:click="quantity_sub( {{ $list_detail['index'] }} )">
-                                                            <i class="fa-solid fa-minus text-emerald-500"></i>
-                                                        </button>
-                                                        <span class="text-center w-8">{{ $list_detail['quantity'] }}</span>
-                                                        <button type="button" wire:click="quantity_add( {{ $list_detail['index'] }} )">
-                                                            <i class="fa-solid fa-plus text-emerald-500"></i>
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                                <div class="flex flex-col items-end">
-                                                    <button type="button" wire:click="remove_item( {{ $list_detail['index'] }} )">
-                                                        <i class="fa-solid fa-xmark text-emerald-500"></i>
+                            </div>
+                            <hr>
+                            <!-- Card Content -->
+                            <div class="overflow-y-auto max-h-28">
+                                <!-- Item -->
+                                @forelse ($list_details as $list_detail)
+                                <div class="flex flex-row max-h-24 px-2 py-2">
+                                    <div class="flex space-x-5 items-center">
+                                        <div class="flex space-x-2 items-center">
+                                            <span class="relative h-2/3 flex rounded-full px-1 bg-emerald-600 text-xs text-white items-center">{{ $list_detail['list_index'] + 1 }}</span>
+                                            <input type="checkbox" class="checkbox checkbox-accent checkbox-sm" value="{{ $list_detail['product_id'] }}" wire:model="productchecked" />
+                                            <span><img src="{{ $prefix . $list_detail['image_path'] }}" width="100" alt="Image" /></span>
+                                        </div>
+                                        <div class="flex w-full justify-between">
+                                            <div class="flex flex-col">
+                                                <span>{{ $list_detail['product_name'] }}</span>
+                                                <div class="flex flex-row items-center space-x-2">
+                                                    <button type="button" wire:click="quantity_sub( {{ $list_detail['list_index'] }} )">
+                                                        <i class="fa-solid fa-minus text-emerald-500"></i>
                                                     </button>
-                                                    <span>₱&nbsp;{{ number_format($list_detail['price'] * $list_detail['quantity'], 2) }}</span>
+                                                    <span class="text-center w-8">{{ $list_detail['quantity'] }}</span>
+                                                    <button type="button" wire:click="quantity_add( {{ $list_detail['list_index'] }} )">
+                                                        <i class="fa-solid fa-plus text-emerald-500"></i>
+                                                    </button>
                                                 </div>
+                                            </div>
+                                            <div class="flex flex-col items-end">
+                                                <button type="button" wire:click="remove_item( {{ $list_detail['list_index'] }} )">
+                                                    <i class="fa-solid fa-xmark text-emerald-500"></i>
+                                                </button>
+                                                <span>₱&nbsp;{{ number_format($list_detail['price'] * $list_detail['quantity'], 2) }}</span>
                                             </div>
                                         </div>
                                     </div>
-                                    @empty
-                                    <span class="flex-row max-h-24 px-2 py-2 italic flex justify-center">Add items here</span>
-                                    @endforelse
                                 </div>
-                                <hr>
-                                <!-- Card Total -->
-                                <div class="py-3">
-                                    <div class="space-y-3">
-                                        <div class="flex justify-between">
-                                            <span class="text-black">Total:</span>
-                                            <span class="text-black"><i class="fa-solid fa-peso-sign"></i>&nbsp;{{ number_format($total, 2) }}</span>
-                                        </div>
-                                        <!-- Card Remaining Budget -->
-                                        <div class="flex justify-between">
-                                            <span class="text-black">Remaining:</span>
-                                            <span><i class="fa-solid fa-peso-sign text-black"></i>
+                                @empty
+                                <span class="flex-row max-h-24 px-2 py-2 italic flex justify-center">Add items here</span>
+                                @endforelse
+                            </div>
+                            <hr>
+                            <!-- Card Total -->
+                            <div class="py-3">
+                                <div class="space-y-3">
+                                    <div class="flex justify-between">
+                                        <span class="text-black">Total:</span>
+                                        <span class="text-black"><i class="fa-solid fa-peso-sign"></i>&nbsp;{{ number_format($total, 2) }}</span>
+                                    </div>
+                                    <!-- Card Remaining Budget -->
+                                    <div class="flex justify-between">
+                                        <span class="text-black">Remaining:</span>
+                                        <span><i class="fa-solid fa-peso-sign text-black"></i>
                                             @if( !empty($budget) )
-                                                @if (number_format($budget - $total, 2) < 0) <span class="text-red-600">{{ number_format($budget - $total, 2) }}</span>
-                                                @else <span class="text-black">{{ number_format($budget - $total, 2) }}</span>
-                                                @endif
-                                            @else <span class="text-black">0.00</span>
-                                            @endif
-                                            </span>
-                                        </div>
-                                        <!-- Save Button -->
-                                        <div class="card-actions flex justify-center">
-                                            <button type="submit" wire:target="store" wire:loading.attr="disabled" :disabled="$disabled" class="sc-btn-primary">
-                                                <span>{{ __('Save')}}</span>
-                                            </button>
-                                        </div>
+                                            @if (number_format($budget - $total, 2) < 0) <span class="text-red-600">{{ number_format($budget - $total, 2) }}</span>
+                                        @else <span class="text-black">{{ number_format($budget - $total, 2) }}</span>
+                                        @endif
+                                        @else <span class="text-black">0.00</span>
+                                        @endif
+                                        </span>
+                                    </div>
+                                    <!-- Save Button -->
+                                    <div class="card-actions flex justify-center">
+                                        <button type="button" wire:click="confirm" class="sc-btn-primary">
+                                            <span>{{ __('Save')}}</span>
+                                        </button>
                                     </div>
                                 </div>
                             </div>
-                        </form>
+                        </div>
                     </div>
                 </div>
             </div>

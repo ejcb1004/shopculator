@@ -1,4 +1,74 @@
 <div>
+
+    <form wire:submit.prevent="archive" enctype="multipart/form-data">
+        @csrf
+        <x-jet-confirmation-modal wire:model="to_confirm_archive">
+            <x-slot name="title">
+                Archive List
+            </x-slot>
+
+            <x-slot name="content">
+                Are you sure you want to archive this list?
+            </x-slot>
+
+            <x-slot name="footer">
+                <button class="sc-btn-indighost" type="button" wire:click="$toggle('to_confirm_archive')" wire:loading.attr="disabled">
+                    <span>No</span>
+                </button>
+
+                <button class="sc-btn-archive ml-3" type="submit" wire:target="archive" wire:loading.attr="disabled">
+                    <span>Save</span>
+                </button>
+            </x-slot>
+        </x-jet-confirmation-modal>
+    </form>
+
+    <form wire:submit.prevent="unarchive" enctype="multipart/form-data">
+        @csrf
+        <x-jet-confirmation-modal wire:model="to_confirm_unarchive">
+            <x-slot name="title">
+                Unarchive List
+            </x-slot>
+
+            <x-slot name="content">
+                Are you sure you want to unarchive this list?
+            </x-slot>
+
+            <x-slot name="footer">
+                <button class="sc-btn-indighost" type="button" wire:click="$toggle('to_confirm_unarchive')" wire:loading.attr="disabled">
+                    <span>No</span>
+                </button>
+
+                <button class="sc-btn-archive ml-3" type="submit" wire:target="unarchive" wire:loading.attr="disabled">
+                    <span>Save</span>
+                </button>
+            </x-slot>
+        </x-jet-confirmation-modal>
+    </form>
+
+    <form wire:submit.prevent="delete" enctype="multipart/form-data">
+        @csrf
+        <x-jet-confirmation-modal wire:model="to_confirm_delete">
+            <x-slot name="title">
+                Delete List
+            </x-slot>
+
+            <x-slot name="content">
+                Are you sure you want to delete this list? This cannot be undone.
+            </x-slot>
+
+            <x-slot name="footer">
+                <button class="sc-btn-red-ghost" type="button" wire:click="$toggle('to_confirm_delete')" wire:loading.attr="disabled">
+                    <span>No</span>
+                </button>
+
+                <button class="sc-btn-danger ml-3" type="submit" wire:target="delete" wire:loading.attr="disabled">
+                    <span>Save</span>
+                </button>
+            </x-slot>
+        </x-jet-confirmation-modal>
+    </form>
+
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <!-- Search and Add Button -->
         <div class="flex flex-row-reverse pt-5">
@@ -13,7 +83,7 @@
                     </a>
                 </button>
 
-                <button class="sc-btn-primary" wire:click = "check_listid">Check List ID</button>
+                <button class="sc-btn-primary" wire:click="check_listid">Check List ID</button>
 
             </div>
         </div>
@@ -38,20 +108,20 @@
                         </thead>
 
                         <tbody>
-                            @forelse ($shoppinglists as $shoppinglist)
+                            @forelse ($lists as $list)
                             <tr class="hover table-group">
-
+                                <input value="{{ $list->id }}" name="id" id="id" hidden />
                                 <td class="table-item">
-                                    <input type="checkbox" value="{{ $shoppinglist->list_id }}" class="checkbox checkbox-sm checkbox-accent" wire:model="checkboxticked" />
+                                    <input type="checkbox" value="{{ $list->list_id }}" class="checkbox checkbox-sm checkbox-accent" wire:model="checkboxticked" />
                                 </td>
-                                <td class="table-item">{{ $shoppinglist->list_name }}</td>
-                                <td class="table-item"><i class="fa-solid fa-peso-sign text-black"></i>&nbsp;{{ number_format($shoppinglist->total, 2, '.') }}</td>
-                                <td class="table-item"><i class="fa-solid fa-peso-sign text-black"></i>&nbsp;{{ number_format($shoppinglist->budget, 2, '.') }}</td>
-                                <td class="table-item">{{ $shoppinglist->updated_at }}</td>
+                                <td class="table-item">{{ $list->list_name }}</td>
+                                <td class="table-item"><i class="fa-solid fa-peso-sign text-black"></i>&nbsp;{{ number_format($list->total, 2, '.') }}</td>
+                                <td class="table-item"><i class="fa-solid fa-peso-sign text-black"></i>&nbsp;{{ number_format($list->budget, 2, '.') }}</td>
+                                <td class="table-item">{{ $list->updated_at }}</td>
                             </tr>
                             @empty
                             <tr>
-                                <td>No Result</td>
+                                <td><i>No Result</i></td>
                             </tr>
                             @endforelse
                         </tbody>
@@ -63,23 +133,27 @@
         </div>
         <!-- Options Menu when Checkbox Ticked -->
         @if (count($checkboxticked) == 1)
+        @foreach ($lists as $list)
         <div class="sticky rounded-md bottom-0 bg-white p-3 bg-shadow w-full">
             <div class="flex justify-center space-x-10">
-                <button class="sc-btn-primary"><a href="{{ route('shopping-lists/edit') }}"><i class="fa-solid fa-pen"></i>&nbsp;Edit</a></button>
-                <button class="sc-btn-archive"><span><i class="fa-solid fa-folder"></i>&nbsp;Archive</span></button>
-                <button class="sc-btn-pdf"><a href="{{ route('list.pdf') }}"><i class="fa-solid fa-file-import"></i>&nbsp;Export PDF</a></button>
-                <button class="sc-btn-danger"><span><i class="fa-solid fa-trash"></i>&nbsp;Delete</span></button>
+                <button type="button" class="sc-btn-ghost"><a href="{{ url('shopping-lists/edit/' . $list->list_id) }}"><i class="fa-solid fa-pen"></i>&nbsp;Edit</a></button>
+                <button type="button" class="sc-btn-indighost" wire:click="confirm_archive"><span><i class="fa-solid fa-folder"></i>&nbsp;Archive</span></button>
+                <button type="button" class="sc-btn-red-ghost"><a href="{{ url('shopping-lists/download/'. $list->list_id) }}"><i class="fa-solid fa-file-pdf"></i>&nbsp;Download as PDF</a></button>
+                <button type="button" class="sc-btn-danger" wire:click="confirm_delete"><span><i class="fa-solid fa-trash"></i>&nbsp;Delete</span></button>
             </div>
         </div>
+        @endforeach
         @elseif (count($checkboxticked) >= 2)
-        <div class="sticky bottom-0 bg-white p-3 bg-shadow w-full">
+        @foreach ($lists as $list)
+        <div class="sticky rounded-md bottom-0 bg-white p-3 bg-shadow w-full">
             <div class="flex justify-center space-x-10">
-                <button class="sc-btn-disabled" disabled><span><i class="fa-solid fa-pen"></i>&nbsp;Edit</span></button>
-                <button class="sc-btn-archive"><span><i class="fa-solid fa-folder"></i>&nbsp;Archive</span></button>
-                <button class="sc-btn-pdf"><a href="{{ route('list.pdf') }}"><i class="fa-solid fa-file-import"></i>&nbsp;Export PDF</a></button>
-                <button class="sc-btn-danger"><span><i class="fa-solid fa-trash"></i>&nbsp;Delete</span></button>
+                <button type="button" class="sc-btn-disabled" disabled><span><i class="fa-solid fa-pen"></i>&nbsp;Edit</span></button>
+                <button type="button" class="sc-btn-indighost" wire:click="confirm_archive"><span><i class="fa-solid fa-folder"></i>&nbsp;Archive</span></button>
+                <button type="button" class="sc-btn-red-ghost"><a href="{{ url('shopping-lists/download/'. $list->list_id) }}"><i class="fa-solid fa-file-pdf"></i>&nbsp;Download as PDF</a></button>
+                <button type="button" class="sc-btn-danger" wire:click="confirm_delete"><span><i class="fa-solid fa-trash"></i>&nbsp;Delete</span></button>
             </div>
         </div>
+        @endforeach
         @endif
     </div>
 </div>

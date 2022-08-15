@@ -7,7 +7,7 @@ use App\Models\ListDetail;
 use App\Models\Market;
 use App\Models\Product;
 use App\Models\ShoppingList;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -22,8 +22,13 @@ class Edit extends Component
     // string
     public $prefix;
     public $list_name;
+    public $list_id;
+
+    // boolean
+    public $to_confirm;
 
     // array
+    public $db_details = [];
     public $list_details = [];
     public $new_detail = [];
     public $productchecked = [];
@@ -57,11 +62,24 @@ class Edit extends Component
     {
         $this->markets = Market::all();
         $this->categories = Category::all();
-        $this->list_details = [];
-        $this->productchecked = [];
-        $this->budget = 0;
-        $this->items = 0;
-        $this->total = 0;
+
+        $this->db_details = DB::select(DB::raw(
+            'SELECT list_details.*, products.product_name, products.price FROM list_details 
+            JOIN products ON list_details.product_id = products.product_id
+            ORDER BY list_index'
+        ));
+
+        foreach ($this->db_details as $db_detail) {
+            array_push($this->list_details, get_object_vars($db_detail));
+        }
+        $this->list_details = array_values($this->list_details);
+        for ($i = 0; $i < count($this->list_details); $i++) $this->list_details[$i]['list_index'] = $i;
+
+        $this->productchecked = ListDetail::where('list_id', $this->list_id)->where('is_checked', 1)->pluck('product_id')->toArray();
+        $this->list_name = ShoppingList::where('list_id', $this->list_id)->pluck('list_name')[0];
+        $this->budget = ShoppingList::where('list_id', $this->list_id)->pluck('budget')[0];
+        $this->items = count($this->list_details);
+        $this->total = ShoppingList::where('list_id', $this->list_id)->pluck('total')[0];
         $this->prefix = 'http://127.0.0.1:3000';
     }
 
@@ -93,46 +111,42 @@ class Edit extends Component
 
     public function store()
     {
-        $list = ShoppingList::create([
-            'list_id'   => '',
-            'email'     => Auth::user()->email,
-            'list_name' => $this->list_name,
-            'budget'    => $this->budget,
-            'total'     => $this->total,
-        ]);
+        if ($this->budget >= $this->total) {
+            $this->to_confirm = false;
 
-        $list->list_id = "L" . str_pad($list->id, 8, "0", STR_PAD_LEFT);
-
-        foreach ($this->list_details as $detail) {
-            $list_detail = ListDetail::create([
-                'detail_id' => '',
-                'list_id' => $list->list_id,
-                'product_id' => $detail['product_id'],
-                'image_path' => $detail['image_path'],
-                'quantity' => $detail['quantity'],
-                'price' => $detail['quantity'] * $detail['price']
+            ShoppingList::where('list_id', $this->list_id)->update([
+                'list_name' => $this->list_name,
+                'budget'    => $this->budget,
+                'total'     => $this->total
             ]);
-            $list_detail->detail_id = "D" . str_pad($list_detail->id, 12, "0", STR_PAD_LEFT);
-            $list_detail->save();
+
+            foreach ($this->list_details as $detail) {
+                ListDetail::where('detail_id', $detail['detail_id'])->update([
+                    'is_checked' => (in_array($detail['product_id'], $this->productchecked)) ? 1 : 0,
+                    'list_index' => $detail['list_index'],
+                    'product_id' => $detail['product_id'],
+                    'image_path' => $detail['image_path'],
+                    'is_deleted' => $detail['is_deleted'],
+                    'quantity' => $detail['quantity']
+                ]);
+            }
+
+            $this->reset(
+                'list_details',
+                'list_name',
+                'budget',
+                'total',
+                'items',
+                'productchecked',
+                'selectedmarket',
+                'selectedcategory'
+            );
+
+            session()->flash('flash.banner', 'List successfully updated!');
+            session()->flash('flash.bannerStyle', 'success');
+
+            return redirect('shopping-lists');
         }
-
-        $list->save();
-
-        $this->reset(
-            'list_details',
-            'list_name',
-            'budget',
-            'total',
-            'items',
-            'productchecked',
-            'selectedmarket',
-            'selectedcategory'
-        );
-        
-        session()->flash('flash.banner', 'List successfully created!');
-        session()->flash('flash.bannerStyle', 'success');
-        
-        return redirect('shopping-lists');
     }
 
     // user-defined methods
@@ -141,7 +155,7 @@ class Edit extends Component
         dd($this->list_details);
     }
 
-    public function inspect_prid()
+    public function inspect_checked()
     {
         dd($this->productchecked);
     }
@@ -150,10 +164,12 @@ class Edit extends Component
     {
         // Populate array with list details
         $this->list_details[] = [
-            'index'         => empty($this->list_details) ? 0 : array_key_last($this->list_details) + 1,
+            'is_checked'    => 0,
+            'list_index'    => empty($this->list_details) ? 0 : array_key_last($this->list_details) + 1,
             'product_id'    => $this->new_detail['product_id'],
             'image_path'    => $this->new_detail['image_path'],
             'quantity'      => 1,
+            'is_deleted'    => 0,
             'product_name'  => $this->new_detail['product_name'],
             'price'         => $this->new_detail['price'],
         ];
@@ -165,12 +181,16 @@ class Edit extends Component
         // Retrieve record based on id
         $this->new_detail = Product::where('id', $id)->get()->toArray()[0];
 
-        // if product id of new detail matches an existing record in the array
+        // If the product being added already exists in the list details table but had been deleted prior
+
+        // if product_id of $new_detail matches an existing record in $list_details array
         $index = array_search($this->new_detail['product_id'], array_column($this->list_details, 'product_id'));
+
         if (!empty($this->new_detail) && !empty($this->list_details)) {
-            if (in_array($this->new_detail['product_id'], $this->list_details[$index]))
+            if (in_array($this->new_detail['product_id'], $this->list_details[$index])) {
                 $this->list_details[$index]['quantity']++;
-            else $this->populate();
+                $this->totalize();
+            } else $this->populate();
         } else {
             $this->populate();
         }
@@ -186,31 +206,36 @@ class Edit extends Component
         }
     }
 
-    public function quantity_sub($index)
+    public function quantity_sub($list_index)
     {
-        ($this->list_details[$index]['quantity'] > 1) ? $this->list_details[$index]['quantity']-- : $this->remove_item($index);
+        ($this->list_details[$list_index]['quantity'] > 1) ? $this->list_details[$list_index]['quantity']-- : $this->remove_item($list_index);
         $this->totalize();
     }
 
-    public function quantity_add($index)
+    public function quantity_add($list_index)
     {
-        $this->list_details[$index]['quantity']++;
+        $this->list_details[$list_index]['quantity']++;
         $this->totalize();
     }
 
-    public function remove_item($index)
+    public function remove_item($list_index)
     {
-        unset($this->list_details[$index]);
-        unset($this->productchecked[$index]);
+        unset($this->list_details[$list_index]);
+        unset($this->productchecked[$list_index]);
         $this->items--;
 
         // Serialize $this->list_details array for error trapping
         $this->list_details = array_values($this->list_details);
-        for ($i = 0; $i < count($this->list_details); $i++) $this->list_details[$i]['index'] = $i;
+        for ($i = 0; $i < count($this->list_details); $i++) $this->list_details[$i]['list_index'] = $i;
 
         // Serialize $this->productchecked array for error trapping
         $this->productchecked = array_values($this->productchecked);
 
         $this->totalize();
+    }
+
+    public function confirm()
+    {
+        $this->to_confirm = true;
     }
 }

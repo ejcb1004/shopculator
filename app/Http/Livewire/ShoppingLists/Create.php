@@ -23,6 +23,9 @@ class Create extends Component
     public $prefix;
     public $list_name;
 
+    // boolean
+    public $to_confirm;
+
     // array
     public $list_details = [];
     public $new_detail = [];
@@ -93,46 +96,54 @@ class Create extends Component
 
     public function store()
     {
-        $list = ShoppingList::create([
-            'list_id'   => '',
-            'email'     => Auth::user()->email,
-            'list_name' => $this->list_name,
-            'budget'    => $this->budget,
-            'total'     => $this->total,
-        ]);
+        if ($this->budget >= $this->total) {
+            $this->to_confirm = false;
 
-        $list->list_id = "L" . str_pad($list->id, 8, "0", STR_PAD_LEFT);
-
-        foreach ($this->list_details as $detail) {
-            $list_detail = ListDetail::create([
-                'detail_id' => '',
-                'list_id' => $list->list_id,
-                'product_id' => $detail['product_id'],
-                'image_path' => $detail['image_path'],
-                'quantity' => $detail['quantity'],
-                'price' => $detail['quantity'] * $detail['price']
+            $list = ShoppingList::create([
+                'list_id'       => '',
+                'email'         => Auth::user()->email,
+                'list_name'     => $this->list_name,
+                'budget'        => $this->budget,
+                'total'         => $this->total,
+                'is_archived'   => 0,
+                'is_deleted'    => 0
             ]);
-            $list_detail->detail_id = "D" . str_pad($list_detail->id, 12, "0", STR_PAD_LEFT);
-            $list_detail->save();
+
+            $list->list_id = "L" . str_pad($list->id, 8, "0", STR_PAD_LEFT);
+
+            foreach ($this->list_details as $detail) {
+                $list_detail = ListDetail::create([
+                    'is_checked' => (in_array($detail['product_id'], $this->productchecked)) ? 1 : 0,
+                    'list_index' => $detail['list_index'],
+                    'detail_id' => '',
+                    'list_id' => $list->list_id,
+                    'product_id' => $detail['product_id'],
+                    'image_path' => $detail['image_path'],
+                    'is_deleted' => $detail['is_deleted'],
+                    'quantity' => $detail['quantity']
+                ]);
+                $list_detail->detail_id = "D" . str_pad($list_detail->id, 12, "0", STR_PAD_LEFT);
+                $list_detail->save();
+            }
+
+            $list->save();
+
+            $this->reset(
+                'list_details',
+                'list_name',
+                'budget',
+                'total',
+                'items',
+                'productchecked',
+                'selectedmarket',
+                'selectedcategory'
+            );
+
+            session()->flash('flash.banner', 'List successfully created!');
+            session()->flash('flash.bannerStyle', 'success');
+
+            return redirect('shopping-lists');
         }
-
-        $list->save();
-
-        $this->reset(
-            'list_details',
-            'list_name',
-            'budget',
-            'total',
-            'items',
-            'productchecked',
-            'selectedmarket',
-            'selectedcategory'
-        );
-        
-        session()->flash('flash.banner', 'List successfully created!');
-        session()->flash('flash.bannerStyle', 'success');
-        
-        return redirect('shopping-lists');
     }
 
     // user-defined methods
@@ -141,7 +152,7 @@ class Create extends Component
         dd($this->list_details);
     }
 
-    public function inspect_prid()
+    public function inspect_checked()
     {
         dd($this->productchecked);
     }
@@ -150,10 +161,12 @@ class Create extends Component
     {
         // Populate array with list details
         $this->list_details[] = [
-            'index'         => empty($this->list_details) ? 0 : array_key_last($this->list_details) + 1,
+            'is_checked'    => 0,
+            'list_index'    => empty($this->list_details) ? 0 : array_key_last($this->list_details) + 1,
             'product_id'    => $this->new_detail['product_id'],
             'image_path'    => $this->new_detail['image_path'],
             'quantity'      => 1,
+            'is_deleted'    => 0,
             'product_name'  => $this->new_detail['product_name'],
             'price'         => $this->new_detail['price'],
         ];
@@ -165,12 +178,13 @@ class Create extends Component
         // Retrieve record based on id
         $this->new_detail = Product::where('id', $id)->get()->toArray()[0];
 
-        // if product id of new detail matches an existing record in the array
-        $index = array_search($this->new_detail['product_id'], array_column($this->list_details, 'product_id'));
+        // if product_id of $new_detail matches an existing record in $list_details array
+        $list_index = array_search($this->new_detail['product_id'], array_column($this->list_details, 'product_id'));
         if (!empty($this->new_detail) && !empty($this->list_details)) {
-            if (in_array($this->new_detail['product_id'], $this->list_details[$index]))
-                $this->list_details[$index]['quantity']++;
-            else $this->populate();
+            if (in_array($this->new_detail['product_id'], $this->list_details[$list_index])) {
+                $this->list_details[$list_index]['quantity']++;
+                $this->totalize();
+            } else $this->populate();
         } else {
             $this->populate();
         }
@@ -186,31 +200,36 @@ class Create extends Component
         }
     }
 
-    public function quantity_sub($index)
+    public function quantity_sub($list_index)
     {
-        ($this->list_details[$index]['quantity'] > 1) ? $this->list_details[$index]['quantity']-- : $this->remove_item($index);
+        ($this->list_details[$list_index]['quantity'] > 1) ? $this->list_details[$list_index]['quantity']-- : $this->remove_item($list_index);
         $this->totalize();
     }
 
-    public function quantity_add($index)
+    public function quantity_add($list_index)
     {
-        $this->list_details[$index]['quantity']++;
+        $this->list_details[$list_index]['quantity']++;
         $this->totalize();
     }
 
-    public function remove_item($index)
+    public function remove_item($list_index)
     {
-        unset($this->list_details[$index]);
-        unset($this->productchecked[$index]);
+        unset($this->list_details[$list_index]);
+        unset($this->productchecked[$list_index]);
         $this->items--;
 
         // Serialize $this->list_details array for error trapping
         $this->list_details = array_values($this->list_details);
-        for ($i = 0; $i < count($this->list_details); $i++) $this->list_details[$i]['index'] = $i;
+        for ($i = 0; $i < count($this->list_details); $i++) $this->list_details[$i]['list_index'] = $i;
 
         // Serialize $this->productchecked array for error trapping
         $this->productchecked = array_values($this->productchecked);
 
         $this->totalize();
+    }
+
+    public function confirm()
+    {
+        $this->to_confirm = true;
     }
 }
