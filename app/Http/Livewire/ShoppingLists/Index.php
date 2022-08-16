@@ -14,16 +14,19 @@ class Index extends Component
     public $selectall = false;
     public $lists;
     public $checkboxticked;
-    public $list_id;
 
     // boolean
     public $to_confirm_archive;
     public $to_confirm_unarchive;
     public $to_confirm_delete;
 
-    public function check_listid()
+    // Livewire lifecycle hooks
+    public function mount()
     {
-        dd($this->checkboxticked);
+        $this->checkboxticked = [];
+        $this->to_confirm_archive = false;
+        $this->to_confirm_unarchive = false;
+        $this->to_confirm_delete = false;
     }
 
     public function updatedSelectAll($value)
@@ -31,12 +34,12 @@ class Index extends Component
         $value ? $this->checkboxticked = ShoppingList::pluck('list_id')->toArray() : $this->checkboxticked = [];
     }
 
-    public function mount()
+    public function render()
     {
-        $this->checkboxticked = [];
-        $this->to_confirm_archive = false;
-        $this->to_confirm_unarchive = false;
-        $this->to_confirm_delete = false;
+        $this->lists = ShoppingList::where('list_name', 'like', '%' . $this->searchterm . '%')
+            ->where('is_deleted', 0)
+            ->orderBy('updated_at', 'desc')->get();
+        return view('livewire.shopping-lists.index');
     }
 
     public function generatepdf($list_id)
@@ -54,44 +57,31 @@ class Index extends Component
         return $pdf->download($list_name . '.pdf');
     }
 
-    public function confirm_archive()
-    {
-        $this->to_confirm_archive = true;
-    }
-
-    public function confirm_unarchive()
-    {
-        $this->to_confirm_unarchive = true;
-    }
-
     public function confirm_delete()
     {
         $this->to_confirm_delete = true;
     }
 
-    public function archive()
+    public function inspect_checkboxticked()
     {
-
-    }
-
-    public function unarchive()
-    {
-
+        dd($this->checkboxticked[0]);
     }
 
     public function delete()
     {
-        $list = ShoppingList::where('list_id', $this->list_id)->get();
-        $list->is_deleted = 1;
-        $list->save();
+        if (count($this->checkboxticked) == 1) {
+            ShoppingList::where('list_id', $this->checkboxticked[0])->update([
+                'is_deleted' => 1
+            ]);
+        } elseif (count($this->checkboxticked) > 1) {
+            foreach ($this->checkboxticked as $list_id)
+            ShoppingList::where('list_id', $list_id)->update([
+                'is_deleted' => 1
+            ]);
+        }
+
         session()->flash('flash.banner', 'List successfully deleted!');
         session()->flash('flash.bannerStyle', 'success');
         return redirect('shopping-lists');
-    }
-
-    public function render()
-    {
-        $this->lists = ShoppingList::where('list_name', 'like', '%' . $this->searchterm . '%')->get();
-        return view('livewire.shopping-lists.index');
     }
 }

@@ -86,7 +86,10 @@ select:focus {
 .sc-btn-ghost > *,
 .sc-btn-wisp > *,
 .sc-btn-red-ghost > *,
-.sc-btn-indighost > *,
+.sc-btn-indighost > *
+{
+    @apply px-6 py-0.5;
+}
 .sc-btn-primary > *,
 .sc-btn-secondary > *,
 .sc-btn-disabled > *,

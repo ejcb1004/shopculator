@@ -110,7 +110,6 @@ class Create extends Component
                 'list_name'     => $this->list_name,
                 'budget'        => $this->budget,
                 'total'         => $this->total,
-                'is_archived'   => 0,
                 'is_deleted'    => 0
             ]);
 

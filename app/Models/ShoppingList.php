@@ -23,7 +23,6 @@ class ShoppingList extends Model
         'list_name',
         'budget',
         'total',
-        'is_archived',
         'is_deleted'
     ];
 

@@ -1,51 +1,4 @@
 <div>
-
-    <form wire:submit.prevent="archive" enctype="multipart/form-data">
-        @csrf
-        <x-jet-confirmation-modal wire:model="to_confirm_archive">
-            <x-slot name="title">
-                Archive List
-            </x-slot>
-
-            <x-slot name="content">
-                Are you sure you want to archive this list?
-            </x-slot>
-
-            <x-slot name="footer">
-                <button class="sc-btn-indighost" type="button" wire:click="$toggle('to_confirm_archive')" wire:loading.attr="disabled">
-                    <span>No</span>
-                </button>
-
-                <button class="sc-btn-archive ml-3" type="submit" wire:target="archive" wire:loading.attr="disabled">
-                    <span>Archive</span>
-                </button>
-            </x-slot>
-        </x-jet-confirmation-modal>
-    </form>
-
-    <form wire:submit.prevent="unarchive" enctype="multipart/form-data">
-        @csrf
-        <x-jet-confirmation-modal wire:model="to_confirm_unarchive">
-            <x-slot name="title">
-                Unarchive List
-            </x-slot>
-
-            <x-slot name="content">
-                Are you sure you want to unarchive this list?
-            </x-slot>
-
-            <x-slot name="footer">
-                <button class="sc-btn-indighost" type="button" wire:click="$toggle('to_confirm_unarchive')" wire:loading.attr="disabled">
-                    <span>No</span>
-                </button>
-
-                <button class="sc-btn-archive ml-3" type="submit" wire:target="unarchive" wire:loading.attr="disabled">
-                    <span>Unarchive</span>
-                </button>
-            </x-slot>
-        </x-jet-confirmation-modal>
-    </form>
-
     <form wire:submit.prevent="delete" enctype="multipart/form-data">
         @csrf
         <x-jet-confirmation-modal wire:model="to_confirm_delete">
@@ -54,17 +7,23 @@
             </x-slot>
 
             <x-slot name="content">
-                Are you sure you want to delete this list? This cannot be undone.
+                @if (count($checkboxticked) == 1)
+                Are you sure you want to delete this list? 
+                @elseif (count($checkboxticked) > 1)
+                Are you sure you want to delete these lists? 
+                @endif
+                This cannot be undone.
             </x-slot>
 
             <x-slot name="footer">
-                <button class="sc-btn-red-ghost" type="button" wire:click="$toggle('to_confirm_delete')" wire:loading.attr="disabled">
+                <button class="sc-btn-red-ghost ml-3" type="button" wire:click="$toggle('to_confirm_delete')" wire:loading.attr="disabled">
                     <span>No</span>
                 </button>
 
                 <button class="sc-btn-danger ml-3" type="submit" wire:target="delete" wire:loading.attr="disabled">
                     <span>Delete</span>
                 </button>
+
             </x-slot>
         </x-jet-confirmation-modal>
     </form>
@@ -133,8 +92,7 @@
         <div class="sticky rounded-md bottom-0 bg-white p-3 bg-shadow w-full">
             <div class="flex justify-center space-x-3 lg:space-x-8">
                 <button type="button" class="sc-btn-ghost"><a href="{{ url('shopping-lists/edit/' . $checkboxticked[0]) }}"><i class="fa-solid fa-pen"></i>&nbsp;Edit</a></button>
-                <button type="button" class="sc-btn-indighost" wire:click="confirm_archive"><span><i class="fa-solid fa-folder"></i>&nbsp;Archive</span></button>
-                <button type="button" class="sc-btn-red-ghost"><a href="{{ url('shopping-lists/download/'. $checkboxticked[0]) }}"><i class="fa-solid fa-file-pdf"></i>&nbsp;PDF</a></button>
+                <button type="button" class="sc-btn-red-ghost"><a href="{{ url('shopping-lists/download/'. $checkboxticked[0]) }}"><i class="fa-solid fa-file-pdf"></i>&nbsp;Save PDF</a></button>
                 <button type="button" class="sc-btn-danger" wire:click="confirm_delete"><span><i class="fa-solid fa-trash"></i>&nbsp;Delete</span></button>
             </div>
         </div>
@@ -142,8 +100,7 @@
         <div class="sticky rounded-md bottom-0 bg-white p-3 bg-shadow w-full">
             <div class="flex justify-center space-x-3 lg:space-x-8">
                 <button type="button" class="sc-btn-disabled" disabled><span><i class="fa-solid fa-pen"></i>&nbsp;Edit</span></button>
-                <button type="button" class="sc-btn-indighost" wire:click="confirm_archive"><span><i class="fa-solid fa-folder"></i>&nbsp;Archive</span></button>
-                <button type="button" class="sc-btn-disabled" disabled><span><i class="fa-solid fa-file-pdf"></i>&nbsp;PDF</span></button>
+                <button type="button" class="sc-btn-disabled" disabled><span><i class="fa-solid fa-file-pdf"></i>&nbsp;Save PDF</span></button>
                 <button type="button" class="sc-btn-danger" wire:click="confirm_delete"><span><i class="fa-solid fa-trash"></i>&nbsp;Delete</span></button>
             </div>
         </div>
