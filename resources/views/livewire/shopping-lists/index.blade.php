@@ -17,7 +17,7 @@
                 </button>
 
                 <button class="sc-btn-archive ml-3" type="submit" wire:target="archive" wire:loading.attr="disabled">
-                    <span>Save</span>
+                    <span>Archive</span>
                 </button>
             </x-slot>
         </x-jet-confirmation-modal>
@@ -40,7 +40,7 @@
                 </button>
 
                 <button class="sc-btn-archive ml-3" type="submit" wire:target="unarchive" wire:loading.attr="disabled">
-                    <span>Save</span>
+                    <span>Unarchive</span>
                 </button>
             </x-slot>
         </x-jet-confirmation-modal>
@@ -63,7 +63,7 @@
                 </button>
 
                 <button class="sc-btn-danger ml-3" type="submit" wire:target="delete" wire:loading.attr="disabled">
-                    <span>Save</span>
+                    <span>Delete</span>
                 </button>
             </x-slot>
         </x-jet-confirmation-modal>
@@ -72,7 +72,7 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <!-- Search and Add Button -->
         <div class="flex flex-row-reverse pt-5">
-            <div class="flex space-x-2 min-w-full justify-end">
+            <div class="flex space-x-4 min-w-full pb-6 pt-2 justify-end">
                 <div class="flex rounded-full bg-white w-full max-w-xs h-10 items-center">
                     <i class="fa-solid fa-magnifying-glass z-1 pl-4 absolute"></i>
                     <input type="text" placeholder="Search" class="input bg-white pl-10 w-full rounded-full h-10" wire:model='searchterm' />
@@ -82,9 +82,6 @@
                         <i class="fa-solid fa-plus"></i>&nbsp;Add List
                     </a>
                 </button>
-
-                <button class="sc-btn-primary" wire:click="check_listid">Check List ID</button>
-
             </div>
         </div>
         <!-- List Management Table -->
@@ -133,21 +130,20 @@
         </div>
         <!-- Options Menu when Checkbox Ticked -->
         @if (count($checkboxticked) == 1)
-        
         <div class="sticky rounded-md bottom-0 bg-white p-3 bg-shadow w-full">
-            <div class="flex justify-center space-x-10">
+            <div class="flex justify-center space-x-3 lg:space-x-8">
                 <button type="button" class="sc-btn-ghost"><a href="{{ url('shopping-lists/edit/' . $checkboxticked[0]) }}"><i class="fa-solid fa-pen"></i>&nbsp;Edit</a></button>
                 <button type="button" class="sc-btn-indighost" wire:click="confirm_archive"><span><i class="fa-solid fa-folder"></i>&nbsp;Archive</span></button>
-                <button type="button" class="sc-btn-red-ghost"><a href="{{ url('shopping-lists/download/'. $checkboxticked[0]) }}"><i class="fa-solid fa-file-pdf"></i>&nbsp;Download as PDF</a></button>
+                <button type="button" class="sc-btn-red-ghost"><a href="{{ url('shopping-lists/download/'. $checkboxticked[0]) }}"><i class="fa-solid fa-file-pdf"></i>&nbsp;PDF</a></button>
                 <button type="button" class="sc-btn-danger" wire:click="confirm_delete"><span><i class="fa-solid fa-trash"></i>&nbsp;Delete</span></button>
             </div>
         </div>
         @elseif (count($checkboxticked) >= 2)
         <div class="sticky rounded-md bottom-0 bg-white p-3 bg-shadow w-full">
-            <div class="flex justify-center space-x-10">
+            <div class="flex justify-center space-x-3 lg:space-x-8">
                 <button type="button" class="sc-btn-disabled" disabled><span><i class="fa-solid fa-pen"></i>&nbsp;Edit</span></button>
                 <button type="button" class="sc-btn-indighost" wire:click="confirm_archive"><span><i class="fa-solid fa-folder"></i>&nbsp;Archive</span></button>
-                <button type="button" class="sc-btn-disabled" disabled><span><i class="fa-solid fa-file-pdf"></i>&nbsp;Download as PDF</span></button>
+                <button type="button" class="sc-btn-disabled" disabled><span><i class="fa-solid fa-file-pdf"></i>&nbsp;PDF</span></button>
                 <button type="button" class="sc-btn-danger" wire:click="confirm_delete"><span><i class="fa-solid fa-trash"></i>&nbsp;Delete</span></button>
             </div>
         </div>
