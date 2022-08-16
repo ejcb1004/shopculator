@@ -63,11 +63,13 @@ class Edit extends Component
         $this->markets = Market::all();
         $this->categories = Category::all();
 
-        $this->db_details = DB::select(DB::raw(
-            'SELECT list_details.*, products.product_name, products.price FROM list_details 
-            JOIN products ON list_details.product_id = products.product_id
-            ORDER BY list_index'
-        ));
+        $this->db_details = DB::table('list_details')
+        ->join('products', 'list_details.product_id', '=', 'products.product_id')
+        ->select('list_details.*', 'products.product_name', 'products.price')
+        ->where('list_details.list_id', $this->list_id)
+        ->where('list_details.is_deleted', 0)
+        ->orderBy('list_index')
+        ->get();
 
         foreach ($this->db_details as $db_detail) {
             array_push($this->list_details, get_object_vars($db_detail));
