@@ -64,12 +64,12 @@ class Edit extends Component
         $this->categories = Category::all();
 
         $this->db_details = DB::table('list_details')
-        ->join('products', 'list_details.product_id', '=', 'products.product_id')
-        ->select('list_details.*', 'products.product_name', 'products.price')
-        ->where('list_details.list_id', $this->list_id)
-        ->where('list_details.is_deleted', 0)
-        ->orderBy('list_index')
-        ->get();
+            ->join('products', 'list_details.product_id', '=', 'products.product_id')
+            ->select('list_details.*', 'products.product_name', 'products.price')
+            ->where('list_details.list_id', $this->list_id)
+            ->where('list_details.is_deleted', 0)
+            ->orderBy('list_index')
+            ->get();
 
         foreach ($this->db_details as $db_detail) {
             array_push($this->list_details, get_object_vars($db_detail));
@@ -113,9 +113,8 @@ class Edit extends Component
 
     public function store()
     {
+        $this->to_confirm = false;
         if ($this->budget >= $this->total) {
-            $this->to_confirm = false;
-
             ShoppingList::where('list_id', $this->list_id)->update([
                 'list_name' => $this->list_name,
                 'budget'    => $this->budget,
@@ -148,6 +147,11 @@ class Edit extends Component
             session()->flash('flash.bannerStyle', 'success');
 
             return redirect('shopping-lists');
+        } else {
+            session()->flash('flash.banner', 'Looks like you don\'t have enough budget. You can either increase budget or reduce the total cost.');
+            session()->flash('flash.bannerStyle', 'danger');
+
+            return redirect('shopping-lists/create');
         }
     }
 
