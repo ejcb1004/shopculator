@@ -72,7 +72,7 @@ select:focus {
 }
 
 .sc-btn-wisp {
-    @apply flex items-center border-2 border-emerald-300 rounded-full text-emerald-300 hover:bg-gray-800 hover:opacity-75 transition duration-300;
+    @apply flex items-center border-2 border-emerald-300 rounded-full text-emerald-300 hover:bg-emerald-900 hover:opacity-75 transition duration-300;
 }
 
 .sc-btn-red-ghost {

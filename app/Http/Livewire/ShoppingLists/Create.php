@@ -102,9 +102,8 @@ class Create extends Component
 
     public function store()
     {
+        $this->to_confirm = false;
         if ($this->budget >= $this->total) {
-            $this->to_confirm = false;
-
             $list = ShoppingList::create([
                 'list_id'       => '',
                 'email'         => Auth::user()->email,
@@ -149,6 +148,12 @@ class Create extends Component
             session()->flash('flash.bannerStyle', 'success');
 
             return redirect('shopping-lists');
+        }
+        else {
+            session()->flash('flash.banner', 'Looks like you don\'t have enough budget. You can either increase budget or reduce the total cost.');
+            session()->flash('flash.bannerStyle', 'danger');
+
+            return redirect('shopping-lists/create');
         }
     }
 

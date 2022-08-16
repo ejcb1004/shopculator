@@ -35,7 +35,7 @@
             <div class="flex justify-start space-x-2 pl-[75px]">
                 <!-- Categories -->
                 <div>
-                    <select class="select select-sm bg-white text-black text-xs w-full max-w-xs border-emerald-400 border-2 leading-none" wire:model="selectedmarket">
+                    <select class="select select-sm rounded-full bg-white text-black text-xs w-full max-w-xs border-emerald-400 border-2 leading-none" wire:model="selectedmarket">
                         <option value="">Markets (All)</option>
                         @foreach($markets as $market)
                         <option value="{{ $market->market_id }}">
@@ -45,7 +45,7 @@
                     </select>
                 </div>
                 <div>
-                    <select class="select select-sm bg-white text-black text-xs w-full max-w-xs border-emerald-400 border-2 leading-none" wire:model="selectedcategory">
+                    <select class="select select-sm rounded-full bg-white text-black text-xs w-full max-w-xs border-emerald-400 border-2 leading-none" wire:model="selectedcategory">
                         <option value="">Categories (All)</option>
                         @foreach($categories as $category)
                         <option value="{{ $category->category_id }}">
@@ -55,18 +55,18 @@
                     </select>
                 </div>
                 <div>
-                    <select class="select select-sm bg-white text-black text-xs w-full max-w-xs border-emerald-400 border-2 leading-none" wire:model="selectedsort">
+                    <select class="select select-sm rounded-full bg-white text-black text-xs w-full max-w-xs border-emerald-400 border-2 leading-none" wire:model="selectedsort">
                         <option disabled selected>Sort By</option>
                         <option value="asc">Price (Lowest-Highest)</option>
                         <option value="desc">Price (Highest-Lowest)</option>
                     </select>
                 </div>
-                <button type="button" wire:click="inspect_ld" class="sc-btn-primary">
+                <!-- <button type="button" wire:click="inspect_ld" class="sc-btn-primary">
                     <span>Inspect List</span>
                 </button>
                 <button type="button" wire:click="inspect_checked" class="sc-btn-ghost">
                     <span>Checked Products</span>
-                </button>
+                </button> -->
             </div>
         </div>
     </div>
