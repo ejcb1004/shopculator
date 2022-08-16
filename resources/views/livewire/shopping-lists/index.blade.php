@@ -133,27 +133,24 @@
         </div>
         <!-- Options Menu when Checkbox Ticked -->
         @if (count($checkboxticked) == 1)
-        @foreach ($lists as $list)
+        
         <div class="sticky rounded-md bottom-0 bg-white p-3 bg-shadow w-full">
             <div class="flex justify-center space-x-10">
-                <button type="button" class="sc-btn-ghost"><a href="{{ url('shopping-lists/edit/' . $list->list_id) }}"><i class="fa-solid fa-pen"></i>&nbsp;Edit</a></button>
+                <button type="button" class="sc-btn-ghost"><a href="{{ url('shopping-lists/edit/' . $checkboxticked[0]) }}"><i class="fa-solid fa-pen"></i>&nbsp;Edit</a></button>
                 <button type="button" class="sc-btn-indighost" wire:click="confirm_archive"><span><i class="fa-solid fa-folder"></i>&nbsp;Archive</span></button>
-                <button type="button" class="sc-btn-red-ghost"><a href="{{ url('shopping-lists/download/'. $list->list_id) }}"><i class="fa-solid fa-file-pdf"></i>&nbsp;Download as PDF</a></button>
+                <button type="button" class="sc-btn-red-ghost"><a href="{{ url('shopping-lists/download/'. $checkboxticked[0]) }}"><i class="fa-solid fa-file-pdf"></i>&nbsp;Download as PDF</a></button>
                 <button type="button" class="sc-btn-danger" wire:click="confirm_delete"><span><i class="fa-solid fa-trash"></i>&nbsp;Delete</span></button>
             </div>
         </div>
-        @endforeach
         @elseif (count($checkboxticked) >= 2)
-        @foreach ($lists as $list)
         <div class="sticky rounded-md bottom-0 bg-white p-3 bg-shadow w-full">
             <div class="flex justify-center space-x-10">
                 <button type="button" class="sc-btn-disabled" disabled><span><i class="fa-solid fa-pen"></i>&nbsp;Edit</span></button>
                 <button type="button" class="sc-btn-indighost" wire:click="confirm_archive"><span><i class="fa-solid fa-folder"></i>&nbsp;Archive</span></button>
-                <button type="button" class="sc-btn-red-ghost"><a href="{{ url('shopping-lists/download/'. $list->list_id) }}"><i class="fa-solid fa-file-pdf"></i>&nbsp;Download as PDF</a></button>
+                <button type="button" class="sc-btn-disabled" disabled><span><i class="fa-solid fa-file-pdf"></i>&nbsp;Download as PDF</span></button>
                 <button type="button" class="sc-btn-danger" wire:click="confirm_delete"><span><i class="fa-solid fa-trash"></i>&nbsp;Delete</span></button>
             </div>
         </div>
-        @endforeach
         @endif
     </div>
 </div>

@@ -28,7 +28,7 @@ class Index extends Component
 
     public function updatedSelectAll($value)
     {
-        $value ? $this->checkboxticked = ShoppingList::pluck('list_id') : $this->checkboxticked = [];
+        $value ? $this->checkboxticked = ShoppingList::pluck('list_id')->toArray() : $this->checkboxticked = [];
     }
 
     public function mount()
