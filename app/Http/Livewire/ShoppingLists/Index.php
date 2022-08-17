@@ -73,11 +73,18 @@ class Index extends Component
             ShoppingList::where('list_id', $this->checkboxticked[0])->update([
                 'is_deleted' => 1
             ]);
-        } elseif (count($this->checkboxticked) > 1) {
-            foreach ($this->checkboxticked as $list_id)
-            ShoppingList::where('list_id', $list_id)->update([
+            ListDetail::where('list_id', $this->checkboxticked[0])->update([
                 'is_deleted' => 1
             ]);
+        } elseif (count($this->checkboxticked) > 1) {
+            foreach ($this->checkboxticked as $list_id) {
+                ShoppingList::where('list_id', $list_id)->update([
+                    'is_deleted' => 1
+                ]);
+                ListDetail::where('list_id', $list_id)->update([
+                    'is_deleted' => 1
+                ]);
+            }
         }
 
         session()->flash('flash.banner', 'List successfully deleted!');
