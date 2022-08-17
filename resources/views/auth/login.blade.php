@@ -39,7 +39,11 @@
                 </a>
                 @endif
                 &nbsp;&nbsp;
-                <button class="sc-btn-primary px-6 py-1.5">
+                <a class="underline text-sm text-gray-600 hover:text-gray-900" href="{{ route('register') }}">
+                    {{ __('Or are you a new user?') }}
+                </a>
+                &nbsp;&nbsp;
+                <button class="sc-btn-primary px-6 py-1">
                     {{ __('Log in') }}
                 </button>
             </div>

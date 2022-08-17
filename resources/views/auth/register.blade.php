@@ -50,10 +50,10 @@
                 <a class="underline text-sm text-gray-600 hover:text-gray-900" href="{{ route('login') }}">
                     {{ __('Already registered?') }}
                 </a>
-
-                <x-jet-button class="ml-4">
+                &nbsp;&nbsp;
+                <button class="sc-btn-primary px-6 py-1">
                     {{ __('Register') }}
-                </x-jet-button>
+                </button>
             </div>
         </form>
     </x-jet-authentication-card>
