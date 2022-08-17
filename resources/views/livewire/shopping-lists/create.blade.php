@@ -128,7 +128,7 @@
                                         <div class="flex space-x-2 items-center">
                                             <span class="relative h-2/3 flex rounded-full px-1 bg-emerald-600 text-xs text-white items-center">{{ $list_detail['list_index'] + 1 }}</span>
                                             <input type="checkbox" class="checkbox checkbox-accent checkbox-sm" value="{{ $list_detail['product_id'] }}" wire:model="productchecked" />
-                                            <span><img src="{{ $prefix . $list_detail['image_path'] }}" width="100" alt="Image" /></span>
+                                            <span><img src="{{ $list_detail['image_path'] }}" width="100" alt="Image" /></span>
                                         </div>
                                         <div class="flex w-full justify-between">
                                             <div class="flex flex-col">
@@ -216,7 +216,7 @@
                                     <div class="flex space-x-5 items-center">
                                         <div class="flex space-x-2 items-center">
                                             <span class="relative h-2/3 flex rounded-full px-1 bg-emerald-600 text-xs text-white items-center">{{ $list_detail['list_index'] + 1 }}</span>
-                                            <span><img src="{{ $prefix . $list_detail['image_path'] }}" width="100" alt="Image" /></span>
+                                            <span><img src="{{ $list_detail['image_path'] }}" width="100" alt="Image" /></span>
                                         </div>
                                         <div class="flex w-full justify-between">
                                             <div class="flex flex-col">
@@ -273,7 +273,7 @@
                         <div class="border bg-white">
                             <div class="flex flex-col min-h-full py-5 px-4 space-y-1 items-center">
                                 <div class="flex flex-auto items-center">
-                                    <img src="{{ $prefix . $product->image_path }}" alt="{{ $product->product_name }}" width="125" />
+                                    <img src="{{ $product->image_path }}" alt="{{ $product->product_name }}" width="125" />
                                 </div>
                                 <div class="h-1/4 text-black text-center">{{ $product->product_name }}</div>
                                 <div class="h-1/4 text-black text-center">PHP {{ $product->price }}</div>

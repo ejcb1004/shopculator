@@ -21,7 +21,6 @@ class Create extends Component
     public $complow = 0;
 
     // string
-    public $prefix;
     public $list_name;
 
     // boolean
@@ -71,7 +70,6 @@ class Create extends Component
         $this->budget = 0;
         $this->items = 0;
         $this->total = 0;
-        $this->prefix = 'http://127.0.0.1:3000';
     }
 
     public function render()
