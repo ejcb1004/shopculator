@@ -67,11 +67,13 @@ class Edit extends Component
             ->join('products', 'list_details.product_id', '=', 'products.product_id')
             ->select('list_details.*', 'products.product_name', 'products.price')
             ->where('list_details.list_id', $this->list_id)
-            ->where('list_details.is_deleted', 0)
+            //->where('list_details.is_deleted', 0)
             ->orderBy('list_index')
-            ->get();
+            ->get()
+            ->toArray();
 
         foreach ($this->db_details as $db_detail) {
+            if (get_object_vars($db_detail)['is_deleted'] == 0)
             array_push($this->list_details, get_object_vars($db_detail));
         }
         $this->list_details = array_values($this->list_details);
@@ -122,14 +124,33 @@ class Edit extends Component
             ]);
 
             foreach ($this->list_details as $detail) {
-                ListDetail::where('detail_id', $detail['detail_id'])->update([
-                    'is_checked' => (in_array($detail['product_id'], $this->productchecked)) ? 1 : 0,
-                    'list_index' => $detail['list_index'],
-                    'product_id' => $detail['product_id'],
-                    'image_path' => $detail['image_path'],
-                    'is_deleted' => $detail['is_deleted'],
-                    'quantity' => $detail['quantity']
-                ]);
+                if (ListDetail::select('product_id')
+                    ->where('product_id', $detail['product_id'])
+                    ->where('list_id', $this->list_id)
+                    ->exists()
+                ) {
+                    ListDetail::where('detail_id', $detail['detail_id'])->update([
+                        'is_checked' => (in_array($detail['product_id'], $this->productchecked)) ? 1 : 0,
+                        'list_index' => $detail['list_index'],
+                        'product_id' => $detail['product_id'],
+                        'image_path' => $detail['image_path'],
+                        'is_deleted' => $detail['is_deleted'],
+                        'quantity' => $detail['quantity']
+                    ]);
+                } else {
+                    $list_detail = ListDetail::create([
+                        'is_checked' => (in_array($detail['product_id'], $this->productchecked)) ? 1 : 0,
+                        'list_index' => $detail['list_index'],
+                        'detail_id' => '',
+                        'list_id' => $this->list_id,
+                        'product_id' => $detail['product_id'],
+                        'image_path' => $detail['image_path'],
+                        'is_deleted' => $detail['is_deleted'],
+                        'quantity' => $detail['quantity']
+                    ]);
+                    $list_detail->detail_id = "D" . str_pad($list_detail->id, 12, "0", STR_PAD_LEFT);
+                    $list_detail->save();
+                }
             }
 
             $this->reset(
@@ -156,14 +177,14 @@ class Edit extends Component
     }
 
     // user-defined methods
+    public function inspect_dbd()
+    {
+        dd($this->db_details);
+    }
+
     public function inspect_ld()
     {
         dd($this->list_details);
-    }
-
-    public function inspect_checked()
-    {
-        dd($this->productchecked);
     }
 
     public function populate()
@@ -187,8 +208,10 @@ class Edit extends Component
         // Retrieve record based on id
         $this->new_detail = Product::where('id', $id)->get()->toArray()[0];
 
-        // If the product being added already exists in the list details table but had been deleted prior
-
+        // if(in_array($this->new_detail['product_id'], array_column($this->db_details, 'product_id'))) {
+            
+        // }
+        
         // if product_id of $new_detail matches an existing record in $list_details array
         $index = array_search($this->new_detail['product_id'], array_column($this->list_details, 'product_id'));
 

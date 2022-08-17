@@ -61,12 +61,12 @@
                         <option value="desc">Price (Highest-Lowest)</option>
                     </select>
                 </div>
-                <!-- <button type="button" wire:click="inspect_ld" class="sc-btn-primary">
+                <button type="button" wire:click="inspect_dbd" class="sc-btn-ghost">
+                    <span>DB Details</span>
+                </button>
+                <button type="button" wire:click="inspect_ld" class="sc-btn-primary">
                     <span>Inspect List</span>
                 </button>
-                <button type="button" wire:click="inspect_checked" class="sc-btn-ghost">
-                    <span>Checked Products</span>
-                </button> -->
             </div>
         </div>
     </div>
@@ -123,6 +123,7 @@
                             <div class="overflow-y-auto max-h-28">
                                 <!-- Item -->
                                 @forelse ($list_details as $list_detail)
+                                @if ($list_detail['is_deleted'] == 0)
                                 <div class="flex flex-row max-h-24 px-2 py-2">
                                     <div class="flex space-x-5 items-center">
                                         <div class="flex space-x-2 items-center">
@@ -152,6 +153,7 @@
                                         </div>
                                     </div>
                                 </div>
+                                @endif
                                 @empty
                                 <span class="flex-row max-h-24 px-2 py-2 italic flex justify-center">Add items here</span>
                                 @endforelse
