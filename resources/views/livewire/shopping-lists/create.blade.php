@@ -30,49 +30,9 @@
             </x-slot>
         </x-jet-confirmation-modal>
     </form>
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="navbar flex flex-row justify-between">
-            <div class="flex justify-start space-x-2 pl-[75px]">
-                <!-- Categories -->
-                <div>
-                    <select class="select select-sm rounded-full bg-white text-black text-xs w-full max-w-xs border-emerald-400 border-2 leading-none" wire:model="selectedmarket">
-                        <option value="">Markets (All)</option>
-                        @foreach($markets as $market)
-                        <option value="{{ $market->market_id }}">
-                            {{$market->market_name}}
-                        </option>
-                        @endforeach
-                    </select>
-                </div>
-                <div>
-                    <select class="select select-sm rounded-full bg-white text-black text-xs w-full max-w-xs border-emerald-400 border-2 leading-none" wire:model="selectedcategory">
-                        <option value="">Categories (All)</option>
-                        @foreach($categories as $category)
-                        <option value="{{ $category->category_id }}">
-                            {{$category->category_name}}
-                        </option>
-                        @endforeach
-                    </select>
-                </div>
-                <div>
-                    <select class="select select-sm rounded-full bg-white text-black text-xs w-full max-w-xs border-emerald-400 border-2 leading-none" wire:model="selectedsort">
-                        <option disabled selected>Sort By</option>
-                        <option value="asc">Price (Lowest-Highest)</option>
-                        <option value="desc">Price (Highest-Lowest)</option>
-                    </select>
-                </div>
-                <!-- <button type="button" wire:click="inspect_ld" class="sc-btn-primary">
-                    <span>Inspect List</span>
-                </button>
-                <button type="button" wire:click="inspect_checked" class="sc-btn-ghost">
-                    <span>Checked Products</span>
-                </button> -->
-            </div>
-        </div>
-    </div>
     <!-- Content Page -->
     <div class="max-w-7xl mx-auto px-3 pb-4 sm:px-6 lg:px-8">
-        <div class="flex flex-row">
+        <div class="flex flex-col">
             <div class="mt-1 fixed flex flex-col w-[70px] justify-center space-y-2">
                 <!-- Cart Dropdown -->
                 <div class="dropdown dropdown-right">
@@ -147,7 +107,7 @@
                                                 <button type="button" wire:click="remove_item( {{ $list_detail['list_index'] }} )">
                                                     <i class="fa-solid fa-xmark text-emerald-500"></i>
                                                 </button>
-                                                <span>₱&nbsp;{{ number_format($list_detail['price'] * $list_detail['quantity'], 2) }}</span>
+                                                <span>₱&nbsp;{{ number_format($list_detail['price'] * $list_detail['quantity'], 2, '.', ',') }}</span>
                                             </div>
                                         </div>
                                     </div>
@@ -162,15 +122,15 @@
                                 <div class="space-y-3">
                                     <div class="flex justify-between">
                                         <span class="text-black">Total:</span>
-                                        <span class="text-black"><i class="fa-solid fa-peso-sign"></i>&nbsp;{{ number_format($total, 2) }}</span>
+                                        <span class="text-black"><i class="fa-solid fa-peso-sign"></i>&nbsp;{{ number_format($total, 2, '.', ',') }}</span>
                                     </div>
                                     <!-- Card Remaining Budget -->
                                     <div class="flex justify-between">
                                         <span class="text-black">Remaining:</span>
                                         <span><i class="fa-solid fa-peso-sign text-black"></i>
                                             @if( !empty($budget) )
-                                            @if (number_format($budget - $total, 2) < 0) <span class="text-red-600">{{ number_format($budget - $total, 2) }}</span>
-                                        @else <span class="text-black">{{ number_format($budget - $total, 2) }}</span>
+                                            @if (number_format($budget - $total, 2) < 0) <span class="text-red-600">{{ number_format($budget - $total, 2, '.', ',') }}</span>
+                                        @else <span class="text-black">{{ number_format($budget - $total, 2, '.', ',') }}</span>
                                         @endif
                                         @else <span class="text-black">0.00</span>
                                         @endif
@@ -235,7 +195,7 @@
                                                 <button type="button" wire:click="remove_compitem( {{ $list_detail['list_index'] }} )">
                                                     <i class="fa-solid fa-xmark text-emerald-500"></i>
                                                 </button>
-                                                <span>₱&nbsp;{{ number_format($list_detail['price'] * $list_detail['quantity'], 2) }}</span>
+                                                <span>₱&nbsp;{{ number_format($list_detail['price'] * $list_detail['quantity'], 2, '.', ',') }}</span>
                                             </div>
                                         </div>
                                     </div>
@@ -250,7 +210,7 @@
                                 <div class="space-y-3">
                                     <div class="flex justify-between">
                                         <span class="text-black">Lowest Price:</span>
-                                        <span class="text-black" wire:model="complow"><i class="fa-solid fa-peso-sign"></i>&nbsp;{{ $complow }}</span>
+                                        <span class="text-black" wire:model="complow"><i class="fa-solid fa-peso-sign"></i>&nbsp;{{ number_format($complow, 2, '.', ',') }}</span>
                                     </div>
                                     <!-- Save Button -->
                                     <div class="card-actions flex justify-center">
@@ -261,6 +221,38 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+                </div>
+            </div>
+            <div class="navbar flex flex-row justify-between">
+                <div class="flex justify-start space-x-2 pl-[76px]">
+                    <!-- Categories -->
+                    <div>
+                        <select class="select select-sm rounded-full bg-white text-black text-xs w-full max-w-xs border-emerald-400 border-2 leading-none" wire:model="selectedmarket">
+                            <option value="">Markets (All)</option>
+                            @foreach($markets as $market)
+                            <option value="{{ $market->market_id }}">
+                                {{$market->market_name}}
+                            </option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div>
+                        <select class="select select-sm rounded-full bg-white text-black text-xs w-full max-w-xs border-emerald-400 border-2 leading-none" wire:model="selectedcategory">
+                            <option value="">Categories (All)</option>
+                            @foreach($categories as $category)
+                            <option value="{{ $category->category_id }}">
+                                {{$category->category_name}}
+                            </option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div>
+                        <select class="select select-sm rounded-full bg-white text-black text-xs w-full max-w-xs border-emerald-400 border-2 leading-none" wire:model="selectedsort">
+                            <option disabled selected>Sort By</option>
+                            <option value="asc">Price (Lowest-Highest)</option>
+                            <option value="desc">Price (Highest-Lowest)</option>
+                        </select>
                     </div>
                 </div>
             </div>
@@ -276,7 +268,7 @@
                                     <img src="{{ $product->image_path }}" alt="{{ $product->product_name }}" width="125" />
                                 </div>
                                 <div class="h-1/4 text-black text-center">{{ $product->product_name }}</div>
-                                <div class="h-1/4 text-black text-center">PHP {{ $product->price }}</div>
+                                <div class="h-1/4 text-black text-center text-bold">PHP {{ number_format($product->price, 2, '.', ',') }}</div>
                                 <button type="button" class="sc-btn-primary" wire:click="product_add({{ $product->id }})">
                                     <span>Add</span>
                                 </button>

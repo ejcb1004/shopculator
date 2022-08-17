@@ -17,8 +17,7 @@ class Create extends Component
     protected $listeners = ['product_add' => 'product_add'];
 
     // int
-    public $budget, $total, $items ,$compitems = 0;
-    public $complow = 0;
+    public $budget, $total, $items, $compitems, $complow;
 
     // string
     public $list_name;
@@ -66,10 +65,12 @@ class Create extends Component
         $this->list_details = [];
         $this->compare_details = [];
         $this->productchecked = [];
-        $this->compareprice =[];
+        $this->compareprice = [];
         $this->budget = 0;
         $this->items = 0;
         $this->total = 0;
+        $this->compitems = 0;
+        $this->complow = 0;
     }
 
     public function render()
@@ -145,8 +146,7 @@ class Create extends Component
             session()->flash('flash.bannerStyle', 'success');
 
             return redirect('shopping-lists');
-        }
-        else {
+        } else {
             session()->flash('flash.banner', 'Looks like you don\'t have enough budget. You can either increase budget or reduce the total cost.');
             session()->flash('flash.bannerStyle', 'danger');
 
@@ -155,16 +155,6 @@ class Create extends Component
     }
 
     // user-defined methods
-    public function inspect_ld()
-    {
-        dd($this->list_details);
-    }
-
-    public function inspect_checked()
-    {
-        dd($this->productchecked);
-    }
-
     public function populate()
     {
         // Populate array with list details
@@ -230,7 +220,6 @@ class Create extends Component
         } else {
             $this->populatecompare();
         }
-
     }
 
     public function totalizecompare()
@@ -248,11 +237,11 @@ class Create extends Component
         }
     }
 
-    public function getlow(){
-        foreach($this->compare_details as $item)
-        array_push($this->compareprice, $item['price']);
+    public function getlow()
+    {
+        foreach ($this->compare_details as $item)
+            array_push($this->compareprice, $item['price']);
         $this->complow = min($this->compareprice);
-        
     }
 
 

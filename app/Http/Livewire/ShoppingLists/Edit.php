@@ -17,10 +17,9 @@ class Edit extends Component
     protected $listeners = ['product_add' => 'product_add'];
 
     // int
-    public $budget, $total, $items = 0;
+    public $budget, $total, $items, $compitems, $complow;
 
     // string
-    public $prefix;
     public $list_name;
     public $list_id;
 
@@ -30,8 +29,11 @@ class Edit extends Component
     // array
     public $db_details = [];
     public $list_details = [];
+    public $newcompare_detail = [];
     public $new_detail = [];
     public $productchecked = [];
+    public $compare_details = [];
+    public $compareprice = [];
 
     // collections
     public $markets;
@@ -74,17 +76,20 @@ class Edit extends Component
 
         foreach ($this->db_details as $db_detail) {
             if (get_object_vars($db_detail)['is_deleted'] == 0)
-            array_push($this->list_details, get_object_vars($db_detail));
+                array_push($this->list_details, get_object_vars($db_detail));
         }
         $this->list_details = array_values($this->list_details);
         for ($i = 0; $i < count($this->list_details); $i++) $this->list_details[$i]['list_index'] = $i;
 
+        $this->compare_details = [];
         $this->productchecked = ListDetail::where('list_id', $this->list_id)->where('is_checked', 1)->pluck('product_id')->toArray();
+        $this->compareprice = [];
         $this->list_name = ShoppingList::where('list_id', $this->list_id)->pluck('list_name')[0];
         $this->budget = ShoppingList::where('list_id', $this->list_id)->pluck('budget')[0];
         $this->items = count($this->list_details);
         $this->total = ShoppingList::where('list_id', $this->list_id)->pluck('total')[0];
-        $this->prefix = 'http://127.0.0.1:3000';
+        $this->compitems = 0;
+        $this->complow = 0;
     }
 
     public function render()
@@ -177,16 +182,6 @@ class Edit extends Component
     }
 
     // user-defined methods
-    public function inspect_dbd()
-    {
-        dd($this->db_details);
-    }
-
-    public function inspect_ld()
-    {
-        dd($this->list_details);
-    }
-
     public function populate()
     {
         // Populate array with list details
@@ -203,26 +198,63 @@ class Edit extends Component
         $this->items++;
     }
 
+    public function populatecompare()
+    {
+        // Populate array with list details
+        $this->compare_details[] = [
+            'is_checked'    => 0,
+            'list_index'    => empty($this->compare_details) ? 0 : array_key_last($this->compare_details) + 1,
+            'product_id'    => $this->newcompare_detail['product_id'],
+            'image_path'    => $this->newcompare_detail['image_path'],
+            'quantity'      => 1,
+            'is_deleted'    => 0,
+            'product_name'  => $this->newcompare_detail['product_name'],
+            'price'         => $this->newcompare_detail['price'],
+        ];
+        $this->compitems++;
+    }
+
     public function product_add($id)
     {
         // Retrieve record based on id
         $this->new_detail = Product::where('id', $id)->get()->toArray()[0];
 
         // if(in_array($this->new_detail['product_id'], array_column($this->db_details, 'product_id'))) {
-            
-        // }
-        
-        // if product_id of $new_detail matches an existing record in $list_details array
-        $index = array_search($this->new_detail['product_id'], array_column($this->list_details, 'product_id'));
 
+        // }
+
+        // if product_id of $new_detail matches an existing record in $list_details array
+        $list_index = array_search($this->new_detail['product_id'], array_column($this->list_details, 'product_id'));
         if (!empty($this->new_detail) && !empty($this->list_details)) {
-            if (in_array($this->new_detail['product_id'], $this->list_details[$index])) {
-                $this->list_details[$index]['quantity']++;
+            if (in_array($this->new_detail['product_id'], $this->list_details[$list_index])) {
+                $this->list_details[$list_index]['quantity']++;
                 $this->totalize();
             } else $this->populate();
         } else {
             $this->populate();
         }
+    }
+
+    public function compare_add($id)
+    {
+        // Retrieve record based on id
+        $this->newcompare_detail = Product::where('id', $id)->get()->toArray()[0];
+
+        // if product_id of $new_detail matches an existing record in $list_details array
+        $comparelist_index = array_search($this->newcompare_detail['product_id'], array_column($this->compare_details, 'product_id'));
+        if (!empty($this->newcompare_detail) && !empty($this->compare_details)) {
+            if (in_array($this->newcompare_detail['product_id'], $this->compare_details[$comparelist_index])) {
+                $this->compare_details[$comparelist_index]['quantity']++;
+                $this->totalizecompare();
+            } else $this->populatecompare();
+        } else {
+            $this->populatecompare();
+        }
+    }
+
+    public function totalizecompare()
+    {
+        $this->complow = 0;
     }
 
     public function totalize()
@@ -235,6 +267,27 @@ class Edit extends Component
         }
     }
 
+    public function getlow()
+    {
+        foreach ($this->compare_details as $item)
+            array_push($this->compareprice, $item['price']);
+        $this->complow = min($this->compareprice);
+    }
+
+
+    public function comparequantity_sub($comparelist_index)
+    {
+        ($this->compare_details[$comparelist_index]['quantity'] > 1) ? $this->compare_details[$comparelist_index]['quantity']-- : $this->remove_compitem($comparelist_index);
+        $this->totalizecompare();
+    }
+
+
+    public function comparequantity_add($comparelist_index)
+    {
+        $this->compare_details[$comparelist_index]['quantity']++;
+        $this->totalizecompare();
+    }
+
     public function quantity_sub($list_index)
     {
         ($this->list_details[$list_index]['quantity'] > 1) ? $this->list_details[$list_index]['quantity']-- : $this->remove_item($list_index);
@@ -245,6 +298,21 @@ class Edit extends Component
     {
         $this->list_details[$list_index]['quantity']++;
         $this->totalize();
+    }
+
+    public function remove_compitem($comparelist_index)
+    {
+        unset($this->compare_details[$comparelist_index]);
+        unset($this->compareprice[$comparelist_index]);
+        $this->compitems--;
+
+        // Serialize $this->list_details array for error trapping
+        $this->compare_details = array_values($this->compare_details);
+        for ($i = 0; $i < count($this->compare_details); $i++) $this->compare_details[$i]['list_index'] = $i;
+
+        // Serialize $this->productchecked array for error trapping
+
+        $this->totalizecompare();
     }
 
     public function remove_item($list_index)

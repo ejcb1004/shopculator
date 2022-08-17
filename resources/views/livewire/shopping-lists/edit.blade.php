@@ -30,49 +30,9 @@
             </x-slot>
         </x-jet-confirmation-modal>
     </form>
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="navbar flex flex-row justify-between">
-            <div class="flex justify-start space-x-2 pl-[75px]">
-                <!-- Categories -->
-                <div>
-                    <select class="select select-sm rounded-full bg-white text-black text-xs w-full max-w-xs border-emerald-400 border-2 leading-none" wire:model="selectedmarket">
-                        <option value="">Markets (All)</option>
-                        @foreach($markets as $market)
-                        <option value="{{ $market->market_id }}">
-                            {{$market->market_name}}
-                        </option>
-                        @endforeach
-                    </select>
-                </div>
-                <div>
-                    <select class="select select-sm rounded-full bg-white text-black text-xs w-full max-w-xs border-emerald-400 border-2 leading-none" wire:model="selectedcategory">
-                        <option value="">Categories (All)</option>
-                        @foreach($categories as $category)
-                        <option value="{{ $category->category_id }}">
-                            {{$category->category_name}}
-                        </option>
-                        @endforeach
-                    </select>
-                </div>
-                <div>
-                    <select class="select select-sm rounded-full bg-white text-black text-xs w-full max-w-xs border-emerald-400 border-2 leading-none" wire:model="selectedsort">
-                        <option disabled selected>Sort By</option>
-                        <option value="asc">Price (Lowest-Highest)</option>
-                        <option value="desc">Price (Highest-Lowest)</option>
-                    </select>
-                </div>
-                <button type="button" wire:click="inspect_dbd" class="sc-btn-ghost">
-                    <span>DB Details</span>
-                </button>
-                <button type="button" wire:click="inspect_ld" class="sc-btn-primary">
-                    <span>Inspect List</span>
-                </button>
-            </div>
-        </div>
-    </div>
     <!-- Content Page -->
     <div class="max-w-7xl mx-auto px-3 pb-4 sm:px-6 lg:px-8">
-        <div class="flex flex-row">
+        <div class="flex flex-col">
             <div class="mt-1 fixed flex flex-col w-[70px] justify-center space-y-2">
                 <!-- Cart Dropdown -->
                 <div class="dropdown dropdown-right">
@@ -123,13 +83,12 @@
                             <div class="overflow-y-auto max-h-28">
                                 <!-- Item -->
                                 @forelse ($list_details as $list_detail)
-                                @if ($list_detail['is_deleted'] == 0)
                                 <div class="flex flex-row max-h-24 px-2 py-2">
                                     <div class="flex space-x-5 items-center">
                                         <div class="flex space-x-2 items-center">
                                             <span class="relative h-2/3 flex rounded-full px-1 bg-emerald-600 text-xs text-white items-center">{{ $list_detail['list_index'] + 1 }}</span>
                                             <input type="checkbox" class="checkbox checkbox-accent checkbox-sm" value="{{ $list_detail['product_id'] }}" wire:model="productchecked" />
-                                            <span><img src="{{ $prefix . $list_detail['image_path'] }}" width="100" alt="Image" /></span>
+                                            <span><img src="{{ $list_detail['image_path'] }}" width="100" alt="Image" /></span>
                                         </div>
                                         <div class="flex w-full justify-between">
                                             <div class="flex flex-col">
@@ -148,12 +107,11 @@
                                                 <button type="button" wire:click="remove_item( {{ $list_detail['list_index'] }} )">
                                                     <i class="fa-solid fa-xmark text-emerald-500"></i>
                                                 </button>
-                                                <span>₱&nbsp;{{ number_format($list_detail['price'] * $list_detail['quantity'], 2) }}</span>
+                                                <span>₱&nbsp;{{ number_format($list_detail['price'] * $list_detail['quantity'], 2, '.', ',') }}</span>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                @endif
                                 @empty
                                 <span class="flex-row max-h-24 px-2 py-2 italic flex justify-center">Add items here</span>
                                 @endforelse
@@ -164,15 +122,15 @@
                                 <div class="space-y-3">
                                     <div class="flex justify-between">
                                         <span class="text-black">Total:</span>
-                                        <span class="text-black"><i class="fa-solid fa-peso-sign"></i>&nbsp;{{ number_format($total, 2) }}</span>
+                                        <span class="text-black"><i class="fa-solid fa-peso-sign"></i>&nbsp;{{ number_format($total, 2, '.', ',') }}</span>
                                     </div>
                                     <!-- Card Remaining Budget -->
                                     <div class="flex justify-between">
                                         <span class="text-black">Remaining:</span>
                                         <span><i class="fa-solid fa-peso-sign text-black"></i>
                                             @if( !empty($budget) )
-                                            @if (number_format($budget - $total, 2) < 0) <span class="text-red-600">{{ number_format($budget - $total, 2) }}</span>
-                                        @else <span class="text-black">{{ number_format($budget - $total, 2) }}</span>
+                                            @if (number_format($budget - $total, 2) < 0) <span class="text-red-600">{{ number_format($budget - $total, 2, '.', ',') }}</span>
+                                        @else <span class="text-black">{{ number_format($budget - $total, 2, '.', ',') }}</span>
                                         @endif
                                         @else <span class="text-black">0.00</span>
                                         @endif
@@ -189,6 +147,114 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Compare Dropdown -->
+                <div class="dropdown dropdown-right">
+                    <label tabindex="2" class="btn btn-ghost btn-circle btn-lg">
+                        <div class="indicator top-3 relative bottom-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 640 512" fill="#94a3b8">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M554.9 154.5c-17.62-35.25-68.12-35.38-85.87 0c-87 174.3-84.1 165.9-84.1 181.5c0 44.13 57.25 80 128 80s127.1-35.88 127.1-80C639.1 319.9 641.4 327.3 554.9 154.5zM439.1 320l71.96-144l72.17 144H439.1zM256 336c0-16.12 1.375-8.75-85.12-181.5c-17.62-35.25-68.12-35.38-85.87 0c-87 174.3-84.1 165.9-84.1 181.5c0 44.13 57.25 80 127.1 80S256 380.1 256 336zM127.9 176L200.1 320H55.96L127.9 176zM495.1 448h-143.1V153.3C375.5 143 393.1 121.8 398.4 96h113.6c17.67 0 31.1-14.33 31.1-32s-14.33-32-31.1-32h-128.4c-14.62-19.38-37.5-32-63.62-32S270.1 12.62 256.4 32H128C110.3 32 96 46.33 96 64S110.3 96 127.1 96h113.6c5.25 25.75 22.87 47 46.37 57.25V448H144c-26.51 0-48.01 21.49-48.01 48c0 8.836 7.165 16 16 16h416c8.836 0 16-7.164 16-16C544 469.5 522.5 448 495.1 448z" />
+                            </svg>
+                            <span class="badge badge-sm bg-emerald-400 border-none text-white indicator-item">{{ $compitems }}</span>
+                        </div>
+                        <span class="relative top-1 text-xs normal-case leading-none">Compare</span>
+                    </label>
+                    <div tabindex="2" class="card card-compact dropdown-content w-96 bg-white shadow ml-3">
+                        <!-- Card Header -->
+                        <div class="font-bold text-lg bg-emerald-700 px-3 py-3 flex justify-between">
+                            <span class="text-white">Compare</span>
+                        </div>
+                        <!-- Card Body -->
+                        <div class="card-body">
+                            <!-- Card Header -->
+                            <hr>
+                            <!-- Card Content -->
+                            <div class="overflow-y-auto max-h-28">
+                                <!-- Item -->
+                                @forelse ($compare_details as $list_detail)
+                                <div class="flex flex-row max-h-24 px-2 py-2">
+                                    <div class="flex space-x-5 items-center">
+                                        <div class="flex space-x-2 items-center">
+                                            <span class="relative h-2/3 flex rounded-full px-1 bg-emerald-600 text-xs text-white items-center">{{ $list_detail['list_index'] + 1 }}</span>
+                                            <span><img src="{{ $list_detail['image_path'] }}" width="100" alt="Image" /></span>
+                                        </div>
+                                        <div class="flex w-full justify-between">
+                                            <div class="flex flex-col">
+                                                <span>{{ $list_detail['product_name'] }}</span>
+                                                <div class="flex flex-row items-center space-x-2">
+                                                    <button type="button" wire:click="comparequantity_sub( {{ $list_detail['list_index'] }} )">
+                                                        <i class="fa-solid fa-minus text-emerald-500"></i>
+                                                    </button>
+                                                    <span class="text-center w-8">{{ $list_detail['quantity'] }}</span>
+                                                    <button type="button" wire:click="comparequantity_add( {{ $list_detail['list_index'] }} )">
+                                                        <i class="fa-solid fa-plus text-emerald-500"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="flex flex-col items-end">
+                                                <button type="button" wire:click="remove_compitem( {{ $list_detail['list_index'] }} )">
+                                                    <i class="fa-solid fa-xmark text-emerald-500"></i>
+                                                </button>
+                                                <span>₱&nbsp;{{ number_format($list_detail['price'] * $list_detail['quantity'], 2, '.', ',') }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                @empty
+                                <span class="flex-row max-h-24 px-2 py-2 italic flex justify-center">Add items here</span>
+                                @endforelse
+                            </div>
+                            <hr>
+                            <!-- Card Total -->
+                            <div class="py-3">
+                                <div class="space-y-3">
+                                    <div class="flex justify-between">
+                                        <span class="text-black">Lowest Price:</span>
+                                        <span class="text-black" wire:model="complow"><i class="fa-solid fa-peso-sign"></i>&nbsp;{{ number_format($complow, 2, '.', ',') }}</span>
+                                    </div>
+                                    <!-- Save Button -->
+                                    <div class="card-actions flex justify-center">
+                                        <button type="button" wire:click="getlow" class="sc-btn-primary">
+                                            <span>Get lowest price</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="navbar flex flex-row justify-between">
+                <div class="flex justify-start space-x-2 pl-[76px]">
+                    <!-- Categories -->
+                    <div>
+                        <select class="select select-sm rounded-full bg-white text-black text-xs w-full max-w-xs border-emerald-400 border-2 leading-none" wire:model="selectedmarket">
+                            <option value="">Markets (All)</option>
+                            @foreach($markets as $market)
+                            <option value="{{ $market->market_id }}">
+                                {{$market->market_name}}
+                            </option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div>
+                        <select class="select select-sm rounded-full bg-white text-black text-xs w-full max-w-xs border-emerald-400 border-2 leading-none" wire:model="selectedcategory">
+                            <option value="">Categories (All)</option>
+                            @foreach($categories as $category)
+                            <option value="{{ $category->category_id }}">
+                                {{$category->category_name}}
+                            </option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div>
+                        <select class="select select-sm rounded-full bg-white text-black text-xs w-full max-w-xs border-emerald-400 border-2 leading-none" wire:model="selectedsort">
+                            <option disabled selected>Sort By</option>
+                            <option value="asc">Price (Lowest-Highest)</option>
+                            <option value="desc">Price (Highest-Lowest)</option>
+                        </select>
+                    </div>
+                </div>
             </div>
             <!-- Product Table -->
             <div class="pl-[75px]">
@@ -199,12 +265,15 @@
                         <div class="border bg-white">
                             <div class="flex flex-col min-h-full py-5 px-4 space-y-1 items-center">
                                 <div class="flex flex-auto items-center">
-                                    <img src="{{ $prefix . $product->image_path }}" alt="{{ $product->product_name }}" width="125" />
+                                    <img src="{{ $product->image_path }}" alt="{{ $product->product_name }}" width="125" />
                                 </div>
                                 <div class="h-1/4 text-black text-center">{{ $product->product_name }}</div>
-                                <div class="h-1/4 text-black text-center">PHP {{ $product->price }}</div>
+                                <div class="h-1/4 text-black text-center text-bold">PHP {{ number_format($product->price, 2, '.', ',') }}</div>
                                 <button type="button" class="sc-btn-primary" wire:click="product_add({{ $product->id }})">
                                     <span>Add</span>
+                                </button>
+                                <button type="button" class="sc-btn-primary" wire:click="compare_add({{ $product->id }})">
+                                    <span>Compare</span>
                                 </button>
                             </div>
                         </div>
