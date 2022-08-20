@@ -8,13 +8,13 @@ use App\Models\Market;
 use App\Models\Product;
 use App\Models\ShoppingList;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
 use Livewire\Component;
 use Livewire\WithPagination;
 
 class Create extends Component
 {
     use WithPagination;
-    protected $listeners = ['product_add' => 'product_add'];
 
     // int
     public $budget, $total, $items, $compitems, $complow;
@@ -155,6 +155,18 @@ class Create extends Component
     }
 
     // user-defined methods
+    public function inspect_response()
+    {
+        $response = Http::get('http://localhost/sample-ecommerce/ajax/products.ajax.php')->json();
+        dd($response['data'][0]['price']);
+    }
+
+    public function inspect_products()
+    {
+        $response = Product::all()->toArray();
+        dd($response);
+    }
+
     public function populate()
     {
         // Populate array with list details

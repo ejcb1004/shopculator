@@ -14,7 +14,6 @@ use Livewire\WithPagination;
 class Edit extends Component
 {
     use WithPagination;
-    protected $listeners = ['product_add' => 'product_add'];
 
     // int
     public $budget, $total, $items, $compitems, $complow;
@@ -172,7 +171,6 @@ class Edit extends Component
                         'is_deleted' => 1
                     ]);
             }
-
 
             $this->reset(
                 'list_details',
