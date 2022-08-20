@@ -69,7 +69,6 @@ class Edit extends Component
             ->join('products', 'list_details.product_id', '=', 'products.product_id')
             ->select('list_details.*', 'products.product_name', 'products.price')
             ->where('list_details.list_id', $this->list_id)
-            //->where('list_details.is_deleted', 0)
             ->orderBy('list_index')
             ->get()
             ->toArray();
@@ -82,7 +81,10 @@ class Edit extends Component
         for ($i = 0; $i < count($this->list_details); $i++) $this->list_details[$i]['list_index'] = $i;
 
         $this->compare_details = [];
-        $this->productchecked = ListDetail::where('list_id', $this->list_id)->where('is_checked', 1)->pluck('product_id')->toArray();
+        $this->productchecked = ListDetail::where('list_id', $this->list_id)
+        ->where('is_checked', 1)
+        ->where('is_deleted', 0)
+        ->pluck('product_id')->toArray();
         $this->compareprice = [];
         $this->list_name = ShoppingList::where('list_id', $this->list_id)->pluck('list_name')[0];
         $this->budget = ShoppingList::where('list_id', $this->list_id)->pluck('budget')[0];
@@ -129,7 +131,8 @@ class Edit extends Component
             ]);
 
             foreach ($this->list_details as $detail) {
-                if (ListDetail::select('product_id')
+                if (
+                    ListDetail::select('product_id')
                     ->where('product_id', $detail['product_id'])
                     ->where('list_id', $this->list_id)
                     ->exists()
@@ -158,6 +161,19 @@ class Edit extends Component
                 }
             }
 
+            // for items that have had related history in the database
+            foreach (array_diff(
+                array_column($this->db_details, 'product_id'),
+                array_column($this->list_details, 'product_id')
+            ) as $difference) {
+                ListDetail::where('list_id', $this->list_id)
+                    ->where('product_id', $difference)
+                    ->update([
+                        'is_deleted' => 1
+                    ]);
+            }
+
+
             $this->reset(
                 'list_details',
                 'list_name',
@@ -182,6 +198,11 @@ class Edit extends Component
     }
 
     // user-defined methods
+    public function inspect_db_details()
+    {
+        dd($this->productchecked);
+    }
+
     public function populate()
     {
         // Populate array with list details
@@ -219,19 +240,29 @@ class Edit extends Component
         // Retrieve record based on id
         $this->new_detail = Product::where('id', $id)->get()->toArray()[0];
 
-        // if(in_array($this->new_detail['product_id'], array_column($this->db_details, 'product_id'))) {
-
-        // }
-
-        // if product_id of $new_detail matches an existing record in $list_details array
-        $list_index = array_search($this->new_detail['product_id'], array_column($this->list_details, 'product_id'));
-        if (!empty($this->new_detail) && !empty($this->list_details)) {
-            if (in_array($this->new_detail['product_id'], $this->list_details[$list_index])) {
-                $this->list_details[$list_index]['quantity']++;
-                $this->totalize();
-            } else $this->populate();
+        if (in_array($this->new_detail['product_id'], array_column($this->db_details, 'product_id'))) {
+            $past_detail = ListDetail::where('product_id', $this->new_detail['product_id'])
+                ->where('list_id', $this->list_id)->get()->toArray()[0];
+            $past_detail['is_deleted'] = 0;
+            $past_detail['quantity'] = 1;
+            $past_detail['is_checked'] = 0;
+            $pieces = Product::select('product_name', 'price')->where('product_id', $this->new_detail['product_id'])->get()->toArray()[0];
+            $past_detail['product_name'] = $pieces['product_name'];
+            $past_detail['price'] = $pieces['price'];
+            array_push($this->list_details, $past_detail);
+            $this->items++;
+            $this->serialize_list();
         } else {
-            $this->populate();
+            // if product_id of $new_detail matches an existing record in $list_details array
+            $list_index = array_search($this->new_detail['product_id'], array_column($this->list_details, 'product_id'));
+            if (!empty($this->new_detail) && !empty($this->list_details)) {
+                if (in_array($this->new_detail['product_id'], $this->list_details[$list_index])) {
+                    $this->list_details[$list_index]['quantity']++;
+                    $this->totalize();
+                } else $this->populate();
+            } else {
+                $this->populate();
+            }
         }
     }
 
@@ -322,8 +353,7 @@ class Edit extends Component
         $this->items--;
 
         // Serialize $this->list_details array for error trapping
-        $this->list_details = array_values($this->list_details);
-        for ($i = 0; $i < count($this->list_details); $i++) $this->list_details[$i]['list_index'] = $i;
+        $this->serialize_list();
 
         // Serialize $this->productchecked array for error trapping
         $this->productchecked = array_values($this->productchecked);
@@ -334,5 +364,11 @@ class Edit extends Component
     public function confirm()
     {
         $this->to_confirm = true;
+    }
+
+    public function serialize_list()
+    {
+        $this->list_details = array_values($this->list_details);
+        for ($i = 0; $i < count($this->list_details); $i++) $this->list_details[$i]['list_index'] = $i;
     }
 }

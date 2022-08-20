@@ -84,6 +84,7 @@
                                 <div class="overflow-y-auto max-h-96">
                                     <!-- Item -->
                                     @forelse ($list_details as $list_detail)
+                                    @if ($list_detail['is_deleted'] == 0)
                                     <div class="flex flex-row max-h-24 px-2 py-2">
                                         <div class="flex space-x-5 items-center">
                                             <div class="flex space-x-2 items-center">
@@ -113,6 +114,7 @@
                                             </div>
                                         </div>
                                     </div>
+                                    @endif
                                     @empty
                                     <span class="flex-row max-h-24 px-2 py-2 italic flex justify-center">Add items here</span>
                                     @endforelse
@@ -255,6 +257,11 @@
                             <option value="asc">Price (Lowest-Highest)</option>
                             <option value="desc">Price (Highest-Lowest)</option>
                         </select>
+                    </div>
+                    <div>
+                        <button class="sc-btn-ghost" wire:click="inspect_db_details">
+                            <span>Checked Products</span>
+                        </button>
                     </div>
                 </div>
             </div>
