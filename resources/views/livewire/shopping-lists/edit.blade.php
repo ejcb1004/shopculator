@@ -230,7 +230,7 @@
                 <div class="flex justify-start space-x-2">
                     <!-- Categories -->
                     <div>
-                        <select class="select select-sm rounded-full bg-white text-black text-xs w-full max-w-xs border-emerald-400 border-2 leading-none" wire:model="selectedmarket">
+                        <select class="select select-sm rounded-full bg-white text-black text-sm w-full max-w-xs border-emerald-400 border-2 leading-none" wire:model="selectedmarket">
                             <option value="">Markets (All)</option>
                             @foreach($markets as $market)
                             <option value="{{ $market->market_id }}">
@@ -240,7 +240,7 @@
                         </select>
                     </div>
                     <div>
-                        <select class="select select-sm rounded-full bg-white text-black text-xs w-full max-w-xs border-emerald-400 border-2 leading-none" wire:model="selectedcategory">
+                        <select class="select select-sm rounded-full bg-white text-black text-sm w-full max-w-xs border-emerald-400 border-2 leading-none" wire:model="selectedcategory">
                             <option value="">Categories (All)</option>
                             @foreach($categories as $category)
                             <option value="{{ $category->category_id }}">
@@ -250,7 +250,7 @@
                         </select>
                     </div>
                     <div>
-                        <select class="select select-sm rounded-full bg-white text-black text-xs w-full max-w-xs border-emerald-400 border-2 leading-none" wire:model="selectedsort">
+                        <select class="select select-sm rounded-full bg-white text-black text-sm w-full max-w-xs border-emerald-400 border-2 leading-none" wire:model="selectedsort">
                             <option disabled selected>Sort By</option>
                             <option value="asc">Price (Lowest-Highest)</option>
                             <option value="desc">Price (Highest-Lowest)</option>
