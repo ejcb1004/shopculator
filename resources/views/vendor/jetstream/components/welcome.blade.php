@@ -3,8 +3,8 @@
         <div class="hero-overlay bg-opacity-60"></div>
         <div class="hero-content text-center text-neutral-content">
             <div class="max-w-md">
-                <h1 class="text-4xl text-white font-bold">Make your shopping life easier with ShopCulator.</h1>
-                <p class="py-6 text-white">With ShopCulator, an easier shopping budget management experience is at your fingertips. Save more time and money with ShopCulator.</p>
+                <h1 class="text-4xl text-white font-bold">Make your shopping life easier with Shopculator.</h1>
+                <p class="py-6 text-white">With Shopculator, an easier shopping budget management experience is at your fingertips. Save more time and money with Shopculator.</p>
                 <!-- Buttons -->
                 <div class="flex max-w-sm space-x-8 justify-center mx-auto">
                     @if (Route::has('login'))
@@ -47,7 +47,7 @@
                         How We Stand Out
                     </h2>
                     <span class="text-body-color text-lg">
-                        Shopping has never been easier with ShopCulator. Now you don't have to waste time
+                        Shopping has never been easier with Shopculator. Now you don't have to waste time
                         calculating your expenses and manage your budget by hand.
                     </span>
                 </div>
