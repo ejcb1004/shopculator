@@ -52,7 +52,15 @@ class Index extends Component
             ->where('list_details.is_deleted', 0)
             ->orderBy('list_index')
             ->get();
-        $pdf = PDF::loadView('pages.list', ['data' => $data]);
+        $budget = ShoppingList::where('list_id', $list_id)->pluck('budget')[0];
+        $total = ShoppingList::where('list_id', $list_id)->pluck('total')[0];
+        $created_at = ShoppingList::where('list_id', $list_id)->pluck('created_at')[0];
+        $pdf = PDF::loadView('livewire.shopping-lists.page', [
+            'data' => $data,
+            'budget' => $budget,
+            'total' => $total,
+            'created_at' => $created_at
+        ]);
 
         return $pdf->download($list_name . '.pdf');
     }
