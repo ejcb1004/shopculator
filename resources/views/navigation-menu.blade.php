@@ -128,12 +128,12 @@
             </div>
             @else
             <div class="flex justify-items-end">
-                <div class="flex px-4 items-center">
+                <div class="flex px-4 items-center space-x-2">
                     <button class="sc-btn-ghost">
                         <a class="px-6 py-1.5" href="{{ route('login') }}">Log in</a>
                     </button>
-                    <button class="flex ml-1 rounded-full text-white bg-gradient-to-r from-emerald-300 to-teal-700 hover:bg-gradient-to-r hover:from-emerald-400 hover:to-teal-800">
-                        <a class="px-6 py-2" href="{{ route('register') }}">Sign up</a>
+                    <button class="sc-btn-action">
+                        <a href="{{ route('register') }}">Sign up</a>
                     </button>
                 </div>
             </div>
