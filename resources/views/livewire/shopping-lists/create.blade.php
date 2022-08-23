@@ -257,11 +257,6 @@
                         </select>
                     </div>
                     <div>
-                        <button class="sc-btn-primary" wire:click="inspect_response">
-                            <span>JSON Data</span>
-                        </button>
-                    </div>
-                    <div>
                         <button class="sc-btn-primary" wire:click="inspect_products">
                             <span>Products</span>
                         </button>
@@ -279,14 +274,25 @@
                                 <div class="flex flex-auto items-center">
                                     <img src="{{ $product->image_path }}" alt="{{ $product->product_name }}" width="125" />
                                 </div>
-                                <div class="h-1/4 text-black text-center">{{ $product->product_name }}</div>
-                                <div class="h-1/4 text-black text-center text-bold">PHP {{ number_format($product->price, 2, '.', ',') }}</div>
-                                <button type="button" class="sc-btn-primary" wire:click="product_add({{ $product->id }})">
-                                    <span>Add</span>
-                                </button>
-                                <button type="button" class="sc-btn-primary" wire:click="compare_add({{ $product->id }})">
-                                    <span>Compare</span>
-                                </button>
+                                <span class="text-black text-center">{{ $product->product_name }}</span>
+                                @if ($this->second_latest($product->product_id) != null)
+                                <span class="text-red-500 text-center text-lg">
+                                    <b>PHP {{ number_format($product->price, 2, '.', ',') }}</b>
+                                </span>
+                                @else
+                                <span class="text-black text-center text-lg">
+                                    <b>PHP {{ number_format($product->price, 2, '.', ',') }}</b>
+                                </span>
+                                @endif
+                                <span class="text-center text-gray-500 text-sm line-through">{{ $this->second_latest($product->product_id) }}</span>
+                                <div class="flex flex-row space-x-2">
+                                    <button type="button" class="sc-btn-primary" wire:click="product_add({{ $product->id }})">
+                                        <span>Add</span>
+                                    </button>
+                                    <button type="button" class="sc-btn-ghost" wire:click="compare_add({{ $product->id }})">
+                                        <span>Compare</span>
+                                    </button>
+                                </div>
                             </div>
                         </div>
                         @endforeach

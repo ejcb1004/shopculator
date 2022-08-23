@@ -8,6 +8,7 @@ use App\Models\Market;
 use App\Models\Product;
 use App\Models\ShoppingList;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -74,18 +75,25 @@ class Create extends Component
     }
 
     public function render()
-    {
+    {        
         return view('livewire.shopping-lists.create', [
-            'products' => Product::with(['market', 'category'])
-                ->when($this->selectedmarket, function ($query) {
-                    $query->where('market_id', $this->selectedmarket);
-                })
-                ->when($this->selectedcategory, function ($query) {
-                    $query->where('category_id', $this->selectedcategory);
-                })
-                ->orderBy('price', $this->selectedsort)
-                ->search(trim($this->searchproduct))
-                ->paginate(8)
+            'products' => Product::from('products as p1')
+            ->select('p1.*')
+            ->leftJoin('products as p2', function ($join) {
+                $join->on('p1.product_id', '=', 'p2.product_id')
+                    ->whereRaw(DB::raw('p1.created_at < p2.created_at'));
+            })
+            ->whereNull('p2.product_id')
+            ->with(['market', 'category'])
+            ->when($this->selectedmarket, function ($query) {
+                $query->where('p1.market_id', $this->selectedmarket);
+            })
+            ->when($this->selectedcategory, function ($query) {
+                $query->where('p1.category_id', $this->selectedcategory);
+            })
+            ->orderBy('price', $this->selectedsort)
+            ->search(trim($this->searchproduct))
+            ->paginate(8)
         ]);
     }
 
@@ -155,16 +163,27 @@ class Create extends Component
     }
 
     // user-defined methods
+    public function second_latest($product_id)
+    {
+        $products = Product::from(DB::raw('(SELECT * from products ORDER BY product_id ASC) recent'))
+        ->where('product_id', $product_id)
+        ->groupBy('created_at')
+        ->orderBy('created_at', 'DESC')
+        ->pluck('price')
+        ->toArray();
+        if (count($products) > 1) return 'PHP ' . number_format($products[1], 2, '.', ',');
+        else return null;
+    }
+
     public function inspect_response()
     {
-        $response = Http::get('http://localhost/sample-ecommerce/ajax/products.ajax.php')->json();
-        dd($response['data'][0]['price']);
+        $response = Http::get('http://localhost/sample-ecommerce/ajax/products.ajax.php')->json()['data'];
+        dd($response[0]['price']);
     }
 
     public function inspect_products()
     {
-        $response = Product::all()->toArray();
-        dd($response);
+        
     }
 
     public function populate()
@@ -198,7 +217,6 @@ class Create extends Component
         ];
         $this->compitems++;
     }
-
 
     public function product_add($id)
     {

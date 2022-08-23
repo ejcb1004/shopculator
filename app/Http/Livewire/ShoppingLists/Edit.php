@@ -8,6 +8,7 @@ use App\Models\Market;
 use App\Models\Product;
 use App\Models\ShoppingList;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -81,9 +82,9 @@ class Edit extends Component
 
         $this->compare_details = [];
         $this->productchecked = ListDetail::where('list_id', $this->list_id)
-        ->where('is_checked', 1)
-        ->where('is_deleted', 0)
-        ->pluck('product_id')->toArray();
+            ->where('is_checked', 1)
+            ->where('is_deleted', 0)
+            ->pluck('product_id')->toArray();
         $this->compareprice = [];
         $this->list_name = ShoppingList::where('list_id', $this->list_id)->pluck('list_name')[0];
         $this->budget = ShoppingList::where('list_id', $this->list_id)->pluck('budget')[0];
@@ -96,16 +97,23 @@ class Edit extends Component
     public function render()
     {
         return view('livewire.shopping-lists.edit', [
-            'products' => Product::with(['market', 'category'])
-                ->when($this->selectedmarket, function ($query) {
-                    $query->where('market_id', $this->selectedmarket);
-                })
-                ->when($this->selectedcategory, function ($query) {
-                    $query->where('category_id', $this->selectedcategory);
-                })
-                ->orderBy('price', $this->selectedsort)
-                ->search(trim($this->searchproduct))
-                ->paginate(8)
+            'products' => Product::from('products as p1')
+            ->select('p1.*')
+            ->leftJoin('products as p2', function ($join) {
+                $join->on('p1.product_id', '=', 'p2.product_id')
+                    ->whereRaw(DB::raw('p1.created_at < p2.created_at'));
+            })
+            ->whereNull('p2.product_id')
+            ->with(['market', 'category'])
+            ->when($this->selectedmarket, function ($query) {
+                $query->where('p1.market_id', $this->selectedmarket);
+            })
+            ->when($this->selectedcategory, function ($query) {
+                $query->where('p1.category_id', $this->selectedcategory);
+            })
+            ->orderBy('price', $this->selectedsort)
+            ->search(trim($this->searchproduct))
+            ->paginate(8)
         ]);
     }
 
@@ -196,9 +204,27 @@ class Edit extends Component
     }
 
     // user-defined methods
-    public function inspect_db_details()
+    public function second_latest($product_id)
     {
-        dd($this->productchecked);
+        $products = Product::from(DB::raw('(SELECT * from products ORDER BY product_id ASC) recent'))
+        ->where('product_id', $product_id)
+        ->groupBy('created_at')
+        ->orderBy('created_at', 'DESC')
+        ->pluck('price')
+        ->toArray();
+        if (count($products) > 1) return 'PHP ' . number_format($products[1], 2, '.', ',');
+        else return null;
+    }
+
+    public function inspect_response()
+    {
+        $response = Http::get('http://localhost/sample-ecommerce/ajax/products.ajax.php')->json()['data'];
+        dd($response[0]['price']);
+    }
+
+    public function inspect_products()
+    {
+        
     }
 
     public function populate()
