@@ -256,11 +256,6 @@
                             <option value="desc">Price (Highest-Lowest)</option>
                         </select>
                     </div>
-                    <div>
-                        <button class="sc-btn-primary" wire:click="inspect_products">
-                            <span>Products</span>
-                        </button>
-                    </div>
                 </div>
             </div>
             <!-- Product Table -->
