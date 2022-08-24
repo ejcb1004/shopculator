@@ -19,8 +19,8 @@ return new class extends Migration
             $table->string('market_id');
             $table->string('category_id');
             $table->string('product_name');
-            $table->string('image_path');
             $table->decimal('price', 9, 2);
+            $table->string('image_path');
             $table->timestamps();
         });
     }
