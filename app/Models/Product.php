@@ -46,6 +46,11 @@ class Product extends Model
         return $this->belongsTo(Category::class, 'category_id');
     }
 
+    public function subcategory()
+    {
+        return $this->belongsTo(Subcategory::class, 'subcategory_id');
+    }
+
     public function detail()
     {
         return $this->hasMany(ListDetail::class, 'product_id');
@@ -54,7 +59,7 @@ class Product extends Model
     public function scopeSearch($query,$term){
         $term = "%$term%";
         $query->where(function($query) use ($term){
-            $query->where('p1.product_name','like',$term);
+            $query->where('product_name','like',$term);
         });
     }
 }

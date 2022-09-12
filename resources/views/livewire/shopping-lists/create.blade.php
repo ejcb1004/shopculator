@@ -240,12 +240,16 @@
                         </select>
                     </div>
                     <div>
-                        <select class="select select-sm rounded-full bg-white text-black text-sm w-full max-w-xs border-emerald-400 border-2 leading-none" wire:model="selectedcategory">
+                        <select class="select select-sm rounded-full bg-white text-black text-sm w-full max-w-xs border-emerald-400 border-2 leading-none" wire:model="selectedsubcategory">
                             <option value="">Categories (All)</option>
                             @foreach($categories as $category)
-                            <option value="{{ $category->category_id }}">
-                                {{$category->category_name}}
-                            </option>
+                            <optgroup label="{{ $category->category_name }}">
+                                @foreach($subcategories as $subcategory)
+                                @if($subcategory->category_id == $category->category_id)
+                                <option value="{{ $subcategory->subcategory_id }}">{{ $subcategory->subcategory_name }}</option>
+                                @endif
+                                @endforeach
+                            </optgroup>
                             @endforeach
                         </select>
                     </div>

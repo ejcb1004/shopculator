@@ -7,9 +7,9 @@ use App\Models\ListDetail;
 use App\Models\Market;
 use App\Models\Product;
 use App\Models\ShoppingList;
+use App\Models\Subcategory;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Http;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -37,10 +37,11 @@ class Create extends Component
     // collections
     public $markets;
     public $categories;
+    public $subcategories;
 
     // search filters
     public $selectedmarket = null;
-    public $selectedcategory = null;
+    public $selectedsubcategory = null;
     public $selectedsort = "asc";
     public $searchproduct = "";
 
@@ -63,6 +64,7 @@ class Create extends Component
     {
         $this->markets = Market::all();
         $this->categories = Category::all();
+        $this->subcategories = Subcategory::all();
         $this->list_details = [];
         $this->compare_details = [];
         $this->productchecked = [];
@@ -77,24 +79,37 @@ class Create extends Component
     public function render()
     {        
         return view('livewire.shopping-lists.create', [
-            'products' => Product::from('products as p1')
-            ->select('p1.*')
-            ->leftJoin('products as p2', function ($join) {
-                $join->on('p1.product_id', '=', 'p2.product_id')
-                    ->whereRaw(DB::raw('p1.created_at < p2.created_at'));
-            })
-            ->whereNull('p2.product_id')
-            ->with(['market', 'category'])
-            ->when($this->selectedmarket, function ($query) {
-                $query->where('p1.market_id', $this->selectedmarket);
-            })
-            ->when($this->selectedcategory, function ($query) {
-                $query->where('p1.category_id', $this->selectedcategory);
-            })
-            ->orderBy('price', $this->selectedsort)
-            ->search(trim($this->searchproduct))
-            ->paginate(8)
+            'products' => Product::with(['market', 'category'])
+                ->when($this->selectedmarket, function ($query) {
+                    $query->where('market_id', $this->selectedmarket);
+                })
+                ->when($this->selectedsubcategory, function ($query) {
+                    $query->where('subcategory_id', $this->selectedsubcategory);
+                })
+                ->orderBy('price', $this->selectedsort)
+                ->search(trim($this->searchproduct))
+                ->paginate(8)
         ]);
+
+        // return view('livewire.shopping-lists.create', [
+        //     'products' => Product::from('products as p1')
+        //     ->select('p1.*')
+        //     ->leftJoin('products as p2', function ($join) {
+        //         $join->on('p1.product_id', '=', 'p2.product_id')
+        //             ->whereRaw(DB::raw('p1.created_at < p2.created_at'));
+        //     })
+        //     ->whereNull('p2.product_id')
+        //     ->with(['market', 'category'])
+        //     ->when($this->selectedmarket, function ($query) {
+        //         $query->where('p1.market_id', $this->selectedmarket);
+        //     })
+        //     ->when($this->selectedcategory, function ($query) {
+        //         $query->where('p1.category_id', $this->selectedcategory);
+        //     })
+        //     ->orderBy('price', $this->selectedsort)
+        //     ->search(trim($this->searchproduct))
+        //     ->paginate(8)
+        // ]);
     }
 
     public function updated($property_name)
@@ -173,12 +188,6 @@ class Create extends Component
         ->toArray();
         if (count($products) > 1) return 'PHP ' . number_format($products[1], 2, '.', ',');
         else return null;
-    }
-
-    public function inspect_response()
-    {
-        $response = Http::get('http://localhost/sample-ecommerce/ajax/products.ajax.php')->json()['data'];
-        dd($response[0]['price']);
     }
 
     public function inspect_products()
