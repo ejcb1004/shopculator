@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('subcategory_id');
             $table->string('category_id');
             $table->string('subcategory_name');
+            $table->tinyInteger('is_deleted');
             $table->timestamps();
         });
     }
