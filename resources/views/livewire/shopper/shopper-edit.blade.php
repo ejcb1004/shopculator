@@ -272,23 +272,17 @@
                                     <img src="{{ $product->image_path }}" alt="{{ $product->product_name }}" width="125" />
                                 </div>
                                 <span class="text-black text-center">{{ $product->product_name }}</span>
-                                @if ($this->second_latest($product->product_id) != null)
-                                <span class="text-red-500 text-center text-lg">
-                                    <b>PHP {{ number_format($product->price, 2, '.', ',') }}</b>
-                                </span>
-                                @else
-                                <span class="text-black text-center text-lg">
-                                    <b>PHP {{ number_format($product->price, 2, '.', ',') }}</b>
-                                </span>
-                                @endif
-                                <span class="text-center text-gray-500 text-sm line-through">{{ $this->second_latest($product->product_id) }}</span>
                                 <div class="flex flex-row space-x-2">
-                                    <button type="button" class="sc-btn-primary" wire:click="product_add({{ $product->id }})">
-                                        <span>Add</span>
-                                    </button>
-                                    <button type="button" class="sc-btn-ghost" wire:click="compare_add({{ $product->id }})">
-                                        <span>Compare</span>
-                                    </button>
+                                    <div class="flex items-center justify-center">
+                                        <div class="inline-flex" role="group">
+                                            <button type="button" class="flex items-center bg-emerald-600 text-white border-none rounded-full rounded-r hover:bg-emerald-700 transition duration-300" wire:click="product_add({{ $product->id }})">
+                                                <span class="px-5 py-0.5"><i class="fa-solid fa-plus"></i>&nbsp;Add</span>
+                                            </button>
+                                            <button type="button" class="flex items-center border-2 border-emerald-600 rounded-full rounded-l text-emerald-600 hover:bg-emerald-100 hover:opacity-75 transition duration-300" wire:click="compare_add({{ $product->id }})">
+                                                <span class="px-5 py-0.5"><i class="fa-solid fa-scale-balanced"></i>&nbsp;Compare</span>
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
