@@ -1,9 +1,12 @@
 <?php
 
 use App\Http\Livewire\Admin\AdminIndex;
+use App\Http\Livewire\Market\Analytics;
+use App\Http\Livewire\Market\MarketCreate;
+use App\Http\Livewire\Market\MarketEdit;
 use App\Http\Livewire\Market\MarketIndex;
-use App\Http\Livewire\Shopper\Create;
-use App\Http\Livewire\Shopper\Edit;
+use App\Http\Livewire\Shopper\ShopperCreate;
+use App\Http\Livewire\Shopper\ShopperEdit;
 use App\Http\Livewire\Shopper\ShopperIndex;
 use Illuminate\Support\Facades\Route;
 
@@ -33,11 +36,12 @@ Route::middleware([
     // Market
     Route::get('market', MarketIndex::class)->name('market');
     Route::get('market/create', MarketCreate::class)->name('market/create');
-    Route::get('market/edit/{list_id}', MarketEdit::class);
+    Route::get('market/edit/{product_id}', MarketEdit::class);
+    Route::get('market/analytics', Analytics::class)->name('market/analytics');
 
     // Shopper
     Route::get('shopper', ShopperIndex::class)->name('shopper');
-    Route::get('shopper/create', Create::class)->name('shopper/create');
-    Route::get('shopper/edit/{list_id}', Edit::class);
+    Route::get('shopper/create', ShopperCreate::class)->name('shopper/create');
+    Route::get('shopper/edit/{list_id}', ShopperEdit::class);
     Route::get('shopper/download/{list_id}', [ShopperIndex::class,'generatepdf']);
 });

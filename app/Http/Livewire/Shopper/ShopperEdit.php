@@ -7,12 +7,13 @@ use App\Models\ListDetail;
 use App\Models\Market;
 use App\Models\Product;
 use App\Models\ShoppingList;
+use App\Models\Subcategory;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Livewire\Component;
 use Livewire\WithPagination;
 
-class Edit extends Component
+class ShopperEdit extends Component
 {
     use WithPagination;
 
@@ -41,7 +42,7 @@ class Edit extends Component
 
     // search filters
     public $selectedmarket = null;
-    public $selectedcategory = null;
+    public $selectedsubcategory = null;
     public $selectedsort = "asc";
     public $searchproduct = "";
 
@@ -64,6 +65,7 @@ class Edit extends Component
     {
         $this->markets = Market::all();
         $this->categories = Category::all();
+        $this->subcategories = Subcategory::all();
 
         $this->db_details = DB::table('list_details')
             ->join('products', 'list_details.product_id', '=', 'products.product_id')
@@ -96,24 +98,17 @@ class Edit extends Component
 
     public function render()
     {
-        return view('livewire.shopper.edit', [
-            'products' => Product::from('products as p1')
-            ->select('p1.*')
-            ->leftJoin('products as p2', function ($join) {
-                $join->on('p1.product_id', '=', 'p2.product_id')
-                    ->whereRaw(DB::raw('p1.created_at < p2.created_at'));
-            })
-            ->whereNull('p2.product_id')
-            ->with(['market', 'category'])
-            ->when($this->selectedmarket, function ($query) {
-                $query->where('p1.market_id', $this->selectedmarket);
-            })
-            ->when($this->selectedcategory, function ($query) {
-                $query->where('p1.category_id', $this->selectedcategory);
-            })
-            ->orderBy('price', $this->selectedsort)
-            ->search(trim($this->searchproduct))
-            ->paginate(8)
+        return view('livewire.shopper.shopper-edit', [
+            'products' => Product::with(['market', 'subcategory'])
+                ->when($this->selectedmarket, function ($query) {
+                    $query->where('market_id', $this->selectedmarket);
+                })
+                ->when($this->selectedsubcategory, function ($query) {
+                    $query->where('subcategory_id', $this->selectedsubcategory);
+                })
+                ->orderBy('price', $this->selectedsort)
+                ->search(trim($this->searchproduct))
+                ->paginate(8)
         ]);
     }
 
@@ -188,7 +183,7 @@ class Edit extends Component
                 'items',
                 'productchecked',
                 'selectedmarket',
-                'selectedcategory'
+                'selectedsubcategory'
             );
 
             session()->flash('flash.banner', 'List successfully updated!');

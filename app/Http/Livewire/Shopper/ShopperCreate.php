@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 use Livewire\WithPagination;
 
-class Create extends Component
+class ShopperCreate extends Component
 {
     use WithPagination;
 
@@ -77,9 +77,9 @@ class Create extends Component
     }
 
     public function render()
-    {        
-        return view('livewire.shopper.create', [
-            'products' => Product::with(['market', 'category'])
+    {
+        return view('livewire.shopper.shopper-create', [
+            'products' => Product::with(['market', 'subcategory'])
                 ->when($this->selectedmarket, function ($query) {
                     $query->where('market_id', $this->selectedmarket);
                 })
@@ -90,26 +90,6 @@ class Create extends Component
                 ->search(trim($this->searchproduct))
                 ->paginate(8)
         ]);
-
-        // return view('livewire.shopper.create', [
-        //     'products' => Product::from('products as p1')
-        //     ->select('p1.*')
-        //     ->leftJoin('products as p2', function ($join) {
-        //         $join->on('p1.product_id', '=', 'p2.product_id')
-        //             ->whereRaw(DB::raw('p1.created_at < p2.created_at'));
-        //     })
-        //     ->whereNull('p2.product_id')
-        //     ->with(['market', 'category'])
-        //     ->when($this->selectedmarket, function ($query) {
-        //         $query->where('p1.market_id', $this->selectedmarket);
-        //     })
-        //     ->when($this->selectedcategory, function ($query) {
-        //         $query->where('p1.category_id', $this->selectedcategory);
-        //     })
-        //     ->orderBy('price', $this->selectedsort)
-        //     ->search(trim($this->searchproduct))
-        //     ->paginate(8)
-        // ]);
     }
 
     public function updated($property_name)
@@ -162,7 +142,7 @@ class Create extends Component
                 'items',
                 'productchecked',
                 'selectedmarket',
-                'selectedcategory'
+                'selectedsubcategory'
             );
 
             session()->flash('flash.banner', 'List successfully created!');
@@ -178,23 +158,6 @@ class Create extends Component
     }
 
     // user-defined methods
-    public function second_latest($product_id)
-    {
-        $products = Product::from(DB::raw('(SELECT * from products ORDER BY product_id ASC) recent'))
-        ->where('product_id', $product_id)
-        ->groupBy('created_at')
-        ->orderBy('created_at', 'DESC')
-        ->pluck('price')
-        ->toArray();
-        if (count($products) > 1) return 'PHP ' . number_format($products[1], 2, '.', ',');
-        else return null;
-    }
-
-    public function inspect_products()
-    {
-        
-    }
-
     public function populate()
     {
         // Populate array with list details
