@@ -10,12 +10,12 @@
                     @if (Route::has('login'))
                     @auth
                     <button class="sc-btn-wisp">
-                        <a href="{{ route('shopping-lists') }}" class="text-lg">
+                        <a href="{{ route('shopper') }}" class="text-lg">
                             <i class="fa-regular fa-eye"></i>&nbsp;View Lists
                         </a>
                     </button>
                     <button class="sc-btn-action">
-                        <a href="{{ route('shopping-lists/create') }}" class="text-lg">
+                        <a href="{{ route('shopper/create') }}" class="text-lg">
                             <i class="fa-solid fa-plus"></i>&nbsp;Create a new list
                         </a>
                     </button>

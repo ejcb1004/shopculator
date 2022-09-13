@@ -37,7 +37,7 @@
                     <input type="text" placeholder="Search" class="input bg-white pl-10 w-full rounded-full h-10" wire:model='searchterm' />
                 </div>
                 <button class="sc-btn-primary">
-                    <a href="{{ route('shopping-lists/create') }}">
+                    <a href="{{ route('shopper/create') }}">
                         <i class="fa-solid fa-plus"></i>&nbsp;Add List
                     </a>
                 </button>
@@ -91,8 +91,8 @@
         @if (count($checkboxticked) == 1)
         <div class="sticky rounded-md bottom-0 bg-white p-3 bg-shadow w-full">
             <div class="flex justify-center space-x-3 lg:space-x-8">
-                <button type="button" class="sc-btn-ghost"><a href="{{ url('shopping-lists/edit/' . $checkboxticked[0]) }}"><i class="fa-solid fa-pen"></i>&nbsp;Edit</a></button>
-                <button type="button" class="sc-btn-red-ghost"><a href="{{ url('shopping-lists/download/'. $checkboxticked[0]) }}"><i class="fa-solid fa-file-pdf"></i>&nbsp;Save PDF</a></button>
+                <button type="button" class="sc-btn-ghost"><a href="{{ url('shopper/edit/' . $checkboxticked[0]) }}"><i class="fa-solid fa-pen"></i>&nbsp;Edit</a></button>
+                <button type="button" class="sc-btn-red-ghost"><a href="{{ url('shopper/download/'. $checkboxticked[0]) }}"><i class="fa-solid fa-file-pdf"></i>&nbsp;Save PDF</a></button>
                 <button type="button" class="sc-btn-danger" wire:click="confirm_delete"><span><i class="fa-solid fa-trash"></i>&nbsp;Delete</span></button>
             </div>
         </div>

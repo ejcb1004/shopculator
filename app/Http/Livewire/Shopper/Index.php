@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire\ShoppingLists;
+namespace App\Http\Livewire\Shopper;
 
 use App\Models\ListDetail;
 use App\Models\ShoppingList;
@@ -39,7 +39,7 @@ class Index extends Component
         $this->lists = ShoppingList::where('list_name', 'like', '%' . $this->searchterm . '%')
             ->where('is_deleted', 0)
             ->orderBy('updated_at', 'desc')->get();
-        return view('livewire.shopping-lists.index');
+        return view('livewire.shopper.index');
     }
 
     public function generatepdf($list_id)
@@ -55,7 +55,7 @@ class Index extends Component
         $budget = ShoppingList::where('list_id', $list_id)->pluck('budget')[0];
         $total = ShoppingList::where('list_id', $list_id)->pluck('total')[0];
         $created_at = ShoppingList::where('list_id', $list_id)->pluck('created_at')[0];
-        $pdf = PDF::loadView('livewire.shopping-lists.page', [
+        $pdf = PDF::loadView('livewire.shopper.page', [
             'data' => $data,
             'budget' => $budget,
             'total' => $total,
@@ -97,6 +97,6 @@ class Index extends Component
 
         session()->flash('flash.banner', 'List successfully deleted!');
         session()->flash('flash.bannerStyle', 'success');
-        return redirect('shopping-lists');
+        return redirect('shopper');
     }
 }

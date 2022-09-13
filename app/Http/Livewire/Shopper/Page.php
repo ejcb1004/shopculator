@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire\ShoppingLists;
+namespace App\Http\Livewire\Shopper;
 
 use Livewire\Component;
 
@@ -13,6 +13,6 @@ class Page extends Component
     
     public function render()
     {
-        return view('livewire.shopping-lists.page');
+        return view('livewire.shopper.page');
     }
 }

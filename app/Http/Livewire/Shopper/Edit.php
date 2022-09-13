@@ -1,19 +1,18 @@
 <?php
 
-namespace App\Http\Livewire\ShoppingLists;
+namespace App\Http\Livewire\Shopper;
 
 use App\Models\Category;
 use App\Models\ListDetail;
 use App\Models\Market;
 use App\Models\Product;
 use App\Models\ShoppingList;
-use App\Models\Subcategory;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
 use Livewire\Component;
 use Livewire\WithPagination;
 
-class Create extends Component
+class Edit extends Component
 {
     use WithPagination;
 
@@ -22,14 +21,16 @@ class Create extends Component
 
     // string
     public $list_name;
+    public $list_id;
 
     // boolean
     public $to_confirm;
 
     // array
+    public $db_details = [];
     public $list_details = [];
-    public $new_detail = [];
     public $newcompare_detail = [];
+    public $new_detail = [];
     public $productchecked = [];
     public $compare_details = [];
     public $compareprice = [];
@@ -37,11 +38,10 @@ class Create extends Component
     // collections
     public $markets;
     public $categories;
-    public $subcategories;
 
     // search filters
     public $selectedmarket = null;
-    public $selectedsubcategory = null;
+    public $selectedcategory = null;
     public $selectedsort = "asc";
     public $searchproduct = "";
 
@@ -64,52 +64,57 @@ class Create extends Component
     {
         $this->markets = Market::all();
         $this->categories = Category::all();
-        $this->subcategories = Subcategory::all();
-        $this->list_details = [];
+
+        $this->db_details = DB::table('list_details')
+            ->join('products', 'list_details.product_id', '=', 'products.product_id')
+            ->select('list_details.*', 'products.product_name', 'products.price')
+            ->where('list_details.list_id', $this->list_id)
+            ->orderBy('list_index')
+            ->get()
+            ->toArray();
+
+        foreach ($this->db_details as $db_detail) {
+            if (get_object_vars($db_detail)['is_deleted'] == 0)
+                array_push($this->list_details, get_object_vars($db_detail));
+        }
+        $this->list_details = array_values($this->list_details);
+        for ($i = 0; $i < count($this->list_details); $i++) $this->list_details[$i]['list_index'] = $i;
+
         $this->compare_details = [];
-        $this->productchecked = [];
+        $this->productchecked = ListDetail::where('list_id', $this->list_id)
+            ->where('is_checked', 1)
+            ->where('is_deleted', 0)
+            ->pluck('product_id')->toArray();
         $this->compareprice = [];
-        $this->budget = 0;
-        $this->items = 0;
-        $this->total = 0;
+        $this->list_name = ShoppingList::where('list_id', $this->list_id)->pluck('list_name')[0];
+        $this->budget = ShoppingList::where('list_id', $this->list_id)->pluck('budget')[0];
+        $this->items = count($this->list_details);
+        $this->total = ShoppingList::where('list_id', $this->list_id)->pluck('total')[0];
         $this->compitems = 0;
         $this->complow = 0;
     }
 
     public function render()
-    {        
-        return view('livewire.shopping-lists.create', [
-            'products' => Product::with(['market', 'category'])
-                ->when($this->selectedmarket, function ($query) {
-                    $query->where('market_id', $this->selectedmarket);
-                })
-                ->when($this->selectedsubcategory, function ($query) {
-                    $query->where('subcategory_id', $this->selectedsubcategory);
-                })
-                ->orderBy('price', $this->selectedsort)
-                ->search(trim($this->searchproduct))
-                ->paginate(8)
+    {
+        return view('livewire.shopper.edit', [
+            'products' => Product::from('products as p1')
+            ->select('p1.*')
+            ->leftJoin('products as p2', function ($join) {
+                $join->on('p1.product_id', '=', 'p2.product_id')
+                    ->whereRaw(DB::raw('p1.created_at < p2.created_at'));
+            })
+            ->whereNull('p2.product_id')
+            ->with(['market', 'category'])
+            ->when($this->selectedmarket, function ($query) {
+                $query->where('p1.market_id', $this->selectedmarket);
+            })
+            ->when($this->selectedcategory, function ($query) {
+                $query->where('p1.category_id', $this->selectedcategory);
+            })
+            ->orderBy('price', $this->selectedsort)
+            ->search(trim($this->searchproduct))
+            ->paginate(8)
         ]);
-
-        // return view('livewire.shopping-lists.create', [
-        //     'products' => Product::from('products as p1')
-        //     ->select('p1.*')
-        //     ->leftJoin('products as p2', function ($join) {
-        //         $join->on('p1.product_id', '=', 'p2.product_id')
-        //             ->whereRaw(DB::raw('p1.created_at < p2.created_at'));
-        //     })
-        //     ->whereNull('p2.product_id')
-        //     ->with(['market', 'category'])
-        //     ->when($this->selectedmarket, function ($query) {
-        //         $query->where('p1.market_id', $this->selectedmarket);
-        //     })
-        //     ->when($this->selectedcategory, function ($query) {
-        //         $query->where('p1.category_id', $this->selectedcategory);
-        //     })
-        //     ->orderBy('price', $this->selectedsort)
-        //     ->search(trim($this->searchproduct))
-        //     ->paginate(8)
-        // ]);
     }
 
     public function updated($property_name)
@@ -126,33 +131,54 @@ class Create extends Component
     {
         $this->to_confirm = false;
         if ($this->budget >= $this->total) {
-            $list = ShoppingList::create([
-                'list_id'       => '',
-                'email'         => Auth::user()->email,
-                'list_name'     => $this->list_name,
-                'budget'        => $this->budget,
-                'total'         => $this->total,
-                'is_deleted'    => 0
+            ShoppingList::where('list_id', $this->list_id)->update([
+                'list_name' => $this->list_name,
+                'budget'    => $this->budget,
+                'total'     => $this->total
             ]);
 
-            $list->list_id = "L" . str_pad($list->id, 8, "0", STR_PAD_LEFT);
-
             foreach ($this->list_details as $detail) {
-                $list_detail = ListDetail::create([
-                    'is_checked' => (in_array($detail['product_id'], $this->productchecked)) ? 1 : 0,
-                    'list_index' => $detail['list_index'],
-                    'detail_id' => '',
-                    'list_id' => $list->list_id,
-                    'product_id' => $detail['product_id'],
-                    'image_path' => $detail['image_path'],
-                    'is_deleted' => $detail['is_deleted'],
-                    'quantity' => $detail['quantity']
-                ]);
-                $list_detail->detail_id = "D" . str_pad($list_detail->id, 12, "0", STR_PAD_LEFT);
-                $list_detail->save();
+                if (
+                    ListDetail::select('product_id')
+                    ->where('product_id', $detail['product_id'])
+                    ->where('list_id', $this->list_id)
+                    ->exists()
+                ) {
+                    ListDetail::where('detail_id', $detail['detail_id'])->update([
+                        'is_checked' => (in_array($detail['product_id'], $this->productchecked)) ? 1 : 0,
+                        'list_index' => $detail['list_index'],
+                        'product_id' => $detail['product_id'],
+                        'image_path' => $detail['image_path'],
+                        'is_deleted' => $detail['is_deleted'],
+                        'quantity' => $detail['quantity']
+                    ]);
+                } else {
+                    $list_detail = ListDetail::create([
+                        'is_checked' => (in_array($detail['product_id'], $this->productchecked)) ? 1 : 0,
+                        'list_index' => $detail['list_index'],
+                        'detail_id' => '',
+                        'list_id' => $this->list_id,
+                        'product_id' => $detail['product_id'],
+                        'image_path' => $detail['image_path'],
+                        'is_deleted' => $detail['is_deleted'],
+                        'quantity' => $detail['quantity']
+                    ]);
+                    $list_detail->detail_id = "D" . str_pad($list_detail->id, 12, "0", STR_PAD_LEFT);
+                    $list_detail->save();
+                }
             }
 
-            $list->save();
+            // for items that have had related history in the database
+            foreach (array_diff(
+                array_column($this->db_details, 'product_id'),
+                array_column($this->list_details, 'product_id')
+            ) as $difference) {
+                ListDetail::where('list_id', $this->list_id)
+                    ->where('product_id', $difference)
+                    ->update([
+                        'is_deleted' => 1
+                    ]);
+            }
 
             $this->reset(
                 'list_details',
@@ -165,15 +191,15 @@ class Create extends Component
                 'selectedcategory'
             );
 
-            session()->flash('flash.banner', 'List successfully created!');
+            session()->flash('flash.banner', 'List successfully updated!');
             session()->flash('flash.bannerStyle', 'success');
 
-            return redirect('shopping-lists');
+            return redirect('shopper');
         } else {
             session()->flash('flash.banner', 'Looks like you don\'t have enough budget. You can either increase budget or reduce the total cost.');
             session()->flash('flash.bannerStyle', 'danger');
 
-            return redirect('shopping-lists/create');
+            return redirect('shopper/create');
         }
     }
 
@@ -188,6 +214,12 @@ class Create extends Component
         ->toArray();
         if (count($products) > 1) return 'PHP ' . number_format($products[1], 2, '.', ',');
         else return null;
+    }
+
+    public function inspect_response()
+    {
+        $response = Http::get('http://localhost/sample-ecommerce/ajax/products.ajax.php')->json()['data'];
+        dd($response[0]['price']);
     }
 
     public function inspect_products()
@@ -232,15 +264,29 @@ class Create extends Component
         // Retrieve record based on id
         $this->new_detail = Product::where('id', $id)->get()->toArray()[0];
 
-        // if product_id of $new_detail matches an existing record in $list_details array
-        $list_index = array_search($this->new_detail['product_id'], array_column($this->list_details, 'product_id'));
-        if (!empty($this->new_detail) && !empty($this->list_details)) {
-            if (in_array($this->new_detail['product_id'], $this->list_details[$list_index])) {
-                $this->list_details[$list_index]['quantity']++;
-                $this->totalize();
-            } else $this->populate();
+        if (in_array($this->new_detail['product_id'], array_column($this->db_details, 'product_id'))) {
+            $past_detail = ListDetail::where('product_id', $this->new_detail['product_id'])
+                ->where('list_id', $this->list_id)->get()->toArray()[0];
+            $past_detail['is_deleted'] = 0;
+            $past_detail['quantity'] = 1;
+            $past_detail['is_checked'] = 0;
+            $pieces = Product::select('product_name', 'price')->where('product_id', $this->new_detail['product_id'])->get()->toArray()[0];
+            $past_detail['product_name'] = $pieces['product_name'];
+            $past_detail['price'] = $pieces['price'];
+            array_push($this->list_details, $past_detail);
+            $this->items++;
+            $this->serialize_list();
         } else {
-            $this->populate();
+            // if product_id of $new_detail matches an existing record in $list_details array
+            $list_index = array_search($this->new_detail['product_id'], array_column($this->list_details, 'product_id'));
+            if (!empty($this->new_detail) && !empty($this->list_details)) {
+                if (in_array($this->new_detail['product_id'], $this->list_details[$list_index])) {
+                    $this->list_details[$list_index]['quantity']++;
+                    $this->totalize();
+                } else $this->populate();
+            } else {
+                $this->populate();
+            }
         }
     }
 
@@ -331,8 +377,7 @@ class Create extends Component
         $this->items--;
 
         // Serialize $this->list_details array for error trapping
-        $this->list_details = array_values($this->list_details);
-        for ($i = 0; $i < count($this->list_details); $i++) $this->list_details[$i]['list_index'] = $i;
+        $this->serialize_list();
 
         // Serialize $this->productchecked array for error trapping
         $this->productchecked = array_values($this->productchecked);
@@ -343,5 +388,11 @@ class Create extends Component
     public function confirm()
     {
         $this->to_confirm = true;
+    }
+
+    public function serialize_list()
+    {
+        $this->list_details = array_values($this->list_details);
+        for ($i = 0; $i < count($this->list_details); $i++) $this->list_details[$i]['list_index'] = $i;
     }
 }

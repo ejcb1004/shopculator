@@ -1,8 +1,8 @@
 <nav x-data="{ open: false }" class="sticky top-0 bg-white border-b border-gray-100 z-99">
     <!-- Primary Navigation Menu -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between h-16 w-full">
-            <div class="flex justify-between w-4/5">
+        <div class="flex h-16 w-full">
+            <div class="flex justify-between w-full">
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
                     <a href="/">
@@ -14,7 +14,7 @@
                 @auth
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 md:flex">
-                    <x-jet-nav-link href="{{ route('shopping-lists') }}" :active="request()->routeIs('shopping-lists')">
+                    <x-jet-nav-link href="{{ route('shopper') }}" :active="request()->routeIs('shopper')">
                         <b>{{ __('Your Lists') }}</b>
                     </x-jet-nav-link>
                 </div>
@@ -127,7 +127,7 @@
                 </div>
             </div>
             @else
-            <div class="flex justify-items-end">
+            <div class="flex justify-end w-1/4">
                 <div class="flex px-4 items-center space-x-2">
                     <button class="sc-btn-ghost">
                         <a class="px-6 py-1.5" href="{{ route('login') }}">Log in</a>
@@ -175,7 +175,7 @@
             </div>
 
             <div class="mt-3 space-y-1">
-                <x-jet-responsive-nav-link href="{{ route('shopping-lists') }}" :active="request()->routeIs('shopping-lists')">
+                <x-jet-responsive-nav-link href="{{ route('shopper') }}" :active="request()->routeIs('shopper')">
                     {{ __('Your Lists') }}
                 </x-jet-responsive-nav-link>
                 <hr />

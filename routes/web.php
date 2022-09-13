@@ -1,8 +1,8 @@
 <?php
 
-use App\Http\Livewire\ShoppingLists\Create;
-use App\Http\Livewire\ShoppingLists\Edit;
-use App\Http\Livewire\ShoppingLists\Index;
+use App\Http\Livewire\Shopper\Create;
+use App\Http\Livewire\Shopper\Edit;
+use App\Http\Livewire\Shopper\Index;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -25,8 +25,8 @@ Route::middleware([
     config('jetstream.auth_session'),
     'verified'
 ])->group(function () {
-    Route::get('shopping-lists', Index::class)->name('shopping-lists');
-    Route::get('shopping-lists/create', Create::class)->name('shopping-lists/create');
-    Route::get('shopping-lists/edit/{list_id}', Edit::class);
-    Route::get('shopping-lists/download/{list_id}', [Index::class,'generatepdf']);
+    Route::get('shopper', Index::class)->name('shopper');
+    Route::get('shopper/create', Create::class)->name('shopper/create');
+    Route::get('shopper/edit/{list_id}', Edit::class);
+    Route::get('shopper/download/{list_id}', [Index::class,'generatepdf']);
 });
