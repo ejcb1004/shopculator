@@ -32,7 +32,7 @@
             {{ __('Saved.') }}
         </x-jet-action-message>
 
-        <button class="flex ml-1 px-6 py-1.5 rounded-full text-white bg-teal-600 hover:bg-teal-700 hover:transition hover:duration-300">
+        <button class="flex ml-1 px-6 py-1.5 rounded-full text-white bg-emerald-600 hover:bg-emerald-700 hover:transition hover:duration-300">
             {{ __('Save') }}
         </button>
     </x-slot>

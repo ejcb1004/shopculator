@@ -34,14 +34,14 @@
                 </span>
             </div>
 
-            <x-jet-secondary-button class="mt-2 mr-2" type="button" x-on:click.prevent="$refs.photo.click()">
-                {{ __('Select A New Photo') }}
-            </x-jet-secondary-button>
+            <button type="button" class="sc-btn-ghost mt-2" x-on:click.prevent="$refs.photo.click()">
+                <span>Update</span>
+            </button>
 
             @if ($this->user->profile_photo_path)
-            <x-jet-secondary-button type="button" class="mt-2" wire:click="deleteProfilePhoto">
-                {{ __('Remove Photo') }}
-            </x-jet-secondary-button>
+            <button type="button" class="sc-btn-danger mt-2" wire:click="deleteProfilePhoto">
+                <span>Remove</span>
+            </button>
             @endif
 
             <x-jet-input-error for="photo" class="mt-2" />
@@ -84,7 +84,7 @@
             {{ __('Saved.') }}
         </x-jet-action-message>
 
-        <button wire:loading.attr="disabled" wire:target="photo" class="flex ml-1 px-6 py-1.5 rounded-full text-white bg-teal-600 hover:bg-teal-700 hover:transition hover:duration-300">
+        <button wire:loading.attr="disabled" wire:target="photo" class="flex ml-1 px-6 py-1.5 rounded-full text-white bg-emerald-600 hover:bg-emerald-700 hover:transition hover:duration-300">
             {{ __('Save') }}
         </button>
     </x-slot>
