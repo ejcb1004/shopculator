@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 use PDF;
 
-class Index extends Component
+class ShopperIndex extends Component
 {
     public $searchterm = '';
     public $selectall = false;
@@ -39,7 +39,7 @@ class Index extends Component
         $this->lists = ShoppingList::where('list_name', 'like', '%' . $this->searchterm . '%')
             ->where('is_deleted', 0)
             ->orderBy('updated_at', 'desc')->get();
-        return view('livewire.shopper.index');
+        return view('livewire.shopper.shopper-index');
     }
 
     public function generatepdf($list_id)
@@ -50,7 +50,7 @@ class Index extends Component
             ->select('list_details.*', 'products.product_name', 'products.price')
             ->where('list_details.list_id', $list_id)
             ->where('list_details.is_deleted', 0)
-            ->orderBy('list_index')
+            ->orderBy('list_shopper-index')
             ->get();
         $budget = ShoppingList::where('list_id', $list_id)->pluck('budget')[0];
         $total = ShoppingList::where('list_id', $list_id)->pluck('total')[0];

@@ -91,7 +91,7 @@
         @if (count($checkboxticked) == 1)
         <div class="sticky rounded-md bottom-0 bg-white p-3 bg-shadow w-full">
             <div class="flex justify-center space-x-3 lg:space-x-8">
-                <button type="button" class="sc-btn-ghost"><a href="{{ url('shopper/edit/' . $checkboxticked[0]) }}"><i class="fa-solid fa-pen"></i>&nbsp;Edit</a></button>
+                <button type="button" class="sc-btn-ghost"><a href="{{ url('shopper/edit/' . $checkboxticked[0]) }}"><i class="fa-solid fa-pen-to-square"></i>&nbsp;Edit</a></button>
                 <button type="button" class="sc-btn-red-ghost"><a href="{{ url('shopper/download/'. $checkboxticked[0]) }}"><i class="fa-solid fa-file-pdf"></i>&nbsp;Save PDF</a></button>
                 <button type="button" class="sc-btn-danger" wire:click="confirm_delete"><span><i class="fa-solid fa-trash"></i>&nbsp;Delete</span></button>
             </div>
@@ -99,7 +99,7 @@
         @elseif (count($checkboxticked) >= 2)
         <div class="sticky rounded-md bottom-0 bg-white p-3 bg-shadow w-full">
             <div class="flex justify-center space-x-3 lg:space-x-8">
-                <button type="button" class="sc-btn-disabled" disabled><span><i class="fa-solid fa-pen"></i>&nbsp;Edit</span></button>
+                <button type="button" class="sc-btn-disabled" disabled><span><i class="fa-solid fa-pen-to-square"></i>&nbsp;Edit</span></button>
                 <button type="button" class="sc-btn-disabled" disabled><span><i class="fa-solid fa-file-pdf"></i>&nbsp;Save as PDF</span></button>
                 <button type="button" class="sc-btn-danger" wire:click="confirm_delete"><span><i class="fa-solid fa-trash"></i>&nbsp;Delete</span></button>
             </div>
