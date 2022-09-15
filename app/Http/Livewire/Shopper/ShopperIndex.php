@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Shopper;
 
 use App\Models\ListDetail;
 use App\Models\ShoppingList;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 use PDF;
@@ -38,6 +39,7 @@ class ShopperIndex extends Component
     {
         $this->lists = ShoppingList::where('list_name', 'like', '%' . $this->searchterm . '%')
             ->where('is_deleted', 0)
+            ->where('email', Auth::user()->email)
             ->orderBy('updated_at', 'desc')->get();
         return view('livewire.shopper.shopper-index');
     }
@@ -50,19 +52,19 @@ class ShopperIndex extends Component
             ->select('list_details.*', 'products.product_name', 'products.price')
             ->where('list_details.list_id', $list_id)
             ->where('list_details.is_deleted', 0)
-            ->orderBy('list_shopper-index')
+            ->orderBy('list_index')
             ->get();
         $budget = ShoppingList::where('list_id', $list_id)->pluck('budget')[0];
         $total = ShoppingList::where('list_id', $list_id)->pluck('total')[0];
         $created_at = ShoppingList::where('list_id', $list_id)->pluck('created_at')[0];
-        $pdf = PDF::loadView('livewire.shopper.page', [
+        return $pdf = PDF::loadView('livewire.shopper.page', [
+            'list_name' => $list_name,
+            'list_id' => $list_id,
             'data' => $data,
             'budget' => $budget,
             'total' => $total,
             'created_at' => $created_at
-        ]);
-
-        return $pdf->download($list_name . '.pdf');
+        ])->setOptions(['defaultFont' => 'Nunito'])->setPaper('letter', 'portrait')->stream();
     }
 
     public function confirm_delete()

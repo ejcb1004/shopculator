@@ -8,9 +8,9 @@
 
             <x-slot name="content">
                 @if (count($checkboxticked) == 1)
-                Are you sure you want to delete this list? 
+                Are you sure you want to delete this list?
                 @elseif (count($checkboxticked) > 1)
-                Are you sure you want to delete these lists? 
+                Are you sure you want to delete these lists?
                 @endif
                 This cannot be undone.
             </x-slot>
@@ -73,7 +73,13 @@
                                 <td class="table-item">{{ $list->list_name }}</td>
                                 <td class="table-item"><i class="fa-solid fa-peso-sign text-black"></i>&nbsp;{{ number_format($list->total, 2, '.') }}</td>
                                 <td class="table-item"><i class="fa-solid fa-peso-sign text-black"></i>&nbsp;{{ number_format($list->budget, 2, '.') }}</td>
-                                <td class="table-item">{{ $list->updated_at }}</td>
+                                <td class="table-item">
+                                    @php
+                                        $dt = new DateTime($list->updated_at);
+                                        $dt->setTimezone(new DateTimeZone('Asia/Manila'));
+                                        echo $dt->format('H:i:s, M d, Y');
+                                    @endphp
+                                </td>
                             </tr>
                             @empty
                             <tr>
