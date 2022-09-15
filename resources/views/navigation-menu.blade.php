@@ -12,12 +12,28 @@
 
                 @if (Route::has('login'))
                 @auth
+                @if (Auth::user()->role_id == 'R2')
+                <!-- Navigation Links -->
+                <div class="hidden space-x-8 sm:-my-px sm:ml-10 md:flex">
+                    <x-jet-nav-link href="{{ route('market') }}" :active="request()->routeIs('market')">
+                        <b>{{ __('Products') }}</b>
+                    </x-jet-nav-link>
+                    <x-jet-nav-link href="{{ route('market/dashboard') }}" :active="request()->routeIs('market/dashboard')">
+                        <b>{{ __('Dashboard') }}</b>
+                    </x-jet-nav-link>
+                </div>
+                @endif
+                @if (Auth::user()->role_id == 'R3')
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 md:flex">
                     <x-jet-nav-link href="{{ route('shopper') }}" :active="request()->routeIs('shopper')">
                         <b>{{ __('Your Lists') }}</b>
                     </x-jet-nav-link>
+                    <x-jet-nav-link href="{{ route('shopper/create') }}" :active="request()->routeIs('shopper/create')">
+                        <b>{{ __('New List') }}</b>
+                    </x-jet-nav-link>
                 </div>
+                @endif
                 @endauth
                 @endif
             </div>
