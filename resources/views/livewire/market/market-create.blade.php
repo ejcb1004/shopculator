@@ -1,8 +1,8 @@
 <div>
     <!-- Content Page -->
-    <div class="max-w-7xl mx-auto px-3 pb-4 sm:px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto px-3 pb-4 sm:px-6 lg:px-8 pt-12">
         <div class="flex flex-row w-full h-16 items-center justify-center">
-            <span class="tracking-wide text-gray-700 text-xl font-bold">New Product</span>
+            <span class="tracking-wide text-gray-700 text-2xl font-bold">New Product</span>
         </div>
         <div class="flex flex-row w-full h-[450px]">
             <div class="flex w-2/5 h-full p-4 justify-center items-center">
