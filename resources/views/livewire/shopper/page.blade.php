@@ -1,56 +1,162 @@
 <div>
-    <table class="table w-full text-base">
-        <!-- head -->
-        <tr class="hover table-group">
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td class="table-item">{{ $created_at }}</td>
-        </tr>
-        <thead class="text-white">
-            <tr>
-                <th>No.</th>
-                <th>Product</th>
-                <th>Quantity</th>
-                <th>Base Price</th>
-                <th>Net Price</th>
-            </tr>
-        </thead>
+    <style>
+        * {
+            font-family: Lato, sans-serif;
+        }
 
-        <tbody>
-            @foreach ($data as $detail)
-            <tr class="hover table-group">
-                <td class="table-item">{{ $detail->list_index + 1 }}</td>
-                <td class="table-item">{{ $detail->product_name }}</td>
-                <td class="table-item">PHP {{ $detail->price }}</td>
-                <td class="table-item">x {{ $detail->quantity }}</td>
-                <td class="table-item">PHP {{ number_format($detail->price * $detail->quantity, 2) }}</td>
-            </tr>
-            @endforeach
-            <tr class="hover table-group">
-            </tr>
-            <tr class="hover table-group">
-                <td></td>
-                <td></td>
-                <td></td>
-                <td class="table-item">Budget =</td>
-                <td class="table-item">PHP {{ $budget }}</td>
-            </tr>
-            <tr class="hover table-group">
-                <td></td>
-                <td></td>
-                <td></td>
-                <td class="table-item">Total =</td>
-                <td class="table-item">PHP {{ $total }}</td>
-            </tr>
-            <tr class="hover table-group">
-                <td></td>
-                <td></td>
-                <td></td>
-                <td class="table-item">Remaining =</td>
-                <td class="table-item">PHP {{ number_format($budget - $total, 2, '.', ',') }}</td>
-            </tr>
-        </tbody>
-    </table>
+        a {
+            text-decoration: none;
+            color: white;
+        }
+
+        .date {
+            text-align: center;
+            font-size: small;
+        }
+
+        .list-name {
+            font-size: x-large;
+            text-align: center;
+        }
+
+        .list-table {
+            border-collapse: collapse;
+            width: 100%;
+            background-color: #e5e7eb;
+        }
+
+        .summary-table {
+            border-collapse: collapse;
+            width: 35%;
+            background-color: #e5e7eb;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .summary-table th {
+            background-color: #059669;
+            color: white;
+            font-size: small;
+            text-transform: uppercase;
+        }
+
+        .main-container {
+            width: 100%;
+            height: 90%;
+        }
+
+        .list-table td,
+        .list-table th,
+        .summary-table td,
+        .summary-table th {
+            border: 2px white solid;
+            padding: 6px;
+        }
+
+        .no-items {
+            color: silver;
+            text-align: center;
+            font-style: italic;
+            font-size: medium;
+        }
+
+        .list-table th {
+            background-color: #059669;
+            color: white;
+            font-size: small;
+            text-transform: uppercase;
+        }
+
+        .sc-btn-primary {
+            display: block;
+            margin: auto;
+            padding: 0.25rem 1rem;
+            width: 4rem;
+            background-color: #059669;
+            color: white;
+            border: none;
+            border-radius: 9999px;
+            transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
+            transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+            transition-duration: 300ms;
+        }
+
+        .sc-btn-primary a {
+            width: 100%;
+            height: 100%;
+        }
+
+        footer {
+            text-align: center;
+            color: silver;
+            font-size: small;
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            left: 0;
+        }
+    </style>
+    
+    <div class="main-container">
+        <p class="list-name">{{ $list_name }}</p>
+        <p class="date">
+            @php
+            $dt = new DateTime($created_at);
+            $dt->setTimezone(new DateTimeZone('Asia/Manila'));
+            echo $dt->format('M d, Y - h:i:s A');
+            @endphp
+        </p>
+        @if ($data->isEmpty())
+        <p class="no-items">Your list seems to be empty. Please check your items here:</p>
+        <button type="button" class="sc-btn-primary">
+            <a href="{{ url('shopper/edit/' . $list_id) }}">Edit</a>
+        </button>
+        @else
+        <table class="list-table">
+            <!-- head -->
+            <thead>
+                <tr>
+                    <th>Product</th>
+                    <th>Base Price</th>
+                    <th>Quantity</th>
+                    <th>Net Price</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @foreach ($data as $detail)
+                <tr>
+                    <td>{{ $detail->product_name }}</td>
+                    <td style="text-align: center">PHP {{ $detail->price }}</td>
+                    <td style="text-align: center">×{{ $detail->quantity }}</td>
+                    <td style="text-align: center">PHP {{ number_format($detail->price * $detail->quantity, 2) }}</td>
+                </tr>
+                @endforeach
+            </tbody>
+        </table>
+        <br>
+        <table class="summary-table">
+            <thead>
+                <tr>
+                    <th colspan="2">Summary</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Budget</td>
+                    <td style="text-align: center">PHP {{ $budget }}</td>
+                </tr>
+                <tr>
+                    <td>Total</td>
+                    <td style="text-align: center">PHP {{ $total }}</td>
+                </tr>
+                <tr>
+                    <td>Remaining</td>
+                    <td style="text-align: center">PHP {{ number_format($budget - $total, 2, '.', ',') }}</td>
+                </tr>
+            </tbody>
+        </table>
+        @endif
+        <footer>Shopculator © 2022 Team W. All rights reserved.</footer>
+    </div>
 </div>
