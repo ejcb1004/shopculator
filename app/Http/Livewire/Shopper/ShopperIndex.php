@@ -37,11 +37,14 @@ class ShopperIndex extends Component
 
     public function render()
     {
-        $this->lists = ShoppingList::where('list_name', 'like', '%' . $this->searchterm . '%')
-            ->where('is_deleted', 0)
-            ->where('email', Auth::user()->email)
-            ->orderBy('updated_at', 'desc')->get();
-        return view('livewire.shopper.shopper-index');
+        if (Auth::user()->role_id != 'R3') abort(403);
+        else {
+            $this->lists = ShoppingList::where('list_name', 'like', '%' . $this->searchterm . '%')
+                ->where('is_deleted', 0)
+                ->where('email', Auth::user()->email)
+                ->orderBy('updated_at', 'desc')->get();
+            return view('livewire.shopper.shopper-index');
+        }
     }
 
     public function generatepdf($list_id)

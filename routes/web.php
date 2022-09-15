@@ -1,7 +1,8 @@
 <?php
 
+use App\Http\Controllers\HomeController;
 use App\Http\Livewire\Admin\AdminIndex;
-use App\Http\Livewire\Market\Analytics;
+use App\Http\Livewire\Market\Dashboard;
 use App\Http\Livewire\Market\MarketCreate;
 use App\Http\Livewire\Market\MarketEdit;
 use App\Http\Livewire\Market\MarketIndex;
@@ -30,6 +31,8 @@ Route::middleware([
     config('jetstream.auth_session'),
     'verified'
 ])->group(function () {
+    Route::get('home', [HomeController::class, 'index']);
+
     // Admin
     Route::get('admin', AdminIndex::class)->name('admin');
 
@@ -37,7 +40,7 @@ Route::middleware([
     Route::get('market', MarketIndex::class)->name('market');
     Route::get('market/create', MarketCreate::class)->name('market/create');
     Route::get('market/edit/{product_id}', MarketEdit::class);
-    Route::get('market/analytics', Analytics::class)->name('market/analytics');
+    Route::get('market/dashboard', Dashboard::class)->name('market/dashboard');
 
     // Shopper
     Route::get('shopper', ShopperIndex::class)->name('shopper');
@@ -46,8 +49,4 @@ Route::middleware([
     Route::get('shopper/download/{list_id}', [ShopperIndex::class,'generatepdf']);
 });
 
-// Route::group(['middleware' => 'auth'], function() {
-//     Route::get('register-market',
-//         []
-// );
-// });
+

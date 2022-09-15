@@ -8,6 +8,7 @@ use App\Models\Market;
 use App\Models\Product;
 use App\Models\ShoppingList;
 use App\Models\Subcategory;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Livewire\Component;
@@ -99,7 +100,8 @@ class ShopperEdit extends Component
 
     public function render()
     {
-        return view('livewire.shopper.shopper-edit', [
+        if (Auth::user()->role_id != 'R3') abort(403);
+        else return view('livewire.shopper.shopper-edit', [
             'products' => Product::with(['market', 'subcategory'])
                 ->when($this->selectedmarket, function ($query) {
                     $query->where('market_id', $this->selectedmarket);
@@ -213,11 +215,11 @@ class ShopperEdit extends Component
     public function second_latest($product_id)
     {
         $products = Product::from(DB::raw('(SELECT * from products ORDER BY product_id ASC) recent'))
-        ->where('product_id', $product_id)
-        ->groupBy('created_at')
-        ->orderBy('created_at', 'DESC')
-        ->pluck('price')
-        ->toArray();
+            ->where('product_id', $product_id)
+            ->groupBy('created_at')
+            ->orderBy('created_at', 'DESC')
+            ->pluck('price')
+            ->toArray();
         if (count($products) > 1) return 'PHP ' . number_format($products[1], 2, '.', ',');
         else return null;
     }
@@ -230,7 +232,6 @@ class ShopperEdit extends Component
 
     public function inspect_products()
     {
-        
     }
 
     public function populate()

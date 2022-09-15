@@ -79,7 +79,8 @@ class ShopperCreate extends Component
 
     public function render()
     {
-        return view('livewire.shopper.shopper-create', [
+        if (Auth::user()->role_id != 'R3') abort(403);
+        else return view('livewire.shopper.shopper-create', [
             'products' => Product::with(['market', 'subcategory'])
                 ->when($this->selectedmarket, function ($query) {
                     $query->where('market_id', $this->selectedmarket);
