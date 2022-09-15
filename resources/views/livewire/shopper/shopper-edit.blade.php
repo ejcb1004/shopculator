@@ -283,10 +283,12 @@
                                     <div class="flex items-center justify-center">
                                         <div class="inline-flex" role="group">
                                             <button type="button" class="flex items-center bg-emerald-600 text-white border-none rounded-full rounded-r hover:bg-emerald-700 transition duration-300" wire:click="product_add({{ $product->id }})">
-                                                <span class="px-5 py-0.5"><i class="fa-solid fa-plus"></i>&nbsp;Add</span>
+                                                <span class="px-6 py-1 hidden xl:inline"><i class="fa-solid fa-cart-plus"></i>&nbsp;Add</span>
+                                                <span class="px-6 py-1 xl:hidden"><i class="fa-solid fa-cart-plus"></i></span>
                                             </button>
                                             <button type="button" class="flex items-center border-2 border-emerald-600 rounded-full rounded-l text-emerald-600 hover:bg-emerald-100 hover:opacity-75 transition duration-300" wire:click="compare_add({{ $product->id }})">
-                                                <span class="px-5 py-0.5"><i class="fa-solid fa-scale-balanced"></i>&nbsp;Compare</span>
+                                                <span class="px-6 py-1 hidden xl:inline"><i class="fa-solid fa-scale-balanced"></i>&nbsp;Compare</span>
+                                                <span class="px-6 py-1 xl:hidden"><i class="fa-solid fa-scale-balanced"></i></span>
                                             </button>
                                         </div>
                                     </div>

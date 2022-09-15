@@ -29,16 +29,6 @@
                 <div class="flex justify-start space-x-2">
                     <!-- Categories -->
                     <div>
-                        <select class="select select-sm rounded-full bg-white text-black text-sm w-full max-w-xs border-emerald-400 border-2 leading-none" wire:model="selectedmarket">
-                            <option value="">Markets (All)</option>
-                            @foreach($markets as $market)
-                            <option value="{{ $market->market_id }}">
-                                {{$market->market_name}}
-                            </option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div>
                         <select class="select select-sm rounded-full bg-white text-black text-sm w-full max-w-xs border-emerald-400 border-2 leading-none" wire:model="selectedsubcategory">
                             <option value="">Categories (All)</option>
                             @foreach($categories as $category)
@@ -60,6 +50,12 @@
                         </select>
                     </div>
                 </div>
+                <div class="mr-20">
+                    <button type="button" class="sc-btn-primary">
+                        <span class="hidden md:inline"><i class="fa-solid fa-plus"></i>&nbsp;New Product</span>
+                        <span class="md:hidden"><i class="fa-solid fa-plus"></i></span>
+                    </button>
+                </div>
             </div>
             <!-- Product Table -->
             <div class="pr-[75px]">
@@ -79,11 +75,13 @@
                                 <div class="flex flex-row space-x-2">
                                     <div class="flex items-center justify-center">
                                         <div class="inline-flex" role="group">
-                                            <button type="button" class="flex items-center bg-emerald-600 text-white border-none rounded-full rounded-r hover:bg-emerald-700 transition duration-300" wire:click="product_add({{ $product->id }})">
-                                                <span class="px-6 py-1"><i class="fa-solid fa-pen-to-square"></i>&nbsp;Edit</span>
+                                            <button type="button" class="flex items-center border-2 border-emerald-600 rounded-full rounded-r text-emerald-600 hover:bg-emerald-100 hover:opacity-75 transition duration-300" wire:click="edit_product({{ $product->id }})">
+                                                <span class="px-6 py-1 hidden xl:inline"><i class="fa-solid fa-pen-to-square"></i>&nbsp;Edit</span>
+                                                <span class="px-6 py-1 xl:hidden"><i class="fa-solid fa-pen-to-square"></i></span>
                                             </button>
-                                            <button type="button" class="flex items-center bg-red-500 text-white border-none rounded-full rounded-l hover:bg-red-600 transition duration-300" wire:click="compare_add({{ $product->id }})">
-                                                <span class="px-6 py-1"><i class="fa-solid fa-trash"></i>&nbsp;Delete</span>
+                                            <button type="button" class="flex items-center bg-red-500 text-white border-none rounded-full rounded-l hover:bg-red-600 transition duration-300" wire:click="delete_product({{ $product->id }})">
+                                                <span class="px-6 py-1 hidden xl:inline"><i class="fa-solid fa-trash"></i>&nbsp;Delete</span>
+                                                <span class="px-6 py-1 xl:hidden"><i class="fa-solid fa-trash"></i></span>
                                             </button>
                                         </div>
                                     </div>
