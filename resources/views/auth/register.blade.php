@@ -4,9 +4,9 @@
             <x-jet-authentication-card-logo />
         </x-slot>
 
-        <x-jet-validation-errors class="mb-4" />
-
         <x-slot name="shopper">
+            <x-jet-validation-errors class="mb-4" />
+
             <form method="POST" action="{{ route('register') }}">
                 @csrf
                 <div>
@@ -63,6 +63,8 @@
         </x-slot>
 
         <x-slot name="market">
+            <x-jet-validation-errors class="mb-4" />
+            
             <form method="POST" action="{{ route('register-market') }}">
                 @csrf
                 <div>
