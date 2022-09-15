@@ -45,3 +45,9 @@ Route::middleware([
     Route::get('shopper/edit/{list_id}', ShopperEdit::class);
     Route::get('shopper/download/{list_id}', [ShopperIndex::class,'generatepdf']);
 });
+
+// Route::group(['middleware' => 'auth'], function() {
+//     Route::get('register-market',
+//         []
+// );
+// });
