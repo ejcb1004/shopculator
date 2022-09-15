@@ -23,6 +23,7 @@ class ShopperEdit extends Component
     // string
     public $list_name;
     public $list_id;
+    public $image;
 
     // boolean
     public $to_confirm;
@@ -199,6 +200,16 @@ class ShopperEdit extends Component
     }
 
     // user-defined methods
+    public function logo($market_id)
+    {
+        $this->image = DB::table('users')
+            ->join('markets', 'users.email', '=', 'markets.email')
+            ->join('products', 'markets.market_id', '=', 'products.market_id')
+            ->where('markets.market_id', $market_id)
+            ->pluck('users.profile_photo_path');
+        return $this->image[0];
+    }
+
     public function second_latest($product_id)
     {
         $products = Product::from(DB::raw('(SELECT * from products ORDER BY product_id ASC) recent'))

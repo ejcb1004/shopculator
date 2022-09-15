@@ -277,11 +277,15 @@
                     <div class="grid grid-cols-2 border-2 sm:grid-cols-3 md:grid-cols-4">
                         <!-- Products -->
                         @foreach ($products as $product)
-                        <div class="border bg-white">
-                            <div class="flex flex-col min-h-full py-5 px-4 space-y-1 items-center">
-                                <div class="flex flex-auto items-center">
-                                    <img src="{{ $product->image_path }}" alt="{{ $product->product_name }}" width="125" />
-                                </div>
+                        <div class="flex flex-col border bg-white min-h-full justify-between">
+                            <div class="p-3">
+                                <img src="{{ '../storage/' . $this->logo($product->market_id) }}" width="35" />
+                            </div>
+                            <div class="flex mx-auto">
+                                <img src="{{ $product->image_path }}" alt="{{ $product->product_name }}" width="125" />
+                            </div>
+                            <div class="flex flex-col py-5 px-4 space-y-1 items-center">
+
                                 <span class="text-black text-center">{{ $product->product_name }}</span>
                                 <span class="text-black text-center text-lg">
                                     <b>PHP {{ number_format($product->price, 2, '.', ',') }}</b>
