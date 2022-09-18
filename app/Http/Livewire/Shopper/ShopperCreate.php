@@ -26,6 +26,7 @@ class ShopperCreate extends Component
 
     // boolean
     public $to_confirm;
+    public $product_added;
 
     // array
     public $list_details = [];
@@ -75,6 +76,7 @@ class ShopperCreate extends Component
         $this->total = 0;
         $this->compitems = 0;
         $this->complow = 0;
+        $this->product_added = false;
     }
 
     public function render()
@@ -170,6 +172,18 @@ class ShopperCreate extends Component
         return $this->image[0];
     }
 
+    public function get_product_id($product_id)
+    {
+        if (in_array($product_id, array_column($this->list_details, 'product_id'))) 
+        return $product_id;
+    }
+
+    public function get_product_name($product_id)
+    {
+        $product_name = Product::where('product_id', $product_id)->pluck('product_name')->first();
+        return $product_name;
+    }
+
     public function populate()
     {
         // Populate array with list details
@@ -204,6 +218,8 @@ class ShopperCreate extends Component
 
     public function product_add($id)
     {
+        $this->product_added = false;
+        
         // Retrieve record based on id
         $this->new_detail = Product::where('id', $id)->get()->toArray()[0];
 
@@ -217,10 +233,13 @@ class ShopperCreate extends Component
         } else {
             $this->populate();
         }
+
+        $this->product_added = true;
     }
 
     public function compare_add($id)
     {
+        $this->product_added = false;
         // Retrieve record based on id
         $this->newcompare_detail = Product::where('id', $id)->get()->toArray()[0];
 
@@ -238,11 +257,13 @@ class ShopperCreate extends Component
 
     public function totalizecompare()
     {
+        $this->product_added = false;
         $this->complow = 0;
     }
 
     public function totalize()
     {
+        $this->product_added = false;
         $this->total = 0;
         foreach ($this->list_details as $detail) {
             if (in_array($detail['product_id'], $this->productchecked)) {

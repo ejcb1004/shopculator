@@ -28,6 +28,7 @@ class ShopperEdit extends Component
 
     // boolean
     public $to_confirm;
+    public $product_added;
 
     // array
     public $db_details = [];
@@ -212,26 +213,16 @@ class ShopperEdit extends Component
         return $this->image[0];
     }
 
-    public function second_latest($product_id)
+    public function get_product_id($product_id)
     {
-        $products = Product::from(DB::raw('(SELECT * from products ORDER BY product_id ASC) recent'))
-            ->where('product_id', $product_id)
-            ->groupBy('created_at')
-            ->orderBy('created_at', 'DESC')
-            ->pluck('price')
-            ->toArray();
-        if (count($products) > 1) return 'PHP ' . number_format($products[1], 2, '.', ',');
-        else return null;
+        if (in_array($product_id, array_column($this->list_details, 'product_id'))) 
+        return $product_id;
     }
 
-    public function inspect_response()
+    public function get_product_name($product_id)
     {
-        $response = Http::get('http://localhost/sample-ecommerce/ajax/products.ajax.php')->json()['data'];
-        dd($response[0]['price']);
-    }
-
-    public function inspect_products()
-    {
+        $product_name = Product::where('product_id', $product_id)->pluck('product_name')->first();
+        return $product_name;
     }
 
     public function populate()
@@ -268,6 +259,8 @@ class ShopperEdit extends Component
 
     public function product_add($id)
     {
+        $this->product_added = false;
+
         // Retrieve record based on id
         $this->new_detail = Product::where('id', $id)->get()->toArray()[0];
 
@@ -295,10 +288,14 @@ class ShopperEdit extends Component
                 $this->populate();
             }
         }
+
+        $this->product_added = true;
     }
 
     public function compare_add($id)
     {
+        $this->product_added = false;
+
         // Retrieve record based on id
         $this->newcompare_detail = Product::where('id', $id)->get()->toArray()[0];
 
@@ -316,11 +313,13 @@ class ShopperEdit extends Component
 
     public function totalizecompare()
     {
+        $this->product_added = false;
         $this->complow = 0;
     }
 
     public function totalize()
     {
+        $this->product_added = false;
         $this->total = 0;
         foreach ($this->list_details as $detail) {
             if (in_array($detail['product_id'], $this->productchecked)) {
