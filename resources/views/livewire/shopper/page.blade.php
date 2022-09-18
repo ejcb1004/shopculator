@@ -125,12 +125,21 @@
 
             <tbody>
                 @foreach ($data as $detail)
+                @if ($detail->is_checked == 1)
                 <tr>
-                    <td>{{ $detail->product_name }}</td>
-                    <td style="text-align: center">PHP {{ $detail->price }}</td>
-                    <td style="text-align: center">×{{ $detail->quantity }}</td>
-                    <td style="text-align: center">PHP {{ number_format($detail->price * $detail->quantity, 2) }}</td>
+                    <td style="background-color:#bbf7d0">{{ $detail->product_name }}</td>
+                    <td style="background-color:#bbf7d0; text-align: center;">PHP {{ $detail->price }}</td>
+                    <td style="background-color:#bbf7d0; text-align: center;">×{{ $detail->quantity }}</td>
+                    <td style="background-color:#bbf7d0; text-align: center;">PHP {{ number_format($detail->price * $detail->quantity, 2) }}</td>
                 </tr>
+                @else
+                <tr>
+                    <td style="background-color:#fecaca;">{{ $detail->product_name }}</td>
+                    <td style="background-color:#fecaca; text-align: center;">PHP {{ $detail->price }}</td>
+                    <td style="background-color:#fecaca; text-align: center;">×{{ $detail->quantity }}</td>
+                    <td style="background-color:#fecaca; text-align: center;">PHP {{ number_format($detail->price * $detail->quantity, 2) }}</td>
+                </tr>
+                @endif
                 @endforeach
             </tbody>
         </table>
@@ -144,7 +153,7 @@
             <tbody>
                 <tr>
                     <td>Budget</td>
-                    <td style="text-align: center">PHP {{ $budget }}</td>
+                    <td style="text-align: center">PHP {{ number_format($budget, 2, '.', ',') }}</td>
                 </tr>
                 <tr>
                     <td>Total</td>
