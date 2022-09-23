@@ -1,6 +1,6 @@
 <div>
     <div class="max-w-7xl mx-auto px-3 pb-4 sm:px-6 lg:px-8">
-        <div class="mx-auto h-1/2 w-3/5 xl:w-full">
+        <div class="mx-auto w-1/2 2xl:w-full">
             <canvas id="chart"></canvas>
         </div>
     </div>
