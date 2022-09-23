@@ -20,10 +20,11 @@ class Product extends Model
     protected $fillable = [
         'product_id',
         'market_id',
-        'category_id',
+        'subcategory_id',
         'product_name',
+        'price',
         'image_path',
-        'price'
+        'is_deleted'
     ];
 
     /**
