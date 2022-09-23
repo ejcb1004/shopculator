@@ -45,6 +45,37 @@
                             </div>
                         </div>
                     </div>
+                    <div class="dropdown dropdown-left">
+                        <label tabindex="1" class="btn btn-ghost btn-circle btn-lg">
+                            <div class="indicator relative left-5 bottom-2">
+                                <i class="fa-solid fa-file-import"></i>
+                                @if (!empty($file))
+                                <span class="border-none text-emerald-400 indicator-item">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="h-3 w-3" fill="currentColor" stroke="#94a3b8">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M256 512c141.4 0 256-114.6 256-256S397.4 0 256 0S0 114.6 0 256S114.6 512 256 512z" />
+                                    </svg>
+                                </span>
+                                @endif
+                            </div>
+                            <span class="relative top-4 right-2 text-xs normal-case leading-none">Import</span>
+                        </label>
+                        <div tabindex="1" class="card card-compact dropdown-content w-96 bg-white shadow-md ml-3 rounded-full">
+                            <!-- Card Body -->
+                            <div class="card-body">
+                                <!-- Card Content -->
+                                <form class="flex flex-row" action="{{ route('market/import') }}" method="POST" enctype="multipart/form-data">
+                                    @csrf
+                                    <div class="flex items-center w-2/3">
+                                        <input type="file" name="file" id="file" wire:model="file" />
+                                    </div>
+                                    <button type="submit" class="sc-btn-primary w-1/2 justify-center">
+                                        <span class="hidden md:inline px-6 py-1"><i class="fa-solid fa-file-import"></i>&nbsp;Import</span>
+                                        <span class="px-6 py-1 md:hidden"><i class="fa-solid fa-file-import"></i></i></span>
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="navbar flex flex-row justify-between">
@@ -73,9 +104,9 @@
                     </div>
                 </div>
                 <div class="mr-20 inline-flex" role="group">
-                    <button type="button" class="flex items-center border-2 border-emerald-600 rounded-full rounded-r text-emerald-600 hover:bg-emerald-100 hover:opacity-75 transition duration-300">
-                        <a href="{{ route('market') }}" class="hidden md:inline px-6 py-0.5"><i class="fa-solid fa-file-import"></i>&nbsp;Import</a>
-                        <span class="px-6 py-0.5 md:hidden"><i class="fa-solid fa-file-import"></i></i></span>
+                    <button type="button" class="flex items-center border-y-2 border-l-2 border-r border-emerald-600 rounded-full rounded-r text-emerald-600 hover:bg-emerald-100 hover:opacity-75 transition duration-300">
+                        <a href="{{ url('market/export/'. $market) }}" class="hidden md:inline px-6 py-0.5"><i class="fa-solid fa-file-export"></i>&nbsp;Export</a>
+                        <span class="px-6 py-0.5 md:hidden"><i class="fa-solid fa-file-export"></i></i></span>
                     </button>
                     <button type="button" class="flex items-center bg-emerald-600 text-white border-none rounded-full rounded-l hover:bg-emerald-700 transition duration-300">
                         <a href="{{ route('market/create') }}" class="hidden md:inline px-6 py-1"><i class="fa-solid fa-plus"></i>&nbsp;New Product</a>
