@@ -31,7 +31,7 @@
         var chartdata1 = {
             type: 'line',
             data: {
-                labels: <?php echo json_encode($shoppers['periods']); ?>,
+                labels: <?php echo json_encode($shoppers['labels']); ?>,
                 datasets: [{
                     label: '# of shoppers',
                     backgroundColor: '#a7f3d0',
@@ -56,7 +56,7 @@
         var chartdata2 = {
             type: 'line',
             data: {
-                labels: <?php echo json_encode($markets['periods']); ?>,
+                labels: <?php echo json_encode($markets['labels']); ?>,
                 datasets: [{
                     label: '# of markets',
                     backgroundColor: '#a7f3d0',

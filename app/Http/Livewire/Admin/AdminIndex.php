@@ -15,7 +15,7 @@ class AdminIndex extends Component
     public function mount()
     {
         $this->shoppers = [
-            'periods' => User::where('role_id', 'R3')
+            'labels' => User::where('role_id', 'R3')
                 ->select(DB::raw("CONCAT(MONTHNAME(created_at), ' ', DAY(created_at), ', ', YEAR(created_at)) as date"))
                 ->groupBy('date')
                 ->pluck('date')
@@ -27,7 +27,7 @@ class AdminIndex extends Component
                 ->toArray()
         ];
         $this->markets = [
-            'periods' => User::where('role_id', 'R2')
+            'labels' => User::where('role_id', 'R2')
                 ->select(DB::raw("CONCAT(MONTHNAME(created_at), ' ', DAY(created_at), ', ', YEAR(created_at)) as date"))
                 ->groupBy('date')
                 ->pluck('date')

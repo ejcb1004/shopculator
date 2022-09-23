@@ -8,7 +8,7 @@ use Livewire\Component;
 
 class Dashboard extends Component
 {
-    public $products;
+    public $labels;
     public $data;
     public $market;
 
@@ -21,21 +21,22 @@ class Dashboard extends Component
         $this->data = DB::table('list_details')
             ->join('products', 'list_details.product_id', '=', 'products.product_id')
             ->where('products.market_id', $this->market)
-            ->groupBy('list_details.product_id')
+            ->groupBy('products.product_name')
             ->pluck(DB::raw('count(*) as total'))
             ->toArray();
-        $this->products = DB::table('list_details')
+        $this->labels = DB::table('list_details')
             ->join('products', 'list_details.product_id', '=', 'products.product_id')
             ->where('products.market_id', $this->market)
-            ->limit(count($this->data))
+            ->groupBy('products.product_name')
             ->pluck('products.product_name')
             ->toArray();
     }
 
     public function render()
     {
+        // dd($this->products, $this->data);
         return view('livewire.market.dashboard', [
-            'products' => $this->products,
+            'labels' => $this->labels,
             'data' => $this->data
         ]);
     }
