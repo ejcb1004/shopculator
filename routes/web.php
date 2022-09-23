@@ -73,6 +73,8 @@ Route::middleware([
     Route::get('market/create', MarketCreate::class)->name('market/create');
     Route::get('market/edit/{product_id}', MarketEdit::class);
     Route::get('market/dashboard', Dashboard::class)->name('market/dashboard');
+    Route::get('market/export/{market_id}', [MarketIndex::class, 'export']);
+    Route::post('market/import', [MarketIndex::class, 'import'])->name('market/import');
 
     // Shopper
     Route::get('shopper', ShopperIndex::class)->name('shopper');
