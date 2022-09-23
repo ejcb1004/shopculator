@@ -16,7 +16,7 @@
     <div>
         {{ $logo }}
     </div>
-    <div class="w-2/3 lg:w-1/5 mt-8">
+    <div class="w-1/2 xl:w-2/5 2xl:w-1/5 mt-8">
         <div x-data="tabs">
             @if (url()->current() === 'http://127.0.0.1:8000/login' || url()->current() === 'http://127.0.0.1:8000/register')
             <div class="grid grid-cols-2 cursor-pointer font-bold">
