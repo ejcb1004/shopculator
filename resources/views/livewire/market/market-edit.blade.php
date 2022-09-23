@@ -25,7 +25,7 @@
             </x-slot>
 
             <x-slot name="content">
-                Are you sure you want to save this list?
+                Are you sure you want to save this product?
             </x-slot>
 
             <x-slot name="footer">
