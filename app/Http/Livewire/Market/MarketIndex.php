@@ -2,20 +2,23 @@
 
 namespace App\Http\Livewire\Market;
 
+use App\Exports\ProductsExport;
+use App\Imports\ProductsImport;
 use App\Models\Category;
-use App\Models\ListDetail;
-use App\Models\Market;
 use App\Models\Product;
-use App\Models\ShoppingList;
 use App\Models\Subcategory;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Livewire\WithFileUploads;
+use Maatwebsite\Excel\Facades\Excel;
 
 class MarketIndex extends Component
 {
     use WithPagination;
+    use WithFileUploads;
 
     // string
     public $market;
@@ -28,6 +31,9 @@ class MarketIndex extends Component
 
     // boolean
     public $confirm_delete;
+
+    //special
+    public $file;
 
     // search filters
     public $selectedsubcategory = null;
@@ -42,7 +48,8 @@ class MarketIndex extends Component
         $this->market = DB::table('markets')
             ->join('users', 'users.email', '=', 'markets.email')
             ->where('users.email', Auth::user()->email)
-            ->pluck('markets.market_id');
+            ->pluck('markets.market_id')
+            ->first();
     }
 
     public function render()
@@ -79,5 +86,18 @@ class MarketIndex extends Component
         session()->flash('flash.bannerStyle', 'success');
 
         return redirect('market');
+    }
+
+    public function export($market_id)
+    {
+        return Excel::download(new ProductsExport($market_id), 'products.csv');
+    }
+
+    public function import(Request $request)
+    {
+        Excel::import(new ProductsImport, $request->file('file')->store('temp'));
+        session()->flash('flash.banner', 'Batch import successful!');
+        session()->flash('flash.bannerStyle', 'success');
+        return back();
     }
 }
