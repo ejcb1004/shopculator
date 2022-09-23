@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->tinyInteger('is_checked');
             $table->integer('list_index');
-            $table->string('detail_id');
+            $table->string('detail_id')->unique();
             $table->string('list_id');
             $table->string('product_id');
             $table->integer('quantity');
