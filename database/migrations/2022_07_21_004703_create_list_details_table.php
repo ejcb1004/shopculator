@@ -20,7 +20,6 @@ return new class extends Migration
             $table->string('detail_id');
             $table->string('list_id');
             $table->string('product_id');
-            $table->string('image_path');
             $table->integer('quantity');
             $table->tinyInteger('is_deleted');
             $table->timestamps();
