@@ -1,6 +1,6 @@
 <div>
     <div class="max-w-7xl mx-auto px-3 pb-4 sm:px-6 lg:px-8">
-        <div class="mt-12 mx-auto h-2/3 w-2/3">
+        <div class="mt-4 mx-auto h-3/5 w-3/5">
             <canvas id="chart"></canvas>
         </div>
     </div>
@@ -44,7 +44,7 @@
                         labels: {
                             // This more specific font property overrides the global property
                             font: {
-                                size: 15
+                                size: 14
                             }
                         }
                     }
