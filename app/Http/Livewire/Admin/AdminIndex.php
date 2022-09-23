@@ -2,11 +2,44 @@
 
 namespace App\Http\Livewire\Admin;
 
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 
 class AdminIndex extends Component
 {
+    public $shoppers;
+    public $markets;
+
+    public function mount()
+    {
+        $this->shoppers = [
+            'periods' => User::where('role_id', 'R3')
+                ->select(DB::raw("CONCAT(MONTHNAME(created_at), ' ', DAY(created_at), ', ', YEAR(created_at)) as date"))
+                ->groupBy('date')
+                ->pluck('date')
+                ->toArray(),
+            'data' => User::where('role_id', 'R3')
+                ->select(DB::raw('count(*) as total'))
+                ->groupBy(DB::raw("DAY(created_at)"))
+                ->pluck('total')
+                ->toArray()
+        ];
+        $this->markets = [
+            'periods' => User::where('role_id', 'R2')
+                ->select(DB::raw("CONCAT(MONTHNAME(created_at), ' ', DAY(created_at), ', ', YEAR(created_at)) as date"))
+                ->groupBy('date')
+                ->pluck('date')
+                ->toArray(),
+            'data' => User::where('role_id', 'R2')
+                ->select(DB::raw('count(*) as total'))
+                ->groupBy(DB::raw("DAY(created_at)"))
+                ->pluck('total')
+                ->toArray()
+        ];
+    }
+
     public function render()
     {
         if (Auth::user()->role_id != 'R1') abort(403);

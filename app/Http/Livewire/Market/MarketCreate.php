@@ -13,6 +13,7 @@ class MarketCreate extends Component
     public $categories;
     public $subcategories;
 
+    // strings
     public $image_path;
     
     public function mount()

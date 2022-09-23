@@ -35,6 +35,24 @@
         </div>
     </div>
     @endif
+    @if ($comp_added)
+    <div class="bg-emerald-600">
+        <div class="max-w-screen-xl mx-auto py-2 px-3 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between flex-wrap">
+                <div class="w-0 flex-1 flex items-center min-w-0">
+                    <span class="flex p-2 rounded-lg bg-emerald-500">
+                        <svg class="h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </span>
+                    <p class="ml-3 font-medium text-sm text-white truncate">
+                        <span>{{ $this->get_product_name($newcompare_detail['product_id']) }} has been added for comparison.</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    @endif
     <form wire:submit.prevent="store" enctype="multipart/form-data">
         @csrf
         <x-jet-confirmation-modal wire:model="to_confirm">
@@ -313,14 +331,20 @@
                                             <button type="button" class="flex items-center bg-emerald-600 text-white border-none rounded-full rounded-r hover:bg-emerald-700 transition duration-300" wire:click="product_add({{ $product->id }})">
                                                 @if (is_null($this->get_product_id($product->product_id)))
                                                 <span class="px-6 py-1 hidden xl:inline"><i class="fa-solid fa-cart-plus"></i>&nbsp;Add</span>
+                                                <span class="px-6 py-1 xl:hidden"><i class="fa-solid fa-cart-plus"></i></span>
                                                 @else
                                                 <span class="px-6 py-1 hidden xl:inline"><i class="fa-solid fa-plus"></i></span>
+                                                <span class="px-6 py-1 xl:hidden"><i class="fa-solid fa-plus"></i></span>
                                                 @endif
-                                                <span class="px-6 py-1 xl:hidden"><i class="fa-solid fa-cart-plus"></i></span>
                                             </button>
                                             <button type="button" class="flex items-center border-2 border-emerald-600 rounded-full rounded-l text-emerald-600 hover:bg-emerald-100 hover:opacity-75 transition duration-300" wire:click="compare_add({{ $product->id }})">
+                                                @if (is_null($this->get_product_comp_id($product->product_id)))
                                                 <span class="px-6 py-1 hidden xl:inline"><i class="fa-solid fa-scale-balanced"></i>&nbsp;Compare</span>
                                                 <span class="px-6 py-1 xl:hidden"><i class="fa-solid fa-scale-balanced"></i></span>
+                                                @else
+                                                <span class="px-6 py-1 hidden xl:inline">Added</span>
+                                                <span class="px-6 py-1 xl:hidden">Added</span>
+                                                @endif
                                             </button>
                                         </div>
                                     </div>

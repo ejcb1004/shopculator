@@ -27,6 +27,7 @@ class ShopperCreate extends Component
     // boolean
     public $to_confirm;
     public $product_added;
+    public $comp_added;
 
     // array
     public $list_details = [];
@@ -77,6 +78,7 @@ class ShopperCreate extends Component
         $this->compitems = 0;
         $this->complow = 0;
         $this->product_added = false;
+        $this->comp_added = false;
     }
 
     public function render()
@@ -128,7 +130,6 @@ class ShopperCreate extends Component
                     'detail_id' => '',
                     'list_id' => $list->list_id,
                     'product_id' => $detail['product_id'],
-                    'image_path' => $detail['image_path'],
                     'is_deleted' => $detail['is_deleted'],
                     'quantity' => $detail['quantity']
                 ]);
@@ -178,6 +179,12 @@ class ShopperCreate extends Component
         return $product_id;
     }
 
+    public function get_product_comp_id($product_id)
+    {
+        if (in_array($product_id, array_column($this->compare_details, 'product_id'))) 
+        return $product_id;
+    }
+
     public function get_product_name($product_id)
     {
         $product_name = Product::where('product_id', $product_id)->pluck('product_name')->first();
@@ -219,6 +226,7 @@ class ShopperCreate extends Component
     public function product_add($id)
     {
         $this->product_added = false;
+        $this->comp_added = false;
         
         // Retrieve record based on id
         $this->new_detail = Product::where('id', $id)->get()->toArray()[0];
@@ -240,6 +248,8 @@ class ShopperCreate extends Component
     public function compare_add($id)
     {
         $this->product_added = false;
+        $this->comp_added = false;
+        
         // Retrieve record based on id
         $this->newcompare_detail = Product::where('id', $id)->get()->toArray()[0];
 
@@ -253,17 +263,21 @@ class ShopperCreate extends Component
         } else {
             $this->populatecompare();
         }
+
+        $this->comp_added = true;
     }
 
     public function totalizecompare()
     {
         $this->product_added = false;
+        $this->comp_added = false;
         $this->complow = 0;
     }
 
     public function totalize()
     {
         $this->product_added = false;
+        $this->comp_added = false;
         $this->total = 0;
         foreach ($this->list_details as $detail) {
             if (in_array($detail['product_id'], $this->productchecked)) {

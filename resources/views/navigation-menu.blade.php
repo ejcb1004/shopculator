@@ -12,8 +12,28 @@
 
                 @if (Route::has('login'))
                 @auth
+                @if (Auth::user()->role_id == 'R1')
+                <!-- Navigation Links for Admin -->
+                <div class="hidden space-x-8 sm:-my-px sm:ml-10 md:flex">
+                    <x-jet-nav-link href="{{ route('admin/users') }}" :active="request()->routeIs('admin/users')">
+                        <b>{{ __('Users') }}</b>
+                    </x-jet-nav-link>
+                    <x-jet-nav-link href="{{ route('admin/markets') }}" :active="request()->routeIs('admin/markets')">
+                        <b>{{ __('Markets') }}</b>
+                    </x-jet-nav-link>
+                    <x-jet-nav-link href="{{ route('admin/categories') }}" :active="request()->routeIs('admin/categories')">
+                        <b>{{ __('Categories') }}</b>
+                    </x-jet-nav-link>
+                    <x-jet-nav-link href="{{ route('admin/subcategories') }}" :active="request()->routeIs('admin/subcategories')">
+                        <b>{{ __('Subcategories') }}</b>
+                    </x-jet-nav-link>
+                    <x-jet-nav-link href="{{ route('admin') }}" :active="request()->routeIs('admin')">
+                        <b>{{ __('Dashboard') }}</b>
+                    </x-jet-nav-link>
+                </div>
+                @endif
                 @if (Auth::user()->role_id == 'R2')
-                <!-- Navigation Links -->
+                <!-- Navigation Links for Markets -->
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 md:flex">
                     <x-jet-nav-link href="{{ route('market') }}" :active="request()->routeIs('market')">
                         <b>{{ __('Products') }}</b>
@@ -24,7 +44,7 @@
                 </div>
                 @endif
                 @if (Auth::user()->role_id == 'R3')
-                <!-- Navigation Links -->
+                <!-- Navigation Links for Shoppers -->
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 md:flex">
                     <x-jet-nav-link href="{{ route('shopper') }}" :active="request()->routeIs('shopper')">
                         <b>{{ __('Your Lists') }}</b>

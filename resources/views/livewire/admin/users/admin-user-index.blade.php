@@ -8,9 +8,9 @@
 
             <x-slot name="content">
                 @if (count($checkboxticked) == 1)
-                Are you sure you want to delete this list?
+                Are you sure you want to delete this user?
                 @elseif (count($checkboxticked) > 1)
-                Are you sure you want to delete these lists?
+                Are you sure you want to delete these users?
                 @endif
                 This cannot be undone.
             </x-slot>
@@ -26,7 +26,6 @@
             </x-slot>
         </x-jet-confirmation-modal>
     </form>
-
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <!-- Search and Add Button -->
         <div class="flex flex-row-reverse pt-5">
@@ -36,8 +35,8 @@
                     <input type="text" placeholder="Search" class="input bg-white pl-10 w-full rounded-full h-10" wire:model='searchterm' />
                 </div>
                 <button class="sc-btn-primary">
-                    <a href="{{ route('shopper/create') }}">
-                        <i class="fa-solid fa-plus"></i>&nbsp;Add List
+                    <a href="{{ route('admin/users/create') }}">
+                        <i class="fa-solid fa-plus"></i>&nbsp;Add User
                     </a>
                 </button>
             </div>
@@ -55,26 +54,33 @@
                                         <input type="checkbox" class="checkbox checkbox-sm checkbox-accent" wire:model="selectall" />
                                     </label>
                                 </th>
-                                <th>List Name</th>
-                                <th>Total</th>
-                                <th>Budget</th>
-                                <th>Updated at</th>
+                                <th></th>
+                                <th>Username</th>
+                                <th>Role</th>
+                                <th>Email</th>
+                                <th>Created at</th>
                             </tr>
                         </thead>
 
                         <tbody>
-                            @forelse ($lists as $list)
+                            @forelse ($users as $user)
                             <tr class="hover table-group">
-                                <input value="{{ $list->id }}" name="id" id="id" hidden />
                                 <td class="table-item">
-                                    <input type="checkbox" value="{{ $list->list_id }}" class="checkbox checkbox-sm checkbox-accent" wire:model="checkboxticked" />
+                                    <input type="checkbox" value="{{ $user->id }}" class="checkbox checkbox-sm checkbox-accent" wire:model="checkboxticked" />
                                 </td>
-                                <td class="table-item">{{ $list->list_name }}</td>
-                                <td class="table-item"><i class="fa-solid fa-peso-sign text-black"></i>&nbsp;{{ number_format($list->total, 2, '.') }}</td>
-                                <td class="table-item"><i class="fa-solid fa-peso-sign text-black"></i>&nbsp;{{ number_format($list->budget, 2, '.') }}</td>
+                                <td class="table-item">
+                                    @if ( !empty($user->profile_photo_path) )
+                                    <img src="{{ '../storage/' . $user->profile_photo_path }}" width="30" />
+                                    @else
+                                    <img src="../storage/img/random_user.png" width="30" />
+                                    @endif
+                                </td>
+                                <td class="table-item">{{ $user->name }}</td>
+                                <td class="table-item">{{ $user->role_name }}</td>
+                                <td class="table-item">{{ $user->email }}</td>
                                 <td class="table-item">
                                     @php
-                                    $dt = new DateTime($list->updated_at);
+                                    $dt = new DateTime($user->created_at);
                                     $dt->setTimezone(new DateTimeZone('Asia/Manila'));
                                     echo $dt->format('h:i:s a, M d, Y');
                                     @endphp
@@ -88,8 +94,8 @@
                         </tbody>
                     </table>
                 </div>
-                @if(count($lists))
-                {{ $lists->links() }}
+                @if(count($users))
+                {{ $users->links() }}
                 @endif
             </div>
         </div>
@@ -97,8 +103,7 @@
         @if (count($checkboxticked) == 1)
         <div class="sticky rounded-md bottom-0 bg-white p-3 bg-shadow w-full">
             <div class="flex justify-center space-x-3 lg:space-x-8">
-                <button type="button" class="sc-btn-ghost"><a href="{{ url('shopper/edit/' . $checkboxticked[0]) }}"><i class="fa-solid fa-pen-to-square"></i>&nbsp;Edit</a></button>
-                <button type="button" class="sc-btn-red-ghost"><a href="{{ url('shopper/download/'. $checkboxticked[0]) }}"><i class="fa-solid fa-file-pdf"></i>&nbsp;Save PDF</a></button>
+                <button type="button" class="sc-btn-ghost"><a href="{{ url('admin/users/edit/' . $checkboxticked[0]) }}"><i class="fa-solid fa-pen-to-square"></i>&nbsp;Edit</a></button>
                 <button type="button" class="sc-btn-danger" wire:click="confirm_delete"><span><i class="fa-solid fa-trash"></i>&nbsp;Delete</span></button>
             </div>
         </div>
@@ -106,7 +111,6 @@
         <div class="sticky rounded-md bottom-0 bg-white p-3 bg-shadow w-full">
             <div class="flex justify-center space-x-3 lg:space-x-8">
                 <button type="button" class="sc-btn-disabled" disabled><span><i class="fa-solid fa-pen-to-square"></i>&nbsp;Edit</span></button>
-                <button type="button" class="sc-btn-disabled" disabled><span><i class="fa-solid fa-file-pdf"></i>&nbsp;Save as PDF</span></button>
                 <button type="button" class="sc-btn-danger" wire:click="confirm_delete"><span><i class="fa-solid fa-trash"></i>&nbsp;Delete</span></button>
             </div>
         </div>

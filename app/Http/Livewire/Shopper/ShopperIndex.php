@@ -7,26 +7,24 @@ use App\Models\ShoppingList;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
+use Livewire\WithPagination;
 use PDF;
 
 class ShopperIndex extends Component
 {
+    use WithPagination;
+
     public $searchterm = '';
     public $selectall = false;
-    public $lists;
     public $checkboxticked;
 
     // boolean
-    public $to_confirm_archive;
-    public $to_confirm_unarchive;
     public $to_confirm_delete;
 
     // Livewire lifecycle hooks
     public function mount()
     {
         $this->checkboxticked = [];
-        $this->to_confirm_archive = false;
-        $this->to_confirm_unarchive = false;
         $this->to_confirm_delete = false;
     }
 
@@ -38,13 +36,13 @@ class ShopperIndex extends Component
     public function render()
     {
         if (Auth::user()->role_id != 'R3') abort(403);
-        else {
-            $this->lists = ShoppingList::where('list_name', 'like', '%' . $this->searchterm . '%')
+        else return view('livewire.shopper.shopper-index', [
+            'lists' => ShoppingList::where('list_name', 'like', '%' . $this->searchterm . '%')
                 ->where('is_deleted', 0)
                 ->where('email', Auth::user()->email)
-                ->orderBy('updated_at', 'desc')->get();
-            return view('livewire.shopper.shopper-index');
-        }
+                ->orderBy('updated_at', 'desc')
+                ->paginate(10)
+        ]);
     }
 
     public function generatepdf($list_id)

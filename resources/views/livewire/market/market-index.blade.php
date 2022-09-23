@@ -1,4 +1,26 @@
 <div>
+    <form wire:submit.prevent="delete" enctype="multipart/form-data">
+        @csrf
+        <x-jet-confirmation-modal wire:model="confirm_delete">
+            <x-slot name="title">
+                Delete List
+            </x-slot>
+
+            <x-slot name="content">
+                Are you sure you want to delete this product? This cannot be undone.
+            </x-slot>
+
+            <x-slot name="footer">
+                <button class="sc-btn-red-ghost ml-3" type="button" wire:click="$toggle('confirm_delete')" wire:loading.attr="disabled">
+                    <span>No</span>
+                </button>
+
+                <button class="sc-btn-danger ml-3" type="submit" wire:target="delete" wire:loading.attr="disabled">
+                    <span>Delete</span>
+                </button>
+            </x-slot>
+        </x-jet-confirmation-modal>
+    </form>
     <!-- Content Page -->
     <div class="max-w-7xl mx-auto px-3 pb-4 sm:px-6 lg:px-8">
         <div class="flex flex-col">
@@ -50,10 +72,14 @@
                         </select>
                     </div>
                 </div>
-                <div class="mr-20">
-                    <button type="button" class="sc-btn-primary">
-                        <span class="hidden md:inline"><i class="fa-solid fa-plus"></i>&nbsp;New Product</span>
-                        <span class="md:hidden"><i class="fa-solid fa-plus"></i></span>
+                <div class="mr-20 inline-flex" role="group">
+                    <button type="button" class="flex items-center border-2 border-emerald-600 rounded-full rounded-r text-emerald-600 hover:bg-emerald-100 hover:opacity-75 transition duration-300">
+                        <a href="{{ route('market') }}" class="hidden md:inline px-6 py-0.5"><i class="fa-solid fa-file-import"></i>&nbsp;Import</a>
+                        <span class="px-6 py-0.5 md:hidden"><i class="fa-solid fa-file-import"></i></i></span>
+                    </button>
+                    <button type="button" class="flex items-center bg-emerald-600 text-white border-none rounded-full rounded-l hover:bg-emerald-700 transition duration-300">
+                        <a href="{{ route('market/create') }}" class="hidden md:inline px-6 py-1"><i class="fa-solid fa-plus"></i>&nbsp;New Product</a>
+                        <span class="px-6 py-1 md:hidden"><i class="fa-solid fa-plus"></i></span>
                     </button>
                 </div>
             </div>
@@ -75,11 +101,11 @@
                                 <div class="flex flex-row space-x-2">
                                     <div class="flex items-center justify-center">
                                         <div class="inline-flex" role="group">
-                                            <button type="button" class="flex items-center border-2 border-emerald-600 rounded-full rounded-r text-emerald-600 hover:bg-emerald-100 hover:opacity-75 transition duration-300" wire:click="edit_product({{ $product->id }})">
-                                                <span class="px-6 py-1 hidden xl:inline"><i class="fa-solid fa-pen-to-square"></i>&nbsp;Edit</span>
+                                            <button type="button" class="flex items-center border-2 border-emerald-600 rounded-full rounded-r text-emerald-600 hover:bg-emerald-100 hover:opacity-75 transition duration-300">
+                                                <a class="px-6 py-1 hidden xl:inline" href="{{ url('market/edit/' . $product->product_id) }}"><i class="fa-solid fa-pen-to-square"></i>&nbsp;Edit</a>
                                                 <span class="px-6 py-1 xl:hidden"><i class="fa-solid fa-pen-to-square"></i></span>
                                             </button>
-                                            <button type="button" class="flex items-center bg-red-500 text-white border-none rounded-full rounded-l hover:bg-red-600 transition duration-300" wire:click="delete_product({{ $product->id }})">
+                                            <button type="button" class="flex items-center bg-red-500 text-white border-none rounded-full rounded-l hover:bg-red-600 transition duration-300" wire:click="confirm_delete_fn({{ $product->id }})">
                                                 <span class="px-6 py-1 hidden xl:inline"><i class="fa-solid fa-trash"></i>&nbsp;Delete</span>
                                                 <span class="px-6 py-1 xl:hidden"><i class="fa-solid fa-trash"></i></span>
                                             </button>

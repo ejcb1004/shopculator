@@ -17,13 +17,17 @@ class MarketIndex extends Component
 {
     use WithPagination;
 
-    // current market
+    // string
     public $market;
+    public $product_id;
 
     // collections
     public $markets;
     public $categories;
     public $subcategories;
+
+    // boolean
+    public $confirm_delete;
 
     // search filters
     public $selectedsubcategory = null;
@@ -50,6 +54,7 @@ class MarketIndex extends Component
                     $query->where('subcategory_id', $this->selectedsubcategory);
                 })
                 ->where('market_id', $this->market)
+                ->where('is_deleted', 0)
                 ->orderBy('price', $this->selectedsort)
                 ->search(trim($this->searchproduct))
                 ->paginate(8)
@@ -57,13 +62,22 @@ class MarketIndex extends Component
     }
 
     // user-defined methods
-    public function edit_product($id)
+    public function confirm_delete_fn($product_id)
     {
-
+        $this->confirm_delete = true;
+        $this->product_id = $product_id;
     }
 
-    public function delete_product($id)
+    public function delete()
     {
-        
+        $this->confirm_delete = false;
+        Product::where('id', $this->product_id)->update([
+            'is_deleted' => 1
+        ]);
+
+        session()->flash('flash.banner', 'Product successfully deleted!');
+        session()->flash('flash.bannerStyle', 'success');
+
+        return redirect('market');
     }
 }
