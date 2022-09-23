@@ -1,6 +1,6 @@
 <div>
     <div class="max-w-7xl mx-auto px-3 pb-4 sm:px-6 lg:px-8">
-        <div class="mt-4 mx-auto h-1/2 w-1/2">
+        <div class="mx-auto h-1/2 w-3/5 xl:w-full">
             <canvas id="chart"></canvas>
         </div>
     </div>
@@ -35,12 +35,12 @@
                     ],
                     borderWidth: 1,
                     data: <?php echo json_encode($data); ?>,
-                    position: 'bottom'
                 }]
             },
             options: {
                 plugins: {
                     legend: {
+                        position: 'right',
                         labels: {
                             // This more specific font property overrides the global property
                             font: {
