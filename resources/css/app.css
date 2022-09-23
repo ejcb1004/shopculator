@@ -103,3 +103,8 @@ select:focus {
 .sc-btn-action > * {
     @apply px-6 py-1;
 }
+
+[data-theme="mytheme"] .table td {
+    border: none;
+}
+
