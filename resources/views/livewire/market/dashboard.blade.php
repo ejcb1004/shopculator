@@ -33,7 +33,7 @@
             }
         }
         var chartdata1 = {
-            type: 'bar',
+            type: 'doughnut',
             data: {
                 labels: <?php echo json_encode($labels[0]); ?>,
                 datasets: [{
@@ -54,14 +54,6 @@
                 }]
             },
             options: {
-                scales: {
-                    y: {
-                        suggestedMin: 0,
-                        ticks: {
-                            stepSize: 1
-                        }
-                    }
-                },
                 plugins: {
                     legend: {
                         position: 'right',
@@ -79,7 +71,7 @@
         new Chart(ctx, chartdata1);
 
         var chartdata2 = {
-            type: 'bar',
+            type: 'doughnut',
             data: {
                 labels: <?php echo json_encode($labels[1]); ?>,
                 datasets: [{
@@ -100,14 +92,6 @@
                 }]
             },
             options: {
-                scales: {
-                    y: {
-                        suggestedMin: 0,
-                        ticks: {
-                            stepSize: 1
-                        }
-                    }
-                },
                 plugins: {
                     legend: {
                         position: 'right',
@@ -125,7 +109,7 @@
         new Chart(ctx, chartdata2);
 
         var chartdata3 = {
-            type: 'bar',
+            type: 'doughnut',
             data: {
                 labels: <?php echo json_encode($labels[2]); ?>,
                 datasets: [{
@@ -146,14 +130,6 @@
                 }]
             },
             options: {
-                scales: {
-                    y: {
-                        suggestedMin: 0,
-                        ticks: {
-                            stepSize: 1
-                        }
-                    }
-                },
                 plugins: {
                     legend: {
                         position: 'right',
