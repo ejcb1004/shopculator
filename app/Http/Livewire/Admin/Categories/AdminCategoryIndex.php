@@ -11,10 +11,13 @@ class AdminCategoryIndex extends Component
     public $searchterm = '';
     public $selectall = false;
     public $checkboxticked;
+
+    public $to_confirm_delete;
     
     public function mount()
     {
         $this->checkboxticked = [];
+        $this->to_confirm_delete = false;
     }
 
     public function updatedSelectAll($value)
@@ -32,5 +35,30 @@ class AdminCategoryIndex extends Component
             ->orderBy('updated_at', 'desc')
             ->paginate(10)
         ]);
+    }
+
+    public function confirm_delete()
+    {
+        $this->to_confirm_delete = true;
+    }
+
+    public function delete()
+    {
+        if (count($this->checkboxticked) == 1) {
+            Category::where('category_id', $this->checkboxticked[0])->update([
+                'is_deleted' => 1
+            ]);
+            session()->flash('flash.banner', 'Category successfully deleted!');
+            session()->flash('flash.bannerStyle', 'success');
+        } elseif (count($this->checkboxticked) > 1) {
+            foreach ($this->checkboxticked as $category_id) {
+                Category::where('category_id', $category_id)->update([
+                    'is_deleted' => 1
+                ]);
+            }
+            session()->flash('flash.banner', 'Categories successfully deleted!');
+            session()->flash('flash.bannerStyle', 'success');
+        }
+        return redirect('admin/categories');
     }
 }

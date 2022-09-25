@@ -1,4 +1,5 @@
 <div>
+    @if (!empty($labels) && !empty($data))
     <div class="max-w-7xl mx-auto px-3 pb-4 sm:px-6 lg:px-8">
         <div x-data="tabs" class="pt-8">
             <div class="grid grid-cols-3 cursor-pointer font-bold">
@@ -36,7 +37,7 @@
             data: {
                 labels: <?php echo json_encode($labels[0]); ?>,
                 datasets: [{
-                    label: 'Count',
+                    label: 'Total transactions',
                     backgroundColor: [
                         "#25CCF7", "#FD7272", "#54a0ff", "#00d2d3",
                         "#1abc9c", "#2ecc71", "#3498db", "#9b59b6", "#34495e",
@@ -82,7 +83,7 @@
             data: {
                 labels: <?php echo json_encode($labels[1]); ?>,
                 datasets: [{
-                    label: 'Count',
+                    label: 'Total transactions',
                     backgroundColor: [
                         "#25CCF7", "#FD7272", "#54a0ff", "#00d2d3",
                         "#1abc9c", "#2ecc71", "#3498db", "#9b59b6", "#34495e",
@@ -128,7 +129,7 @@
             data: {
                 labels: <?php echo json_encode($labels[2]); ?>,
                 datasets: [{
-                    label: 'Count',
+                    label: 'Total transactions',
                     backgroundColor: [
                         "#25CCF7", "#FD7272", "#54a0ff", "#00d2d3",
                         "#1abc9c", "#2ecc71", "#3498db", "#9b59b6", "#34495e",
@@ -169,4 +170,5 @@
         var ctx = document.getElementById('chart3').getContext('2d');
         new Chart(ctx, chartdata3);
     </script>
+    @endif
 </div>

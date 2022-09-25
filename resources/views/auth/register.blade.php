@@ -64,7 +64,7 @@
 
         <x-slot name="market">
             <x-jet-validation-errors class="mb-4" />
-            
+
             <form method="POST" action="{{ route('register') }}">
                 @csrf
                 <div>
@@ -126,7 +126,7 @@
             <form method="POST" action="{{ route('register') }}">
                 @csrf
                 <div>
-                    <x-jet-input hidden id="role_id" type="text" name="role_id" value="R3" required />
+                    <x-jet-input hidden id="role_id" type="text" name="role_id" value="R1" required />
                 </div>
 
                 <div>

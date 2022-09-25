@@ -62,11 +62,11 @@ Route::middleware([
 
     Route::get('admin/categories', AdminCategoryIndex::class)->name('admin/categories');
     Route::get('admin/categories/create', AdminCategoryCreate::class)->name('admin/categories/create');
-    Route::get('admin/categories/edit/{categories_id}', AdminCategoryEdit::class);
+    Route::get('admin/categories/edit/{category_id}', AdminCategoryEdit::class);
 
     Route::get('admin/subcategories', AdminSubcategoryIndex::class)->name('admin/subcategories');
     Route::get('admin/subcategories/create', AdminSubcategoryCreate::class)->name('admin/subcategories/create');
-    Route::get('admin/subcategories/edit/{user_id}', AdminSubcategoryEdit::class);
+    Route::get('admin/subcategories/edit/{subcategory_id}', AdminSubcategoryEdit::class);
 
     // Market
     Route::get('market', MarketIndex::class)->name('market');

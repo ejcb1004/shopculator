@@ -16,7 +16,7 @@ class AdminIndex extends Component
     {
         $this->shoppers = [
             'labels' => User::where('role_id', 'R3')
-                ->select(DB::raw("CONCAT(MONTHNAME(created_at), ' ', DAY(created_at), ', ', YEAR(created_at)) as date"))
+                ->select(DB::raw("DATE_FORMAT(created_at, '%M %d, %Y') as date"))
                 ->groupBy('date')
                 ->pluck('date')
                 ->toArray(),
@@ -28,7 +28,7 @@ class AdminIndex extends Component
         ];
         $this->markets = [
             'labels' => User::where('role_id', 'R2')
-                ->select(DB::raw("CONCAT(MONTHNAME(created_at), ' ', DAY(created_at), ', ', YEAR(created_at)) as date"))
+                ->select(DB::raw("DATE_FORMAT(created_at, '%M %d, %Y') as date"))
                 ->groupBy('date')
                 ->pluck('date')
                 ->toArray(),

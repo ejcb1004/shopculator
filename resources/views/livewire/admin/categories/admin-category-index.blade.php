@@ -1,4 +1,31 @@
 <div>
+    <form wire:submit.prevent="delete" enctype="multipart/form-data">
+        @csrf
+        <x-jet-confirmation-modal wire:model="to_confirm_delete">
+            <x-slot name="title">
+                Delete Category
+            </x-slot>
+
+            <x-slot name="content">
+                @if (count($checkboxticked) == 1)
+                Are you sure you want to delete this category?
+                @elseif (count($checkboxticked) > 1)
+                Are you sure you want to delete these categories?
+                @endif
+                This cannot be undone.
+            </x-slot>
+
+            <x-slot name="footer">
+                <button class="sc-btn-red-ghost ml-3" type="button" wire:click="$toggle('to_confirm_delete')" wire:loading.attr="disabled">
+                    <span>No</span>
+                </button>
+
+                <button class="sc-btn-danger ml-3" type="submit" wire:target="delete" wire:loading.attr="disabled">
+                    <span>Delete</span>
+                </button>
+            </x-slot>
+        </x-jet-confirmation-modal>
+    </form>
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <!-- Search and Add Button -->
         <div class="flex flex-row-reverse pt-5">
@@ -26,7 +53,7 @@
                                     <label>
                                         <input type="checkbox" class="checkbox checkbox-sm checkbox-accent" wire:model="selectall" />
                                     </label>
-                                </th>                                
+                                </th>
                                 <th>Category</th>
                                 <th>Updated at</th>
                             </tr>

@@ -213,7 +213,7 @@
                                 <span class="text-white">Compare</span>
                             </div>
                             <!-- Card Body -->
-                            <div class="card-body max-h-[385px]">
+                            <div class="card-body max-h-[500px]">
                                 <!-- Card Header -->
                                 <hr>
                                 <!-- Card Content -->
@@ -224,7 +224,7 @@
                                         <div class="flex space-x-5 items-center">
                                             <div class="flex space-x-2 items-center">
                                                 <span class="relative h-2/3 flex rounded-full px-1 bg-emerald-600 text-xs text-white items-center">{{ $list_detail['list_index'] + 1 }}</span>
-                                                <span><img src="{{ $list_detail['image_path'] }}" width="100" alt="Image" /></span>
+                                                <span><img src="{{ $list_detail['image_path'] }}" width="75" alt="Image" /></span>
                                             </div>
                                             <div class="flex w-full justify-between">
                                                 <div class="flex flex-col">
@@ -244,6 +244,7 @@
                                                         <i class="fa-solid fa-xmark text-emerald-500"></i>
                                                     </button>
                                                     <span>₱&nbsp;{{ number_format($list_detail['price'] * $list_detail['quantity'], 2, '.', ',') }}</span>
+                                                    <img src="{{ '../../storage/' . $this->logo_from_product($list_detail['product_id']) }}" width="25" />
                                                 </div>
                                             </div>
                                         </div>
@@ -256,15 +257,38 @@
                                 <!-- Card Total -->
                                 <div class="py-3">
                                     <div class="space-y-3">
-                                        <div class="flex justify-between">
-                                            <span class="text-black">Lowest Price:</span>
-                                            <span class="text-black" wire:model="complow"><i class="fa-solid fa-peso-sign"></i>&nbsp;{{ number_format($complow, 2, '.', ',') }}</span>
+                                        @if (!empty($complow))
+                                        <div class="flex justify-center w-full">
+                                            <span class="text-black text-bold">Cheapest Item</span>
                                         </div>
+                                        <div class="flex flex-row max-h-24 px-2 py-2">
+                                            <div class="flex space-x-5 items-center">
+                                                <div class="flex space-x-2 items-center">
+                                                    <span><img src="{{ $complow['image_path'] }}" width="50" alt="Image" /></span>
+                                                </div>
+                                                <div class="flex w-full justify-between">
+                                                    <div class="flex flex-col">
+                                                        <span>{{ $complow['product_name'] }}</span>
+                                                    </div>
+                                                    <div class="flex flex-col items-end">
+                                                        <span>₱&nbsp;{{ number_format($complow['price'] * $complow['quantity'], 2, '.', ',') }}</span>
+                                                        <img src="{{ '../../storage/' . $this->logo_from_product($complow['product_id']) }}" width="25" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        @endif
                                         <!-- Save Button -->
-                                        <div class="card-actions flex justify-center">
-                                            <button type="button" wire:click="getlow" class="sc-btn-primary">
+                                        <div class="card-actions flex justify-center space-x-2">
+                                            <button type="button" wire:click="getlow" class="sc-btn-ghost">
                                                 <span>Get lowest price</span>
                                             </button>
+                                            @if (!empty($complow))
+                                            <button type="button" wire:click="complow_add" class="sc-btn-primary">
+                                                <span class="px-6 py-1 hidden xl:inline"><i class="fa-solid fa-cart-plus"></i>&nbsp;Add</span>
+                                                <span class="px-6 py-1 xl:hidden"><i class="fa-solid fa-cart-plus"></i></span>
+                                            </button>
+                                            @endif
                                         </div>
                                     </div>
                                 </div>

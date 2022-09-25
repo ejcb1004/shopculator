@@ -36,4 +36,29 @@ class AdminSubcategoryIndex extends Component
             ->paginate(10)
         ]);
     }
+
+    public function confirm_delete()
+    {
+        $this->to_confirm_delete = true;
+    }
+
+    public function delete()
+    {
+        if (count($this->checkboxticked) == 1) {
+            Subcategory::where('subcategory_id', $this->checkboxticked[0])->update([
+                'is_deleted' => 1
+            ]);
+            session()->flash('flash.banner', 'Subcategory successfully deleted!');
+            session()->flash('flash.bannerStyle', 'success');
+        } elseif (count($this->checkboxticked) > 1) {
+            foreach ($this->checkboxticked as $subcategory_id) {
+                Subcategory::where('subcategory_id', $subcategory_id)->update([
+                    'is_deleted' => 1
+                ]);
+            }
+            session()->flash('flash.banner', 'Categories successfully deleted!');
+            session()->flash('flash.bannerStyle', 'success');
+        }
+        return redirect('admin/subcategories');
+    }
 }

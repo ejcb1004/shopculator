@@ -26,6 +26,55 @@
             </x-slot>
         </x-jet-confirmation-modal>
     </form>
+    <form wire:submit.prevent="store" enctype="multipart/form-data">
+        @csrf
+        <x-jet-confirmation-modal wire:model="to_confirm">
+            <x-slot name="title">
+                Save List
+            </x-slot>
+
+            <x-slot name="content">
+                Are you sure you want to save this list?
+            </x-slot>
+
+            <x-slot name="footer">
+                <button class="sc-btn-ghost" type="button" wire:click="$toggle('to_confirm')" wire:loading.attr="disabled">
+                    <span>No</span>
+                </button>
+
+                <button class="sc-btn-primary ml-3" type="submit" wire:target="store" wire:loading.attr="disabled">
+                    <span>Save</span>
+                </button>
+            </x-slot>
+        </x-jet-confirmation-modal>
+    </form>
+    <form wire:submit.prevent="delete" enctype="multipart/form-data">
+        @csrf
+        <x-jet-confirmation-modal wire:model="to_confirm_delete">
+            <x-slot name="title">
+                Delete List
+            </x-slot>
+
+            <x-slot name="content">
+                @if (count($checkboxticked) == 1)
+                Are you sure you want to delete this user?
+                @elseif (count($checkboxticked) > 1)
+                Are you sure you want to delete these users?
+                @endif
+                This cannot be undone.
+            </x-slot>
+
+            <x-slot name="footer">
+                <button class="sc-btn-red-ghost ml-3" type="button" wire:click="$toggle('to_confirm_delete')" wire:loading.attr="disabled">
+                    <span>No</span>
+                </button>
+
+                <button class="sc-btn-danger ml-3" type="submit" wire:target="delete" wire:loading.attr="disabled">
+                    <span>Delete</span>
+                </button>
+            </x-slot>
+        </x-jet-confirmation-modal>
+    </form>
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <!-- Search and Add Button -->
         <div class="flex flex-row-reverse pt-5">
@@ -59,6 +108,7 @@
                                 <th>Role</th>
                                 <th>Email</th>
                                 <th>Created at</th>
+                                <th></th>
                             </tr>
                         </thead>
 
@@ -84,6 +134,13 @@
                                     $dt->setTimezone(new DateTimeZone('Asia/Manila'));
                                     echo $dt->format('h:i:s a, M d, Y');
                                     @endphp
+                                </td>
+                                <td>
+                                    @if ($user->role_id == 'R2' && !App\Models\Market::where('email', $user->email)->exists())
+                                    <button class="sc-btn-ghost">
+                                        <a href="{{ route('admin/markets/create') }}">Verify</a>
+                                    </button>
+                                    @endif
                                 </td>
                             </tr>
                             @empty

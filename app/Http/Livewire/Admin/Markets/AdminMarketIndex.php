@@ -12,10 +12,13 @@ class AdminMarketIndex extends Component
     public $searchterm = '';
     public $selectall = false;
     public $checkboxticked;
+
+    public $to_confirm_delete;
     
     public function mount()
     {
         $this->checkboxticked = [];
+        $this->to_confirm_delete = false;
     }
 
     public function updatedSelectAll($value)
@@ -35,5 +38,30 @@ class AdminMarketIndex extends Component
             ->orderBy('markets.updated_at', 'desc')
             ->paginate(10)
         ]);
+    }
+
+    public function confirm_delete()
+    {
+        $this->to_confirm_delete = true;
+    }
+
+    public function delete()
+    {
+        if (count($this->checkboxticked) == 1) {
+            Market::where('market_id', $this->checkboxticked[0])->update([
+                'is_deleted' => 1
+            ]);
+            session()->flash('flash.banner', 'Market successfully deleted!');
+            session()->flash('flash.bannerStyle', 'success');
+        } elseif (count($this->checkboxticked) > 1) {
+            foreach ($this->checkboxticked as $market_id) {
+                Market::where('market_id', $market_id)->update([
+                    'is_deleted' => 1
+                ]);
+            }
+            session()->flash('flash.banner', 'Markets successfully deleted!');
+            session()->flash('flash.bannerStyle', 'success');
+        }
+        return redirect('admin/markets');
     }
 }

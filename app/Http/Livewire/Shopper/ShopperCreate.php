@@ -18,7 +18,7 @@ class ShopperCreate extends Component
     use WithPagination;
 
     // int
-    public $budget, $total, $items, $compitems, $complow;
+    public $budget, $total, $items, $compitems;
 
     // string
     public $list_name;
@@ -36,6 +36,7 @@ class ShopperCreate extends Component
     public $productchecked = [];
     public $compare_details = [];
     public $compareprice = [];
+    public $complow = [];
 
     // collections
     public $markets;
@@ -76,7 +77,7 @@ class ShopperCreate extends Component
         $this->items = 0;
         $this->total = 0;
         $this->compitems = 0;
-        $this->complow = 0;
+        $this->complow = [];
         $this->product_added = false;
         $this->comp_added = false;
     }
@@ -223,6 +224,22 @@ class ShopperCreate extends Component
         $this->compitems++;
     }
 
+    public function populate_multi($quantity)
+    {
+        // Populate array with list details
+        $this->list_details[] = [
+            'is_checked'    => 0,
+            'list_index'    => empty($this->list_details) ? 0 : array_key_last($this->list_details) + 1,
+            'product_id'    => $this->new_detail['product_id'],
+            'image_path'    => $this->new_detail['image_path'],
+            'quantity'      => $quantity,
+            'is_deleted'    => 0,
+            'product_name'  => $this->new_detail['product_name'],
+            'price'         => $this->new_detail['price'],
+        ];
+        $this->items++;
+    }
+
     public function product_add($id)
     {
         $this->product_added = false;
@@ -242,6 +259,28 @@ class ShopperCreate extends Component
             $this->populate();
         }
 
+        $this->product_added = true;
+    }
+
+    public function complow_add()
+    {
+        $this->product_added = false;
+        $this->comp_added = false;
+        
+        // Retrieve record based on id
+        $this->new_detail = Product::where('product_id', $this->complow['product_id'])->get()->first()->toArray();
+
+        // if product_id of $new_detail matches an existing record in $list_details array
+        $list_index = array_search($this->new_detail['product_id'], array_column($this->list_details, 'product_id'));
+        if (!empty($this->new_detail) && !empty($this->list_details)) {
+            if (in_array($this->new_detail['product_id'], $this->list_details[$list_index])) {
+                $this->list_details[$list_index]['quantity'] = $this->complow['quantity'];
+                $this->totalize();
+            } else $this->populate_multi($this->complow['quantity']);
+        } else {
+            $this->populate_multi($this->complow['quantity']);
+        }
+        $this->list_details[$list_index]['quantity'] = $this->complow['quantity'];
         $this->product_added = true;
     }
 
@@ -267,11 +306,20 @@ class ShopperCreate extends Component
         $this->comp_added = true;
     }
 
+    public function logo_from_product($product_id)
+    {
+        $this->image = DB::table('users')
+            ->join('markets', 'users.email', '=', 'markets.email')
+            ->join('products', 'markets.market_id', '=', 'products.market_id')
+            ->where('products.product_id', $product_id)
+            ->pluck('users.profile_photo_path');
+        return $this->image[0];
+    }
+
     public function totalizecompare()
     {
         $this->product_added = false;
         $this->comp_added = false;
-        $this->complow = 0;
     }
 
     public function totalize()
@@ -288,11 +336,13 @@ class ShopperCreate extends Component
 
     public function getlow()
     {
-        foreach ($this->compare_details as $item)
-            array_push($this->compareprice, $item['price']);
-        $this->complow = min($this->compareprice);
+        if(!empty($this->compare_details)) {
+            $this->compareprice = [];
+            foreach ($this->compare_details as $item)
+                array_push($this->compareprice, $item['price'] * $item['quantity']);
+            $this->complow = $this->compare_details[array_keys($this->compareprice, min($this->compareprice))[0]];
+        }   
     }
-
 
     public function comparequantity_sub($comparelist_index)
     {

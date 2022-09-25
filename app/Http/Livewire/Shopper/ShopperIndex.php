@@ -87,6 +87,8 @@ class ShopperIndex extends Component
             ListDetail::where('list_id', $this->checkboxticked[0])->update([
                 'is_deleted' => 1
             ]);
+            session()->flash('flash.banner', 'List successfully deleted!');
+            session()->flash('flash.bannerStyle', 'success');
         } elseif (count($this->checkboxticked) > 1) {
             foreach ($this->checkboxticked as $list_id) {
                 ShoppingList::where('list_id', $list_id)->update([
@@ -96,10 +98,9 @@ class ShopperIndex extends Component
                     'is_deleted' => 1
                 ]);
             }
+            session()->flash('flash.banner', 'Lists successfully deleted!');
+            session()->flash('flash.bannerStyle', 'success');
         }
-
-        session()->flash('flash.banner', 'List successfully deleted!');
-        session()->flash('flash.bannerStyle', 'success');
         return redirect('shopper');
     }
 }
