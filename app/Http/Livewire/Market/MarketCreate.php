@@ -84,7 +84,7 @@ class MarketCreate extends Component
             'price' => $this->price,
             'image_path' => $this->image_path
         ]);
-        $product->product_id = "M" . str_pad($product->id, 8, "0", STR_PAD_LEFT);
+        $product->product_id = "P" . str_pad($product->id, 8, "0", STR_PAD_LEFT);
         $product->save();
 
         $this->reset(
