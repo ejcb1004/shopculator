@@ -23,6 +23,7 @@ class MarketCreate extends Component
     public $subcategory_id;
     public $price;
     
+    // boolean
     public $to_confirm;
 
     protected $rules = [
