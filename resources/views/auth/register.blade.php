@@ -1,7 +1,12 @@
 <x-guest-layout>
     <x-jet-authentication-card>
         <x-slot name="logo">
-            <x-jet-authentication-card-logo />
+            <div class="flex flex-row items-center">
+                <x-jet-authentication-card-logo />
+                <a href="/">
+                    <img src="img/shopculator-title.svg" alt="Shopculator" width="275" />
+                </a>
+            </div>
         </x-slot>
 
         <x-slot name="shopper">

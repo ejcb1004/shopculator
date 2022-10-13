@@ -8,6 +8,17 @@
                     <a href="/">
                         <x-jet-application-mark class="block h-9 w-auto" />
                     </a>
+                    @if (Route::has('login'))
+                    @auth
+                    <a href="/">
+                        <img src="../../img/shopculator-title.svg" alt="Shopculator" width="175" />
+                    </a>
+                    @else
+                    <a href="/">
+                        <img src="img/shopculator-title.svg" alt="Shopculator" width="175" />
+                    </a>
+                    @endauth
+                    @endif
                 </div>
 
                 @if (Route::has('login'))

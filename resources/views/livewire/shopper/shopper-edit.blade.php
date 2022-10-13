@@ -82,7 +82,7 @@
                 <div class="mt-1 fixed flex flex-col w-[70px] justify-center space-y-2">
                     <!-- Cart Dropdown -->
                     <div class="dropdown dropdown-left">
-                        <label tabindex="0" class="btn btn-ghost btn-circle btn-lg">
+                        <label tabindex="0" class="btn btn-ghost btn-circle btn-lg text-emerald-600">
                             <div class="indicator relative left-5 bottom-2">
                                 <i class="fa-solid fa-magnifying-glass"></i>
                             </div>
@@ -100,18 +100,18 @@
                         </div>
                     </div>
                     <div class="dropdown dropdown-left">
-                        <label tabindex="1" class="btn btn-ghost btn-circle btn-lg">
+                        <label tabindex="1" class="btn btn-ghost btn-circle btn-lg text-emerald-600">
                             <div class="indicator relative left-3 bottom-1">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="#94a3b8">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="#059669">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
                                 </svg>
-                                <span class="badge badge-sm bg-emerald-400 border-none text-white indicator-item">{{ $items }}</span>
+                                <span class="badge badge-sm bg-emerald-500 border-none text-white indicator-item">{{ $items }}</span>
                             </div>
                             <span class="relative top-5 right-4 text-xs normal-case leading-none">Cart</span>
                         </label>
                         <div tabindex="1" class="card card-compact dropdown-content w-96 bg-white shadow ml-3">
                             <!-- Card Header -->
-                            <div class="font-bold text-lg bg-emerald-700 px-3 py-3 flex justify-between">
+                            <div class="font-bold text-lg bg-emerald-600 px-3 py-3 flex justify-between">
                                 <input type="text" name="list_name" id="list_name" placeholder="Shopping List Name" class="input input-sm bg-white w-full max-w-xs" wire:model.lazy="list_name" />
                                 <span class="pr-2"></span>
                             </div>
@@ -198,18 +198,18 @@
 
                     <!-- Compare Dropdown -->
                     <div class="dropdown dropdown-left">
-                        <label tabindex="2" class="btn btn-ghost btn-circle btn-lg">
+                        <label tabindex="2" class="btn btn-ghost btn-circle btn-lg text-emerald-600">
                             <div class="indicator top-3 relative bottom-1">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 640 512" fill="#94a3b8">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 640 512" fill="#059669">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M554.9 154.5c-17.62-35.25-68.12-35.38-85.87 0c-87 174.3-84.1 165.9-84.1 181.5c0 44.13 57.25 80 128 80s127.1-35.88 127.1-80C639.1 319.9 641.4 327.3 554.9 154.5zM439.1 320l71.96-144l72.17 144H439.1zM256 336c0-16.12 1.375-8.75-85.12-181.5c-17.62-35.25-68.12-35.38-85.87 0c-87 174.3-84.1 165.9-84.1 181.5c0 44.13 57.25 80 127.1 80S256 380.1 256 336zM127.9 176L200.1 320H55.96L127.9 176zM495.1 448h-143.1V153.3C375.5 143 393.1 121.8 398.4 96h113.6c17.67 0 31.1-14.33 31.1-32s-14.33-32-31.1-32h-128.4c-14.62-19.38-37.5-32-63.62-32S270.1 12.62 256.4 32H128C110.3 32 96 46.33 96 64S110.3 96 127.1 96h113.6c5.25 25.75 22.87 47 46.37 57.25V448H144c-26.51 0-48.01 21.49-48.01 48c0 8.836 7.165 16 16 16h416c8.836 0 16-7.164 16-16C544 469.5 522.5 448 495.1 448z" />
                                 </svg>
-                                <span class="badge badge-sm bg-emerald-400 border-none text-white indicator-item">{{ $compitems }}</span>
+                                <span class="badge badge-sm bg-emerald-500 border-none text-white indicator-item">{{ $compitems }}</span>
                             </div>
                             <span class="relative top-1 text-xs normal-case leading-none">Compare</span>
                         </label>
                         <div tabindex="2" class="card card-compact dropdown-content w-96 bg-white shadow ml-3">
                             <!-- Card Header -->
-                            <div class="font-bold text-lg bg-emerald-700 px-3 py-3 flex justify-between">
+                            <div class="font-bold text-lg bg-emerald-600 px-3 py-3 flex justify-between">
                                 <span class="text-white">Compare</span>
                             </div>
                             <!-- Card Body -->
@@ -355,7 +355,7 @@
                                 <div class="flex flex-row space-x-2">
                                     <div class="flex items-center justify-center">
                                         <div class="inline-flex" role="group">
-                                            <button type="button" class="flex items-center bg-emerald-600 text-white border-none rounded-full rounded-r hover:bg-emerald-700 transition duration-300" wire:click="product_add({{ $product->id }})">
+                                            <button type="button" class="flex items-center bg-emerald-600 text-white border-none rounded-full rounded-r hover:bg-emerald-600 transition duration-300" wire:click="product_add({{ $product->id }})">
                                                 @if (is_null($this->get_product_id($product->product_id)))
                                                 <span class="px-6 py-1 hidden xl:inline"><i class="fa-solid fa-cart-plus"></i>&nbsp;Add</span>
                                                 <span class="px-6 py-1 xl:hidden"><i class="fa-solid fa-cart-plus"></i></span>
