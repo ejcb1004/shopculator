@@ -12,7 +12,7 @@ class Dashboard extends Component
     public $market;
     public $labels;
     public $data;
-    public $limit;
+    public $titles;
 
     public function mount()
     {
@@ -70,18 +70,28 @@ class Dashboard extends Component
                     ->pluck(DB::raw('count(*) as total'))
                     ->toArray()
             ];
+            
+            $this->titles = [
+                'Most trending',
+                'Most trending (Top 10)',
+                'Least trending'
+            ];
+
         } catch (QueryException $qe) {
             $this->labels = null;
             $this->data = null;
+            $this->titles = null;
         }
     }
 
     public function render()
     {
         if (Auth::user()->role_id != 'R2') abort(403);
-        else return view('livewire.market.dashboard', [
+        // dd($this->labels, $this->data, $this->titles);
+        return view('livewire.market.dashboard', [
             'labels' => $this->labels,
-            'data' => $this->data
+            'data' => $this->data,
+            'titles' => $this->titles
         ]);
     }
 }
