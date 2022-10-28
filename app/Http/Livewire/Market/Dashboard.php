@@ -10,8 +10,9 @@ use Livewire\Component;
 class Dashboard extends Component
 {
     public $market;
-    public $labels;
-    public $data;
+    public $products;
+    public $counts;
+    public $contents;
     public $titles;
 
     public function mount()
@@ -21,7 +22,7 @@ class Dashboard extends Component
             ->where('users.email', Auth::user()->email)
             ->pluck('markets.market_id');
         try {
-            $this->labels = [
+            $this->products = [
                 DB::table('list_details')
                     ->join('products', 'list_details.product_id', '=', 'products.product_id')
                     ->where('products.market_id', $this->market)
@@ -46,7 +47,7 @@ class Dashboard extends Component
                     ->toArray()
             ];
     
-            $this->data = [
+            $this->counts = [
                 DB::table('list_details')
                     ->join('products', 'list_details.product_id', '=', 'products.product_id')
                     ->where('products.market_id', $this->market)
@@ -70,16 +71,24 @@ class Dashboard extends Component
                     ->pluck(DB::raw('count(*) as total'))
                     ->toArray()
             ];
-            
+
             $this->titles = [
                 'Most trending',
                 'Most trending (Top 10)',
                 'Least trending'
             ];
 
+            for ($i = 0; $i < count($this->titles); $i++) {
+                for ($j = 0; $j < count($this->products[$i]); $j++) {
+                    $this->contents[$i][$j] = [
+                        'product' => $this->products[$i][$j],
+                        'count' => $this->counts[$i][$j]
+                    ];
+                }
+            }
+            
         } catch (QueryException $qe) {
-            $this->labels = null;
-            $this->data = null;
+            $this->contents = null;
             $this->titles = null;
         }
     }
@@ -87,10 +96,9 @@ class Dashboard extends Component
     public function render()
     {
         if (Auth::user()->role_id != 'R2') abort(403);
-        // dd($this->labels, $this->data, $this->titles);
+        // dd($this->contents, $this->titles);
         return view('livewire.market.dashboard', [
-            'labels' => $this->labels,
-            'data' => $this->data,
+            'contents' => $this->contents,
             'titles' => $this->titles
         ]);
     }

@@ -8,10 +8,10 @@
                 </div>
                 @endfor
             </div>
-            <div class="min-w-full sm:max-w-md px-6 py-4 bg-white shadow-md h-[700px] sm:rounded-b-lg overflow-scroll">
+            <div class="min-w-full sm:max-w-md px-6 py-4 bg-white shadow-md h-[500px] sm:rounded-b-lg overflow-scroll">
                 @for ($i = 0; $i < count($titles); $i++)
                 <div x-show="isActive({{ $i + 1 }})" x-transition:enter.duration.500ms>
-                    <div class="overflow-scroll rounded-lg">
+                    <div class="pt-8 rounded-lg">
                         <div data-theme="mytheme">
                             <table class="table w-full">
                                 <!-- head -->
@@ -22,10 +22,12 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    @foreach ($contents[$i] as $content)
                                     <tr class="hover table-group">
-                                        <td class="table-item">Product</td>
-                                        <td class="table-item">Count</td>
+                                        <td class="table-item">{{ $content['product'] }}</td>
+                                        <td class="table-item">{{ $content['count'] }}</td>
                                     </tr>
+                                    @endforeach
                                 </tbody>
                             </table>
                         </div>
