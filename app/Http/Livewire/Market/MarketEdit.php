@@ -28,23 +28,28 @@ class MarketEdit extends Component
     public $product_name;
     public $subcategory_id;
     public $price;
+    public $existing_product;
+    public $existing_image;
 
     // rules
     protected $rules = [
+        'subcategory_id' => [
+            'required',
+            'string',
+            'max:255'
+        ],
         'product_name' => [
             'required',
-            'unique:products,product_name',
+            'string',
             'min:3',
-            'max:50'
-        ],
-        'subcategory_id' => [
-            'required'
+            'max:255'
         ],
         'price' => [
             'required',
             'min:0'
         ],
         'image_path' => [
+            'string',
             'required'
         ]
     ];
@@ -76,6 +81,22 @@ class MarketEdit extends Component
     public function confirm_delete_fn()
     {
         $this->confirm_delete = true;
+    }
+
+    public function updatedProductName()
+    {
+        $this->existing_product = Product::where('product_name', $this->product_name)
+        ->where('product_id', '!=', $this->product_id)
+        ->pluck('product_name')
+        ->first();
+    }
+
+    public function updatedImagePath()
+    {
+        $this->existing_image = Product::where('image_path', $this->image_path)
+        ->where('product_id', '!=', $this->product_id)
+        ->pluck('image_path')
+        ->first();
     }
 
     public function store()

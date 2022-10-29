@@ -22,6 +22,8 @@ class MarketCreate extends Component
     public $product_name;
     public $subcategory_id;
     public $price;
+    public $existing_product;
+    public $existing_image;
     
     // boolean
     public $to_confirm;
@@ -29,14 +31,13 @@ class MarketCreate extends Component
     protected $rules = [
         'subcategory_id' => [
             'required',
-            'unique:subcategories,subcategory_id',
             'string',
             'max:255'
         ],
         'product_name' => [
             'required',
-            'unique:products,product_name',
             'string',
+            'min:3',
             'max:255'
         ],
         'price' => [
@@ -44,14 +45,8 @@ class MarketCreate extends Component
             'min:0'
         ],
         'image_path' => [
-            'string'
-        ],
-        'email' => [
-            'required',
             'string',
-            'email',
-            'max:255',
-            'unique:users'
+            'required'
         ]
     ];
 
@@ -74,9 +69,20 @@ class MarketCreate extends Component
         else return view('livewire.market.market-create');
     }
 
+    public function updatedProductName()
+    {
+        $this->existing_product = Product::where('product_name', $this->product_name)->pluck('product_name')->first();
+    }
+
+    public function updatedImagePath()
+    {
+        $this->existing_image = Product::where('image_path', $this->image_path)->pluck('image_path')->first();
+    }
+
     public function store()
     {
         $this->to_confirm = false;
+        $this->validate();
         $product = Product::create([
             'product_id' => '',
             'market_id' => $this->market_id,

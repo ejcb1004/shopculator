@@ -44,7 +44,7 @@
         <div class="flex flex-row w-full h-16 items-center justify-center">
             <span class="tracking-wide text-gray-700 text-2xl font-bold">New Product</span>
         </div>
-        <div class="flex flex-row w-full h-[450px]">
+        <div class="flex flex-row w-full min-h-[450px]">
             <div class="flex w-2/5 h-full p-4 justify-center items-center">
                 <img src="{{ $image_path }}" alt="Product Image">
             </div>
@@ -56,6 +56,9 @@
                                 Product Name
                             </label>
                             <input wire:model="product_name" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" type="text" placeholder="Product Name">
+                            @if(!empty($existing_product))
+                            <span class="error text-red-600">This product already exists.</span>
+                            @endif
                         </div>
                     </div>
                     <div class="mb-4">
@@ -91,12 +94,24 @@
                                 Image URL
                             </label>
                             <input wire:model="image_path" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" type="text" placeholder="https://" wire:model="image_path">
+                            @if(!empty($existing_image))
+                            <span class="error text-red-600">This image is already being used.</span>
+                            @endif
                         </div>
                     </div>
                     <div class="flex justify-end space-x-3 pt-3">
+                        <button class="sc-btn-ghost">
+                            <a href="{{ route('market') }}">Back</a>
+                        </button>
+                        @if (empty($product_name) || empty($price) || !empty($existing_product) || !empty($existing_image))
+                        <button class="sc-btn-disabled" type="button" wire:click="confirm" disabled>
+                            <span>Save</span>
+                        </button>
+                        @else
                         <button class="sc-btn-primary" type="button" wire:click="confirm">
                             <span>Save</span>
                         </button>
+                        @endif
                     </div>
                 </form>
             </div>
