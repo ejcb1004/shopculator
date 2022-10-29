@@ -52,7 +52,7 @@ select:focus {
 }
 
 .sc-btn-disabled {
-    @apply flex items-center bg-gray-300 text-gray-600 border-none rounded-full transition duration-300;
+    @apply flex items-center bg-gray-300 text-gray-600 border-none rounded-full;
 }
 
 .sc-btn-archive {
