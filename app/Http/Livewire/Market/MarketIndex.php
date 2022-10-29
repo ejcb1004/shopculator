@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\Market;
 
 use App\Exports\ProductsExport;
+use App\Exports\ProductsTemplateExport;
 use App\Imports\ProductsImport;
 use App\Models\Category;
 use App\Models\Product;
@@ -91,6 +92,11 @@ class MarketIndex extends Component
     public function export($market_id)
     {
         return Excel::download(new ProductsExport($market_id), 'products.csv');
+    }
+
+    public function template($market_id)
+    {
+        return Excel::download(new ProductsTemplateExport($market_id), 'products_template.csv');
     }
 
     public function import(Request $request)
