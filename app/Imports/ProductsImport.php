@@ -6,10 +6,11 @@ use App\Models\Product;
 use Maatwebsite\Excel\Concerns\Importable;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithBatchInserts;
+use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithUpsertColumns;
 use Maatwebsite\Excel\Concerns\WithUpserts;
 
-class ProductsImport implements ToModel, WithBatchInserts, WithUpserts, WithUpsertColumns
+class ProductsImport implements ToModel, WithBatchInserts, WithUpserts, WithUpsertColumns, WithHeadingRow
 {
     use Importable;
     /**
@@ -20,13 +21,13 @@ class ProductsImport implements ToModel, WithBatchInserts, WithUpserts, WithUpse
     public function model(array $row)
     {
         return new Product([
-            'product_id' => $row[1],
-            'market_id' => $row[2],
-            'subcategory_id' => $row[3],
-            'product_name' => $row[4],
-            'price' => $row[5],
-            'image_path' => $row[6],
-            'is_deleted' => $row[7]
+            'product_id' => $row['product_id'],
+            'market_id' => $row['market_id'],
+            'subcategory_id' => $row['subcategory_id'],
+            'product_name' => $row['product_name'],
+            'price' => $row['price'],
+            'image_path' => $row['image_path'],
+            'is_deleted' => $row['is_deleted']
         ]);
     }
 
@@ -42,6 +43,6 @@ class ProductsImport implements ToModel, WithBatchInserts, WithUpserts, WithUpse
 
     public function upsertColumns()
     {
-        return ['product_name', 'price', 'image_path', 'is_deleted'];
+        return ['product_name', 'subcategory_id', 'price', 'image_path', 'is_deleted'];
     }
 }
