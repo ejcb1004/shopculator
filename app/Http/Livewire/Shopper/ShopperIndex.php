@@ -38,7 +38,7 @@ class ShopperIndex extends Component
         if (Auth::user()->role_id != 'R3') abort(403);
         else return view('livewire.shopper.shopper-index', [
             'lists' => ShoppingList::where('list_name', 'like', '%' . $this->searchterm . '%')
-                ->where('is_deleted', 0)
+                ->where('status', 1)
                 ->where('email', Auth::user()->email)
                 ->orderBy('updated_at', 'desc')
                 ->paginate(10)
@@ -82,7 +82,7 @@ class ShopperIndex extends Component
     {
         if (count($this->checkboxticked) == 1) {
             ShoppingList::where('list_id', $this->checkboxticked[0])->update([
-                'is_deleted' => 1
+                'status' => 0
             ]);
             ListDetail::where('list_id', $this->checkboxticked[0])->update([
                 'is_deleted' => 1
@@ -92,7 +92,7 @@ class ShopperIndex extends Component
         } elseif (count($this->checkboxticked) > 1) {
             foreach ($this->checkboxticked as $list_id) {
                 ShoppingList::where('list_id', $list_id)->update([
-                    'is_deleted' => 1
+                    'status' => 0
                 ]);
                 ListDetail::where('list_id', $list_id)->update([
                     'is_deleted' => 1
