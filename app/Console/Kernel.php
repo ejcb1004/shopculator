@@ -18,33 +18,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->call(function () {
-            $response = Http::get('http://localhost/sample-ecommerce/ajax/products.ajax.php')->json()['data'];
-            for ($i = 0; $i < count($response); $i++) {
-                if (Product::select('product_id')->where('product_id', $response[$i]['product_id'])->exists()) {
-                    $recent = Product::where('product_id', $response[$i]['product_id'])->orderBy('created_at', 'DESC')->get()->first()->toArray();
-                    if ($recent['price'] != $response[$i]['price']) {
-                        Product::create([
-                            'product_id'    => $response[$i]['product_id'],
-                            'market_id'     => $response[$i]['market_id'],
-                            'category_id'   => $response[$i]['category_id'],
-                            'product_name'  => $response[$i]['product_name'],
-                            'price'         => $response[$i]['price'],
-                            'image_path'    => $response[$i]['image_path']
-                        ]);
-                    } 
-                } else {
-                    Product::create([
-                        'product_id'    => $response[$i]['product_id'],
-                        'market_id'     => $response[$i]['market_id'],
-                        'category_id'   => $response[$i]['category_id'],
-                        'product_name'  => $response[$i]['product_name'],
-                        'price'         => $response[$i]['price'],
-                        'image_path'    => $response[$i]['image_path']
-                    ]);
-                }
-            }
-        })->everyMinute();
+        
     }
 
     /**
