@@ -59,7 +59,7 @@
                             </div>
                             <span class="relative top-4 right-2 text-xs normal-case leading-none">Import</span>
                         </label>
-                        <div tabindex="1" class="card card-compact dropdown-content w-96 bg-white shadow-md ml-3 rounded-full">
+                        <div tabindex="1" class="card card-compact dropdown-content w-[575px] bg-white shadow-md ml-3 rounded-full">
                             <!-- Card Body -->
                             <div class="card-body">
                                 <!-- Card Content -->
@@ -68,9 +68,20 @@
                                     <div class="flex items-center w-2/3">
                                         <input type="file" name="file" id="file" wire:model="file" />
                                     </div>
-                                    <button type="submit" class="sc-btn-primary w-1/2 justify-center">
+                                    @if (!empty($file))
+                                    <button type="submit" class="flex items-center bg-emerald-600 text-white border-none rounded-full rounded-r hover:bg-emerald-700 transition duration-300 w-1/2 justify-center">
                                         <span class="hidden md:inline px-6 py-1"><i class="fa-solid fa-file-import"></i>&nbsp;Import</span>
-                                        <span class="px-6 py-1 md:hidden"><i class="fa-solid fa-file-import"></i></i></span>
+                                        <span class="px-6 py-1 md:hidden"><i class="fa-solid fa-file-import"></i></span>
+                                    </button>
+                                    @else
+                                    <button type="button" class="flex items-center bg-gray-300 text-gray-600 border-none rounded-full rounded-r w-1/2 justify-center" disabled>
+                                        <span class="hidden md:inline px-6 py-1"><i class="fa-solid fa-file-import"></i>&nbsp;Import</span>
+                                        <span class="px-6 py-1 md:hidden"><i class="fa-solid fa-file-import"></i></span>
+                                    </button>
+                                    @endif
+                                    <button type="button" class="flex items-center border-y-2 border-r-2 border-l border-emerald-600 rounded-full rounded-l text-emerald-600 hover:bg-emerald-100 hover:opacity-75 transition duration-300 w-1/2 justify-center">
+                                        <a href="{{ url('market/template/'. $market) }}" class="hidden md:inline px-6 py-1"><i class="fa-solid fa-download"></i>&nbsp;Template</a>
+                                        <a class="px-6 py-1 md:hidden"><i class="fa-solid fa-download"></i></a>
                                     </button>
                                 </form>
                             </div>
