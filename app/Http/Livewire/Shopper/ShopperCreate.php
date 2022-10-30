@@ -306,20 +306,27 @@ class ShopperCreate extends Component
         $this->comp_added = true;
     }
 
-    public function add_compprod($product_id)
+    public function add_compprod($list_index)
     {
-
         $this->product_added = false;
         $this->comp_added = false;
 
         // Retrieve record based on id
-        $this->new_detail = Product::where('product_id', $product_id)->get()->toArray();
-        dd($this->new_detail);
+        $this->new_detail = Product::where('product_id', $this->compare_details[$list_index]['product_id'])->get()->toArray()[0];
+
         // if product_id of $new_detail matches an existing record in $list_details array
-        
+        $list_index = array_search($this->new_detail['product_id'], array_column($this->list_details, 'product_id'));
+        if (!empty($this->new_detail) && !empty($this->list_details)) {
+            if (in_array($this->new_detail['product_id'], $this->list_details[$list_index])) {
+                $this->list_details[$list_index]['quantity'] = $this->compare_details[$list_index]['quantity'];
+                $this->totalize();
+            } else $this->populate_multi($this->compare_details[$list_index]['quantity']);
+        } else {
+            $this->populate_multi($this->compare_details[$list_index]['quantity']);
+        }
+        $this->list_details[$list_index]['quantity'] = $this->compare_details[$list_index]['quantity'];
+        $this->product_added = true;   
     }
-
-
 
     public function logo_from_product($product_id)
     {
