@@ -176,14 +176,14 @@ class ShopperCreate extends Component
 
     public function get_product_id($product_id)
     {
-        if (in_array($product_id, array_column($this->list_details, 'product_id'))) 
-        return $product_id;
+        if (in_array($product_id, array_column($this->list_details, 'product_id')))
+            return $product_id;
     }
 
     public function get_product_comp_id($product_id)
     {
-        if (in_array($product_id, array_column($this->compare_details, 'product_id'))) 
-        return $product_id;
+        if (in_array($product_id, array_column($this->compare_details, 'product_id')))
+            return $product_id;
     }
 
     public function get_product_name($product_id)
@@ -244,7 +244,7 @@ class ShopperCreate extends Component
     {
         $this->product_added = false;
         $this->comp_added = false;
-        
+
         // Retrieve record based on id
         $this->new_detail = Product::where('id', $id)->get()->toArray()[0];
 
@@ -266,7 +266,7 @@ class ShopperCreate extends Component
     {
         $this->product_added = false;
         $this->comp_added = false;
-        
+
         // Retrieve record based on id
         $this->new_detail = Product::where('product_id', $this->complow['product_id'])->get()->first()->toArray();
 
@@ -288,7 +288,7 @@ class ShopperCreate extends Component
     {
         $this->product_added = false;
         $this->comp_added = false;
-        
+
         // Retrieve record based on id
         $this->newcompare_detail = Product::where('id', $id)->get()->toArray()[0];
 
@@ -305,6 +305,21 @@ class ShopperCreate extends Component
 
         $this->comp_added = true;
     }
+
+    public function add_compprod($product_id)
+    {
+
+        $this->product_added = false;
+        $this->comp_added = false;
+
+        // Retrieve record based on id
+        $this->new_detail = Product::where('product_id', $product_id)->get()->toArray();
+        dd($this->new_detail);
+        // if product_id of $new_detail matches an existing record in $list_details array
+        
+    }
+
+
 
     public function logo_from_product($product_id)
     {
@@ -336,12 +351,12 @@ class ShopperCreate extends Component
 
     public function getlow()
     {
-        if(!empty($this->compare_details)) {
+        if (!empty($this->compare_details)) {
             $this->compareprice = [];
             foreach ($this->compare_details as $item)
                 array_push($this->compareprice, $item['price'] * $item['quantity']);
             $this->complow = $this->compare_details[array_keys($this->compareprice, min($this->compareprice))[0]];
-        }   
+        }
     }
 
     public function comparequantity_sub($comparelist_index)

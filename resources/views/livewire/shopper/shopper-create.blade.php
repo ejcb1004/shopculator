@@ -235,6 +235,13 @@
                                                         <button type="button" wire:click="comparequantity_add( {{ $list_detail['list_index'] }} )">
                                                             <i class="fa-solid fa-plus text-emerald-500"></i>
                                                         </button>
+
+                                                        <!-- add button in compare -->
+
+                                                        <button type="button" wire:click="add_compprod({{$list_detail['product_id']}})" class="sc-btn-primary">
+                                                            <span class="px-6 py-1 hidden xl:inline"><i class="fa-solid fa-cart-plus"></i>&nbsp;Add</span>
+                                                            <span class="px-6 py-1 xl:hidden"><i class="fa-solid fa-cart-plus"></i></span>
+                                                        </button>
                                                     </div>
                                                 </div>
                                                 <div class="flex flex-col items-end">
