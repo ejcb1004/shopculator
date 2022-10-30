@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 
-class Dashboard extends Component
+class Analytics extends Component
 {
     public $market;
     public $products;
@@ -97,7 +97,7 @@ class Dashboard extends Component
     {
         if (Auth::user()->role_id != 'R2') abort(403);
         // dd($this->contents, $this->titles);
-        return view('livewire.market.dashboard', [
+        return view('livewire.market.analytics', [
             'contents' => $this->contents,
             'titles' => $this->titles
         ]);

@@ -39,7 +39,7 @@
                         <b>{{ __('Subcategories') }}</b>
                     </x-jet-nav-link>
                     <x-jet-nav-link href="{{ route('admin') }}" :active="request()->routeIs('admin')">
-                        <b>{{ __('Dashboard') }}</b>
+                        <b>{{ __('Analytics') }}</b>
                     </x-jet-nav-link>
                 </div>
                 @endif
@@ -49,8 +49,8 @@
                     <x-jet-nav-link href="{{ route('market') }}" :active="request()->routeIs('market')">
                         <b>{{ __('Products') }}</b>
                     </x-jet-nav-link>
-                    <x-jet-nav-link href="{{ route('market/dashboard') }}" :active="request()->routeIs('market/dashboard')">
-                        <b>{{ __('Dashboard') }}</b>
+                    <x-jet-nav-link href="{{ route('market/analytics') }}" :active="request()->routeIs('market/analytics')">
+                        <b>{{ __('Analytics') }}</b>
                     </x-jet-nav-link>
                 </div>
                 @endif

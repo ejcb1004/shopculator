@@ -71,12 +71,18 @@ class MarketCreate extends Component
 
     public function updatedProductName()
     {
-        $this->existing_product = Product::where('product_name', $this->product_name)->pluck('product_name')->first();
+        $this->existing_product = Product::where('product_name', $this->product_name)
+        ->where('is_deleted', 0)
+        ->pluck('product_name')
+        ->first();
     }
 
     public function updatedImagePath()
     {
-        $this->existing_image = Product::where('image_path', $this->image_path)->pluck('image_path')->first();
+        $this->existing_image = Product::where('image_path', $this->image_path)
+        ->where('is_deleted', 0)
+        ->pluck('image_path')
+        ->first();
     }
 
     public function store()

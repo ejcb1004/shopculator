@@ -1,5 +1,15 @@
 <div>
     <div class="max-w-7xl mx-auto px-3 pb-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-3 gap-x-4">
+            <div class="mx-auto w-full sm:max-w-md px-6 py-4 mt-8 bg-white shadow-md h-[500px] sm:rounded-xl">
+                test
+            </div>
+            <div class="col-span-2 mx-auto min-w-full sm:max-w-md px-6 py-4 mt-8 bg-white shadow-md h-[500px] sm:rounded-xl">
+                test
+            </div>
+        </div>
+    </div>
+    <div class="max-w-7xl mx-auto px-3 pb-4 sm:px-6 lg:px-8">
         <div x-data="tabs" class="pt-8">
             <div class="grid grid-cols-3 cursor-pointer font-bold">
                 @for ($i = 0; $i < count($titles); $i++)

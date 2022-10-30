@@ -14,7 +14,7 @@ use App\Http\Livewire\Admin\Subcategories\AdminSubcategoryIndex;
 use App\Http\Livewire\Admin\Users\AdminUserCreate;
 use App\Http\Livewire\Admin\Users\AdminUserEdit;
 use App\Http\Livewire\Admin\Users\AdminUserIndex;
-use App\Http\Livewire\Market\Dashboard;
+use App\Http\Livewire\Market\Analytics;
 use App\Http\Livewire\Market\MarketCreate;
 use App\Http\Livewire\Market\MarketEdit;
 use App\Http\Livewire\Market\MarketIndex;
@@ -72,7 +72,7 @@ Route::middleware([
     Route::get('market', MarketIndex::class)->name('market');
     Route::get('market/create', MarketCreate::class)->name('market/create');
     Route::get('market/edit/{product_id}', MarketEdit::class);
-    Route::get('market/dashboard', Dashboard::class)->name('market/dashboard');
+    Route::get('market/analytics', Analytics::class)->name('market/analytics');
     Route::get('market/export/{market_id}', [MarketIndex::class, 'export']);
     Route::get('market/template/{market_id}', [MarketIndex::class, 'template']);
     Route::post('market/import', [MarketIndex::class, 'import'])->name('market/import');

@@ -87,6 +87,7 @@ class MarketEdit extends Component
     {
         $this->existing_product = Product::where('product_name', $this->product_name)
         ->where('product_id', '!=', $this->product_id)
+        ->where('is_deleted', 0)
         ->pluck('product_name')
         ->first();
     }
@@ -95,6 +96,7 @@ class MarketEdit extends Component
     {
         $this->existing_image = Product::where('image_path', $this->image_path)
         ->where('product_id', '!=', $this->product_id)
+        ->where('is_deleted', 0)
         ->pluck('image_path')
         ->first();
     }

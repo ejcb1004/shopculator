@@ -12,7 +12,7 @@ class HomeController extends Controller
         $role = Auth::user()->role_id;
 
         if ($role == 'R3') return redirect('shopper/create');
-        if ($role == 'R2') return redirect('market/dashboard');
+        if ($role == 'R2') return redirect('market/analytics');
         if ($role == 'R1') return redirect('admin');
     }
 }
