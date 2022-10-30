@@ -1,4 +1,4 @@
-<svg version="1.1" width="50" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="1600px" height="1600px" viewBox="0 0 1600 1600" enable-background="new 0 0 1600 1600" xml:space="preserve">  <image id="image0" width="1600" height="1600" x="0" y="0"
+<svg version="1.1" width="50" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 1600 1600" enable-background="new 0 0 1600 1600" xml:space="preserve">  <image id="image0" x="0" y="0"
     href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABkAAAAZACAYAAAAhDI6nAAAABGdBTUEAALGPC/xhBQAAACBjSFJN
 AAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAABmJLR0QA/wD/AP+gvaeTAAAA
 CXBIWXMAAA7CAAAOwgEVKEqAAACAAElEQVR42uz9O892XZeeCY1xmdD+Ke2WaLdBBIiAACHcm7AF
