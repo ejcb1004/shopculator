@@ -320,7 +320,7 @@ class ShopperEdit extends Component
     {
         $this->product_added = false;
         $this->comp_added = false;
-        
+
         // Retrieve record based on id
         $this->new_detail = Product::where('product_id', $this->complow['product_id'])->get()->first()->toArray();
 
@@ -358,6 +358,43 @@ class ShopperEdit extends Component
         }
 
         $this->comp_added = true;
+    }
+
+    public function add_compprod($list_index)
+    {
+        $this->product_added = false;
+        $this->comp_added = false;
+
+        // Retrieve record based on id
+        $this->new_detail = Product::where('product_id', $this->compare_details[$list_index]['product_id'])->get()->toArray()[0];
+
+        if (in_array($this->new_detail['product_id'], array_column($this->db_details, 'product_id'))) {
+            $past_detail = ListDetail::where('product_id', $this->new_detail['product_id'])
+                ->where('list_id', $this->list_id)->get()->toArray()[0];
+            $past_detail['is_deleted'] = 0;
+            $past_detail['quantity'] = 1;
+            $past_detail['is_checked'] = 0;
+            $pieces = Product::select('product_name', 'price')->where('product_id', $this->new_detail['product_id'])->get()->toArray()[0];
+            $past_detail['product_name'] = $pieces['product_name'];
+            $past_detail['price'] = $pieces['price'];
+            array_push($this->list_details, $past_detail);
+            $this->items++;
+            $this->serialize_list();
+        } else {
+            // if product_id of $new_detail matches an existing record in $list_details array
+            $comprod_list_index = array_search($this->new_detail['product_id'], array_column($this->list_details, 'product_id'));
+            if (!empty($this->new_detail) && !empty($this->list_details)) {
+                if (in_array($this->new_detail['product_id'], $this->list_details[$comprod_list_index])) {
+                    $this->list_details[$comprod_list_index]['quantity'] = $this->compare_details[$list_index]['quantity'];
+                    $this->totalize();
+                } else $this->populate_multi($this->compare_details[$list_index]['quantity']);
+            } else {
+                $this->populate_multi($this->compare_details[$list_index]['quantity']);
+            }
+            $this->list_details[$list_index]['quantity'] = $this->compare_details[$list_index]['quantity'];
+        }
+
+        $this->product_added = true;
     }
 
     public function logo_from_product($product_id)
