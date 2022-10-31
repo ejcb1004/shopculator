@@ -18,7 +18,7 @@ class ShopperEdit extends Component
     use WithPagination;
 
     // int
-    public $budget, $total, $items, $compitems;
+    public $budget, $total, $status, $items, $compitems;
 
     // string
     public $list_name;
@@ -100,6 +100,8 @@ class ShopperEdit extends Component
         $this->complow = [];
         $this->product_added = false;
         $this->comp_added = false;
+        $this->to_confirm = false;
+        $this->to_confirm_complete = false;
     }
 
     public function render()
@@ -133,12 +135,12 @@ class ShopperEdit extends Component
 
     public function store()
     {
-        $this->to_confirm = false;
         if ($this->budget >= $this->total) {
             ShoppingList::where('list_id', $this->list_id)->update([
                 'list_name' => $this->list_name,
                 'budget'    => $this->budget,
-                'total'     => $this->total
+                'total'     => $this->total,
+                'status'    => $this->status
             ]);
 
             foreach ($this->list_details as $detail) {
@@ -492,8 +494,9 @@ class ShopperEdit extends Component
         $this->totalize();
     }
 
-    public function confirm()
+    public function confirm($status)
     {
+        $this->status = $status;
         $this->to_confirm = true;
     }
 

@@ -14,12 +14,15 @@ class ShopperIndex extends Component
 {
     use WithPagination;
 
+    // int
+    public $status;
+
     public $searchterm = '';
     public $selectall = false;
     public $checkboxticked;
-    public $current_check;
 
     // boolean
+    public $to_confirm;
     public $to_confirm_delete;
 
     // Livewire lifecycle hooks
@@ -27,11 +30,14 @@ class ShopperIndex extends Component
     {
         $this->checkboxticked = [];
         $this->to_confirm_delete = false;
+        $this->to_confirm = false;
     }
 
     public function updatedSelectAll($value)
     {
-        $value ? $this->checkboxticked = ShoppingList::where('email', Auth::user()->email)->pluck('list_id')->toArray() : $this->checkboxticked = [];
+        $value ? $this->checkboxticked = ShoppingList::where('email', Auth::user()->email)
+            ->where('status', 1)
+            ->pluck('list_id')->toArray() : $this->checkboxticked = [];
     }
 
     public function render()
@@ -47,26 +53,21 @@ class ShopperIndex extends Component
         ]);
     }
 
-    public function updatedCheckboxTicked($value)
-    {
-        switch (count($this->checkboxticked)) {
-            case 1:
-                if (!empty($value)) {
-                    $this->current_check = $value[0];
-                }
-                break;
-            default:
-        }
-    }
-
     public function list_is_completed()
     {
         switch (count($this->checkboxticked)) {
             case 1:
-                if (ShoppingList::where('list_id', $this->current_check)->pluck('status')->first() == 2) return true;
+                if (ShoppingList::where('list_id', $this->checkboxticked[0])->pluck('status')->first() == 2) return true;
                 break;
             default:
-                return false;
+                $completed = false;
+                foreach ($this->checkboxticked as $list_id) {
+                    if (ShoppingList::where('list_id', $list_id)->pluck('status')->first() == 2) {
+                        $completed = true;
+                        break;
+                    }
+                }
+                return $completed;
         }
     }
 
@@ -96,6 +97,34 @@ class ShopperIndex extends Component
     public function confirm_delete()
     {
         $this->to_confirm_delete = true;
+    }
+
+    public function confirm($status)
+    {
+        $this->status = $status;
+        $this->to_confirm = true;
+    }
+
+    public function mark_complete()
+    {
+        switch (count($this->checkboxticked)) {
+            case 1:
+                ShoppingList::where('list_id', $this->checkboxticked[0])->update([
+                    'status' => 2
+                ]);
+                session()->flash('flash.banner', 'List successfully marked complete!');
+                session()->flash('flash.bannerStyle', 'success');
+                break;
+            default:
+                foreach ($this->checkboxticked as $list_id) {
+                    ShoppingList::where('list_id', $list_id)->update([
+                        'status' => 2
+                    ]);
+                }
+                session()->flash('flash.banner', 'Lists successfully marked complete!');
+                session()->flash('flash.bannerStyle', 'success');
+        }
+        return redirect('shopper');
     }
 
     public function delete()

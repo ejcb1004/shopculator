@@ -55,6 +55,8 @@
     @endif
     <form wire:submit.prevent="store" enctype="multipart/form-data">
         @csrf
+        @switch ($status)
+        @case (1)
         <x-jet-confirmation-modal wire:model="to_confirm">
             <x-slot name="title">
                 Save List
@@ -65,15 +67,39 @@
             </x-slot>
 
             <x-slot name="footer">
-                <button class="sc-btn-ghost" type="button" wire:click="$toggle('to_confirm')" wire:loading.attr="disabled">
+                <button class="sc-btn-ghost ml-3" type="button" wire:click="$toggle('to_confirm')" wire:loading.attr="disabled">
                     <span>No</span>
                 </button>
-
                 <button class="sc-btn-primary ml-3" type="submit" wire:target="store" wire:loading.attr="disabled">
                     <span>Save</span>
                 </button>
             </x-slot>
         </x-jet-confirmation-modal>
+        @break
+        @case (2)
+        <x-jet-confirmation-modal wire:model="to_confirm">
+            <x-slot name="title">
+                Mark List as Completed
+            </x-slot>
+
+            <x-slot name="content">
+                Are you sure you want to mark this list as completed?
+                <br>
+                <span class="text-red-600">This list cannot be edited afterwards, and these changes cannot be undone.</span>
+            </x-slot>
+
+            <x-slot name="footer">
+                <button class="sc-btn-ghost ml-3" type="button" wire:click="$toggle('to_confirm')" wire:loading.attr="disabled">
+                    <span>No</span>
+                </button>
+                <button class="sc-btn-primary ml-3" type="submit" wire:target="store" wire:loading.attr="disabled">
+                    <span>Save</span>
+                </button>
+            </x-slot>
+        </x-jet-confirmation-modal>
+        @break
+        @default
+        @endswitch
     </form>
     <!-- Content Page -->
     <div class="max-w-7xl mx-auto px-3 pb-4 sm:px-6 lg:px-8">
@@ -112,7 +138,7 @@
                         <div tabindex="1" class="card card-compact dropdown-content w-96 bg-white shadow ml-3">
                             <!-- Card Header -->
                             <div class="font-bold text-lg bg-emerald-600 px-3 py-3 flex justify-between">
-                                <input type="text" name="list_name" id="list_name" placeholder="Shopping List Name" class="input input-sm bg-white w-full max-w-xs" wire:model.lazy="list_name" />
+                                <input type="text" name="list_name" id="list_name" placeholder="Shopping List Name" class="input input-sm bg-white w-full max-w-xs" wire:model="list_name" />
                                 <span class="pr-2"></span>
                             </div>
                             <!-- Card Body -->
@@ -121,7 +147,7 @@
                                 <div class="flex flex-nowrap py-1">
                                     <div class="flex w-full items-center">
                                         <i class="fa-solid fa-peso-sign pl-3 absolute"></i>
-                                        <input type="number" name="budget" id="budget" placeholder="Enter budget here" min="0" class="input input-bordered input-sm bg-white w-full pl-8" wire:model.lazy="budget" />
+                                        <input type="number" name="budget" id="budget" placeholder="Enter budget here" min="0" class="input input-bordered input-sm bg-white w-full pl-8" wire:model="budget" />
                                     </div>
                                 </div>
                                 <hr>
@@ -185,11 +211,25 @@
                                             </span>
                                         </div>
                                         <!-- Save Button -->
+                                        @if (!empty($list_details) && !empty($budget) && !empty($list_name))
                                         <div class="card-actions flex justify-center">
-                                            <button type="button" wire:click="confirm" class="sc-btn-primary">
-                                                <span>{{ __('Save')}}</span>
+                                            <button type="button" wire:click="confirm(2)" class="sc-btn-ghost">
+                                                <span><i class="fa-solid fa-check"></i>&nbsp;{{ __('Mark as completed')}}</span>
+                                            </button>
+                                            <button type="button" wire:click="confirm(1)" class="sc-btn-primary">
+                                                <span><i class="fa-solid fa-floppy-disk"></i>&nbsp;{{ __('Save')}}</span>
                                             </button>
                                         </div>
+                                        @else
+                                        <div class="card-actions flex justify-center">
+                                            <button type="button" wire:click="confirm(2)" class="sc-btn-disabled" disabled>
+                                                <span><i class="fa-solid fa-check"></i>&nbsp;{{ __('Mark as completed')}}</span>
+                                            </button>
+                                            <button type="button" wire:click="confirm(1)" class="sc-btn-disabled" disabled>
+                                                <span><i class="fa-solid fa-floppy-disk"></i>&nbsp;{{ __('Save')}}</span>
+                                            </button>
+                                        </div>
+                                        @endif
                                     </div>
                                 </div>
                             </div>
@@ -282,7 +322,7 @@
                                             </div>
                                         </div>
                                         @endif
-                                        <!-- Save Button -->
+                                        <!-- Get Lowest Price Button -->
                                         <div class="card-actions flex justify-center space-x-2">
                                             <button type="button" wire:click="getlow" class="sc-btn-ghost">
                                                 <span>Get lowest price</span>
@@ -359,7 +399,7 @@
                                 <div class="flex flex-row space-x-2">
                                     <div class="flex items-center justify-center">
                                         <div class="inline-flex" role="group">
-                                            <button type="button" class="flex items-center bg-emerald-600 text-white border-none rounded-full rounded-r hover:bg-emerald-600 transition duration-300" wire:click="product_add({{ $product->id }})">
+                                            <button type="button" class="flex items-center bg-emerald-600 text-white border-none rounded-full rounded-r hover:bg-emerald-700 transition duration-300" wire:click="product_add({{ $product->id }})">
                                                 @if (is_null($this->get_product_id($product->product_id)))
                                                 <span class="px-6 py-1 hidden xl:inline"><i class="fa-solid fa-cart-plus"></i>&nbsp;Add</span>
                                                 <span class="px-6 py-1 xl:hidden"><i class="fa-solid fa-cart-plus"></i></span>

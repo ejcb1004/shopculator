@@ -12,7 +12,7 @@
                 @elseif (count($checkboxticked) > 1)
                 Are you sure you want to delete these lists?
                 @endif
-                This cannot be undone.
+                <span class="text-red-600">This cannot be undone.</span>
             </x-slot>
 
             <x-slot name="footer">
@@ -22,6 +22,39 @@
 
                 <button class="sc-btn-danger ml-3" type="submit" wire:target="delete" wire:loading.attr="disabled">
                     <span>Delete</span>
+                </button>
+            </x-slot>
+        </x-jet-confirmation-modal>
+    </form>
+    <form wire:submit.prevent="mark_complete" enctype="multipart/form-data">
+        @csrf
+        <x-jet-confirmation-modal wire:model="to_confirm">
+            <x-slot name="title">
+                @if (count($checkboxticked) == 1)
+                Mark List as Completed
+                @elseif (count($checkboxticked) > 1)
+                Mark Lists as Completed
+                @endif
+            </x-slot>
+
+            <x-slot name="content">
+                @if (count($checkboxticked) == 1)
+                Are you sure you want to mark this list as completed?
+                <br>
+                <span class="text-red-600">This list cannot be edited afterwards, and these changes cannot be undone.</span>
+                @elseif (count($checkboxticked) > 1)
+                Are you sure you want to mark these lists as completed?
+                <br>
+                <span class="text-red-600">These lists cannot be edited afterwards, and these changes cannot be undone.</span>
+                @endif
+            </x-slot>
+
+            <x-slot name="footer">
+                <button class="sc-btn-ghost ml-3" type="button" wire:click="$toggle('to_confirm')" wire:loading.attr="disabled">
+                    <span>No</span>
+                </button>
+                <button class="sc-btn-primary ml-3" type="submit" wire:target="mark_complete" wire:loading.attr="disabled">
+                    <span>Save</span>
                 </button>
             </x-slot>
         </x-jet-confirmation-modal>
@@ -108,32 +141,43 @@
             </div>
         </div>
         <!-- Options Menu when Checkbox Ticked -->
-        @switch (count($checkboxticked))
-        @case (0)
-        @break
-        @case (1)
+        @if (count($checkboxticked) == 1)
         <div class="sticky rounded-md bottom-0 bg-white p-3 bg-shadow w-full">
             <div class="flex justify-center space-x-3 lg:space-x-8">
                 <button type="button" class="sc-btn-ghost"><a href="{{ url('shopper/view/' . $checkboxticked[0]) }}"><i class="fa-solid fa-eye"></i>&nbsp;View</a></button>
                 @if ($this->list_is_completed())
                 <button type="button" class="sc-btn-disabled" disabled><span><i class="fa-solid fa-pen-to-square"></i>&nbsp;Edit</span></button>
+                <button type="button" class="sc-btn-disabled" disabled><span><i class="fa-solid fa-check"></i>&nbsp;Mark as completed</span></button>
                 @else
                 <button type="button" class="sc-btn-ghost"><a href="{{ url('shopper/edit/' . $checkboxticked[0]) }}"><i class="fa-solid fa-pen-to-square"></i>&nbsp;Edit</a></button>
+                <button type="button" class="sc-btn-ghost" wire:click="confirm(2)"><span><i class="fa-solid fa-check"></i>&nbsp;Mark as completed</span></button>
                 @endif
                 <button type="button" class="sc-btn-red-ghost"><a href="{{ url('shopper/download/'. $checkboxticked[0]) }}"><i class="fa-solid fa-file-pdf"></i>&nbsp;Save PDF</a></button>
+                @if ($this->list_is_completed())
+                <button type="button" class="sc-btn-disabled" disabled><span><i class="fa-solid fa-trash"></i>&nbsp;Delete</span></button>
+                @else
                 <button type="button" class="sc-btn-danger" wire:click="confirm_delete"><span><i class="fa-solid fa-trash"></i>&nbsp;Delete</span></button>
+                @endif
             </div>
         </div>
-        @break
-        @default
+        @elseif (count($checkboxticked) >= 2)
         <div class="sticky rounded-md bottom-0 bg-white p-3 bg-shadow w-full">
             <div class="flex justify-center space-x-3 lg:space-x-8">
                 <button type="button" class="sc-btn-disabled" disabled><span><i class="fa-solid fa-eye-slash"></i>&nbsp;View</span></button>
                 <button type="button" class="sc-btn-disabled" disabled><span><i class="fa-solid fa-pen-to-square"></i>&nbsp;Edit</span></button>
-                <button type="button" class="sc-btn-disabled" disabled><span><i class="fa-solid fa-file-pdf"></i>&nbsp;Save as PDF</span></button>
+                @if ($this->list_is_completed())
+                <button type="button" class="sc-btn-disabled" disabled><span><i class="fa-solid fa-check"></i>&nbsp;Mark as completed</span></button>
+                @else
+                <button type="button" class="sc-btn-ghost" wire:click="confirm(2)"><span><i class="fa-solid fa-check"></i>&nbsp;Mark as completed</span></button>
+                @endif
+                <button type="button" class="sc-btn-disabled" disabled><span><i class="fa-solid fa-file-pdf"></i>&nbsp;Save PDF</span></button>
+                @if ($this->list_is_completed())
+                <button type="button" class="sc-btn-disabled" disabled><span><i class="fa-solid fa-trash"></i>&nbsp;Delete</span></button>
+                @else
                 <button type="button" class="sc-btn-danger" wire:click="confirm_delete"><span><i class="fa-solid fa-trash"></i>&nbsp;Delete</span></button>
+                @endif
             </div>
         </div>
-        @endswitch
+        @endif
     </div>
 </div>
