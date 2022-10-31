@@ -119,7 +119,7 @@ class ShopperCreate extends Component
                 'list_name'     => $this->list_name,
                 'budget'        => $this->budget,
                 'total'         => $this->total,
-                'status'    => 0
+                'status'        => 1
             ]);
 
             $list->list_id = "L" . str_pad($list->id, 8, "0", STR_PAD_LEFT);
