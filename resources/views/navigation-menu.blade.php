@@ -11,7 +11,7 @@
                     @if (Route::has('login'))
                     @auth
                     <a href="/">
-                        <img src="../../img/shopculator-title.svg" alt="Shopculator" width="175" />
+                        <img src="../../../img/shopculator-title.svg" alt="Shopculator" width="175" />
                     </a>
                     @else
                     <a href="/">
