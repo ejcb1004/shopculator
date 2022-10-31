@@ -18,6 +18,7 @@ use App\Http\Livewire\Market\Analytics;
 use App\Http\Livewire\Market\MarketCreate;
 use App\Http\Livewire\Market\MarketEdit;
 use App\Http\Livewire\Market\MarketIndex;
+use App\Http\Livewire\Shopper\ShopperView;
 use App\Http\Livewire\Shopper\ShopperCreate;
 use App\Http\Livewire\Shopper\ShopperEdit;
 use App\Http\Livewire\Shopper\ShopperIndex;
@@ -81,5 +82,6 @@ Route::middleware([
     Route::get('shopper', ShopperIndex::class)->name('shopper');
     Route::get('shopper/create', ShopperCreate::class)->name('shopper/create');
     Route::get('shopper/edit/{list_id}', ShopperEdit::class);
+    Route::get('shopper/view/{list_id}', ShopperView::class);
     Route::get('shopper/download/{list_id}', [ShopperIndex::class, 'generatepdf']);
 });
