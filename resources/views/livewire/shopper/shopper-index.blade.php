@@ -55,6 +55,7 @@
                                         <input type="checkbox" class="checkbox checkbox-sm checkbox-accent" wire:model="selectall" />
                                     </label>
                                 </th>
+                                <th>Status</th>
                                 <th>List Name</th>
                                 <th>Total</th>
                                 <th>Budget</th>
@@ -68,6 +69,19 @@
                                 <input value="{{ $list->id }}" name="id" id="id" hidden />
                                 <td class="table-item">
                                     <input type="checkbox" value="{{ $list->list_id }}" class="checkbox checkbox-sm checkbox-accent" wire:model="checkboxticked" />
+                                </td>
+                                <td class="table-item">
+                                    @switch ($list->status)
+                                    @case(1)
+                                    Active
+                                    @break
+
+                                    @case(2)
+                                    Completed
+                                    @break
+
+                                    @default
+                                    @endswitch
                                 </td>
                                 <td class="table-item">{{ $list->list_name }}</td>
                                 <td class="table-item"><i class="fa-solid fa-peso-sign text-black"></i>&nbsp;{{ number_format($list->total, 2, '.') }}</td>
@@ -94,22 +108,32 @@
             </div>
         </div>
         <!-- Options Menu when Checkbox Ticked -->
-        @if (count($checkboxticked) == 1)
+        @switch (count($checkboxticked))
+        @case (0)
+        @break
+        @case (1)
         <div class="sticky rounded-md bottom-0 bg-white p-3 bg-shadow w-full">
             <div class="flex justify-center space-x-3 lg:space-x-8">
+                <button type="button" class="sc-btn-ghost"><a href="{{ url('shopper/view/' . $checkboxticked[0]) }}"><i class="fa-solid fa-eye"></i>&nbsp;View</a></button>
+                @if ($this->list_is_completed())
+                <button type="button" class="sc-btn-disabled" disabled><span><i class="fa-solid fa-pen-to-square"></i>&nbsp;Edit</span></button>
+                @else
                 <button type="button" class="sc-btn-ghost"><a href="{{ url('shopper/edit/' . $checkboxticked[0]) }}"><i class="fa-solid fa-pen-to-square"></i>&nbsp;Edit</a></button>
+                @endif
                 <button type="button" class="sc-btn-red-ghost"><a href="{{ url('shopper/download/'. $checkboxticked[0]) }}"><i class="fa-solid fa-file-pdf"></i>&nbsp;Save PDF</a></button>
                 <button type="button" class="sc-btn-danger" wire:click="confirm_delete"><span><i class="fa-solid fa-trash"></i>&nbsp;Delete</span></button>
             </div>
         </div>
-        @elseif (count($checkboxticked) >= 2)
+        @break
+        @default
         <div class="sticky rounded-md bottom-0 bg-white p-3 bg-shadow w-full">
             <div class="flex justify-center space-x-3 lg:space-x-8">
+                <button type="button" class="sc-btn-disabled" disabled><span><i class="fa-solid fa-eye-slash"></i>&nbsp;View</span></button>
                 <button type="button" class="sc-btn-disabled" disabled><span><i class="fa-solid fa-pen-to-square"></i>&nbsp;Edit</span></button>
                 <button type="button" class="sc-btn-disabled" disabled><span><i class="fa-solid fa-file-pdf"></i>&nbsp;Save as PDF</span></button>
                 <button type="button" class="sc-btn-danger" wire:click="confirm_delete"><span><i class="fa-solid fa-trash"></i>&nbsp;Delete</span></button>
             </div>
         </div>
-        @endif
+        @endswitch
     </div>
 </div>

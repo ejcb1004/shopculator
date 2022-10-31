@@ -104,7 +104,9 @@ class ShopperEdit extends Component
 
     public function render()
     {
-        if (Auth::user()->role_id != 'R3' || Auth::user()->email != ShoppingList::where('list_id', $this->list_id)->pluck('email')->first()) abort(403);
+        if (Auth::user()->role_id != 'R3' || 
+        Auth::user()->email != ShoppingList::where('list_id', $this->list_id)->pluck('email')->first() || 
+        ShoppingList::where('list_id', $this->list_id)->pluck('status')->first() != 1) abort(403);
         else return view('livewire.shopper.shopper-edit', [
             'products' => Product::with(['market', 'subcategory'])
                 ->when($this->selectedmarket, function ($query) {

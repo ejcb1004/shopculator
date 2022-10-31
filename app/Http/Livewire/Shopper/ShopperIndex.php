@@ -17,6 +17,7 @@ class ShopperIndex extends Component
     public $searchterm = '';
     public $selectall = false;
     public $checkboxticked;
+    public $current_check;
 
     // boolean
     public $to_confirm_delete;
@@ -30,7 +31,7 @@ class ShopperIndex extends Component
 
     public function updatedSelectAll($value)
     {
-        $value ? $this->checkboxticked = ShoppingList::pluck('list_id')->toArray() : $this->checkboxticked = [];
+        $value ? $this->checkboxticked = ShoppingList::where('email', Auth::user()->email)->pluck('list_id')->toArray() : $this->checkboxticked = [];
     }
 
     public function render()
@@ -38,11 +39,35 @@ class ShopperIndex extends Component
         if (Auth::user()->role_id != 'R3') abort(403);
         else return view('livewire.shopper.shopper-index', [
             'lists' => ShoppingList::where('list_name', 'like', '%' . $this->searchterm . '%')
-                ->where('status', 1)
                 ->where('email', Auth::user()->email)
+                ->where('status', 1)
+                ->orWhere('status', 2)
                 ->orderBy('updated_at', 'desc')
                 ->paginate(10)
         ]);
+    }
+
+    public function updatedCheckboxTicked($value)
+    {
+        switch (count($this->checkboxticked)) {
+            case 1:
+                if (!empty($value)) {
+                    $this->current_check = $value[0];
+                }
+                break;
+            default:
+        }
+    }
+
+    public function list_is_completed()
+    {
+        switch (count($this->checkboxticked)) {
+            case 1:
+                if (ShoppingList::where('list_id', $this->current_check)->pluck('status')->first() == 2) return true;
+                break;
+            default:
+                return false;
+        }
     }
 
     public function generatepdf($list_id)
@@ -71,11 +96,6 @@ class ShopperIndex extends Component
     public function confirm_delete()
     {
         $this->to_confirm_delete = true;
-    }
-
-    public function inspect_checkboxticked()
-    {
-        dd($this->checkboxticked[0]);
     }
 
     public function delete()
