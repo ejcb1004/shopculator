@@ -28,7 +28,7 @@
                 <div class="mt-1 fixed flex flex-col w-[70px] justify-end space-y-2">
                     <!-- Cart Dropdown -->
                     <div class="dropdown dropdown-left">
-                        <label tabindex="0" class="btn btn-ghost btn-circle btn-lg">
+                        <label tabindex="0" class="btn btn-ghost btn-circle btn-lg text-emerald-600">
                             <div class="indicator relative left-5 bottom-2">
                                 <i class="fa-solid fa-magnifying-glass"></i>
                             </div>
@@ -46,7 +46,7 @@
                         </div>
                     </div>
                     <div class="dropdown dropdown-left">
-                        <label tabindex="1" class="btn btn-ghost btn-circle btn-lg">
+                        <label tabindex="1" class="btn btn-ghost btn-circle btn-lg text-emerald-600">
                             <div class="indicator relative left-5 bottom-2">
                                 <i class="fa-solid fa-file-import"></i>
                                 @if (!empty($file))
