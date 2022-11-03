@@ -138,14 +138,14 @@
                         <div tabindex="1" class="card card-compact dropdown-content w-96 bg-white shadow ml-3">
                             <!-- Card Header -->
                             <div class="font-bold text-lg bg-emerald-600 px-3 py-3 flex justify-between">
-                                <input type="text" name="list_name" id="list_name" placeholder="Shopping List Name" class="input input-sm bg-white w-full max-w-xs" wire:model="list_name" />
+                                <input type="text" name="list_name" id="list_name" placeholder="Shopping List Name" class="input input-sm bg-white w-full max-w-xs text-gray-600" wire:model="list_name" />
                                 <span class="pr-2"></span>
                             </div>
                             <!-- Card Body -->
                             <div class="card-body max-h-[440px]">
                                 <!-- Card Header -->
                                 <div class="flex flex-nowrap py-1">
-                                    <div class="flex w-full items-center">
+                                    <div class="flex w-full items-center text-gray-600">
                                         <i class="fa-solid fa-peso-sign pl-3 absolute"></i>
                                         <input type="number" name="budget" id="budget" placeholder="Enter budget here" min="0" class="input input-bordered input-sm bg-white w-full pl-8" wire:model="budget" />
                                     </div>
@@ -163,7 +163,7 @@
                                                 <span><img src="{{ $list_detail['image_path'] }}" width="100" alt="Image" /></span>
                                             </div>
                                             <div class="flex w-full justify-between">
-                                                <div class="flex flex-col">
+                                                <div class="flex flex-col text-gray-600">
                                                     <span>{{ $list_detail['product_name'] }}</span>
                                                     <div class="flex flex-row items-center space-x-2">
                                                         <button type="button" wire:click="quantity_sub( {{ $list_detail['list_index'] }} )">
@@ -179,7 +179,7 @@
                                                     <button type="button" wire:click="remove_item( {{ $list_detail['list_index'] }} )">
                                                         <i class="fa-solid fa-xmark text-emerald-500"></i>
                                                     </button>
-                                                    <span>₱&nbsp;{{ number_format($list_detail['price'] * $list_detail['quantity'], 2, '.', ',') }}</span>
+                                                    <span class="text-gray-600">₱&nbsp;{{ number_format($list_detail['price'] * $list_detail['quantity'], 2, '.', ',') }}</span>
                                                 </div>
                                             </div>
                                         </div>
