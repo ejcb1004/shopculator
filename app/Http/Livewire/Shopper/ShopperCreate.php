@@ -325,7 +325,7 @@ class ShopperCreate extends Component
         } else {
             $this->populate_multi($this->compare_details[$list_index]['quantity']);
         }
-        $this->list_details[$list_index]['quantity'] = $this->compare_details[$list_index]['quantity'];
+        // $this->list_details[$comprod_list_index]['quantity'] = $this->compare_details[$list_index]['quantity'];
         $this->product_added = true;   
     }
 
