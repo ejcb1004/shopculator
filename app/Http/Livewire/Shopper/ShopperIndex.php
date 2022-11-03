@@ -21,13 +21,17 @@ class ShopperIndex extends Component
     public $searchterm = '';
     public $selectall = false;
     public $checkboxticked;
+    public $list_count;
+    public $active_list_count;
+    public $completed_list_count;
 
     // boolean
     public $to_confirm;
     public $to_confirm_delete;
 
-    // list details (temporary)
-    public $list_details;
+    // public $list_details;
+    public $db_trending;
+    public $top_trending;
 
     // Livewire lifecycle hooks
     public function mount()
@@ -36,6 +40,35 @@ class ShopperIndex extends Component
         $this->to_confirm_delete = false;
         $this->to_confirm = false;
         $this->list_details = ListDetail::pluck('product_id')->toArray();
+
+        $this->db_trending = DB::table('list_details')
+            ->join('products', 'list_details.product_id', '=', 'products.product_id')
+            ->join('shopping_lists', 'list_details.list_id', '=', 'shopping_lists.list_id')
+            ->select('products.product_name', 'products.image_path')
+            ->where('shopping_lists.email', Auth::user()->email)
+            ->limit(5)
+            ->groupBy('products.product_name', 'products.image_path')
+            ->orderBy(DB::raw('count(*)'), 'desc')
+            ->get()
+            ->toArray();
+        $this->top_trending = [];
+        foreach ($this->db_trending as $trend) {
+            array_push($this->top_trending, get_object_vars($trend));
+        }
+
+        $this->list_count = count(ShoppingList::where('email', Auth::user()->email)
+        ->where('status', 1)
+        ->orWhere('status', 2)
+        ->where('email', Auth::user()->email)
+        ->pluck('list_id')->toArray());
+
+        $this->active_list_count = count(ShoppingList::where('email', Auth::user()->email)
+        ->where('status', 1)
+        ->pluck('list_id')->toArray());
+
+        $this->completed_list_count = count(ShoppingList::where('email', Auth::user()->email)
+        ->where('status', 2)
+        ->pluck('list_id')->toArray());
     }
 
     public function updatedSelectAll($value)
@@ -47,6 +80,7 @@ class ShopperIndex extends Component
 
     public function render()
     {
+        // dd($this->list_count);
         if (Auth::user()->role_id != 'R3') abort(403);
         else return view('livewire.shopper.shopper-index', [
             'lists' => ShoppingList::where('list_name', 'like', '%' . $this->searchterm . '%')
@@ -112,17 +146,17 @@ class ShopperIndex extends Component
         $this->to_confirm = true;
     }
 
-    public function register_prices()
-    {
-        for ($i = 1650; $i < count($this->list_details); $i++) {
-            ListDetail::where('product_id', $this->list_details[$i])->update([
-                'current_price' => Product::where('product_id', $this->list_details[$i])->pluck('price')[0]
-            ]);
-        }
-        session()->flash('flash.banner', 'Prices successfully registered!');
-        session()->flash('flash.bannerStyle', 'success');
-        return redirect('shopper');
-    }
+    // public function register_prices()
+    // {
+    //     for ($i = 1650; $i < count($this->list_details); $i++) {
+    //         ListDetail::where('product_id', $this->list_details[$i])->update([
+    //             'current_price' => Product::where('product_id', $this->list_details[$i])->pluck('price')[0]
+    //         ]);
+    //     }
+    //     session()->flash('flash.banner', 'Prices successfully registered!');
+    //     session()->flash('flash.bannerStyle', 'success');
+    //     return redirect('shopper');
+    // }
 
     public function mark_complete()
     {

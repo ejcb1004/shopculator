@@ -61,8 +61,47 @@
     </form>
 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-3 gap-2 mb-12">
+            <div class="mx-auto w-full text-center text-gray-600 px-6 py-4 mt-8 bg-white shadow-md h-full sm:rounded-xl">
+                <div class="flex flex-col h-full justify-between">
+                    <div class="rounded-lg bg-emerald-600 p-2"><span class="text-white text-xl">Most added product</span></div>
+                    <img src="{{ $top_trending[0]['image_path'] }}" class="w-[175px] mx-auto"/>
+                    <span class="text-2xl">1.&nbsp;&nbsp;{{ $top_trending[0]['product_name'] }}</span>
+                </div>
+            </div>
+            <div class="grid grid-cols-2 gap-2 mt-8 h-full col-span-2">
+                @for ($i = 1; $i < count($top_trending); $i++)
+                <div class="mx-auto w-full text-center text-gray-600 px-6 py-4 bg-white shadow-md sm:rounded-xl">
+                    <div class="flex flex-col h-full justify-between">
+                        <img src="{{ $top_trending[$i]['image_path'] }}" class="w-[100px] mx-auto"/>
+                        <span class="text-lg">{{ $i + 1 }}.&nbsp;&nbsp;{{ $top_trending[$i]['product_name'] }}</span>
+                    </div>
+                </div>
+                @endfor
+            </div>
+        </div>
+        <div class="grid grid-cols-3 gap-2 mb-12">
+            <div class="mx-auto w-full text-center text-gray-600 px-6 py-4 mt-8 bg-white shadow-md h-full sm:rounded-xl">
+                <div class="flex flex-col h-full justify-center">
+                    <span class="text-[100px]">{{ $list_count }}</span>
+                    <span class="text-2xl">total lists</span>
+                </div>
+            </div>
+            <div class="mx-auto w-full text-center text-gray-600 px-6 py-4 mt-8 bg-white shadow-md h-full sm:rounded-xl">
+                <div class="flex flex-col h-full justify-center">
+                    <span class="text-[100px]">{{ $active_list_count }}</span>
+                    <span class="text-2xl">active lists</span>
+                </div>
+            </div>
+            <div class="mx-auto w-full text-center text-gray-600 px-6 py-4 mt-8 bg-white shadow-md h-full sm:rounded-xl">
+                <div class="flex flex-col h-full justify-center">
+                    <span class="text-[100px]">{{ $completed_list_count }}</span>
+                    <span class="text-2xl">completed lists</span>
+                </div>
+            </div>
+        </div>
         <!-- Search and Add Button -->
-        <div class="flex flex-row-reverse pt-5">
+        <div class="flex flex-row-reverse pt-12">
             <div class="flex space-x-4 min-w-full pb-6 pt-2 justify-end">
                 <div class="flex rounded-full bg-white w-full max-w-xs h-10 items-center">
                     <i class="fa-solid fa-magnifying-glass z-1 pl-4 absolute"></i>
@@ -76,7 +115,7 @@
             </div>
         </div>
         <!-- List Management Table -->
-        <div class="py-5">
+        <div class="pt-4 pb-14">
             <div class="overflow-auto rounded-lg">
                 <div data-theme="mytheme">
                     <table class="table w-full">
@@ -140,9 +179,10 @@
                 @endif
             </div>
         </div>
-        <!-- Options Menu when Checkbox Ticked -->
-        @if (count($checkboxticked) == 1)
-        <div class="sticky rounded-md bottom-0 bg-white p-3 bg-shadow w-full">
+    </div>
+    <!-- Options Menu when Checkbox Ticked -->
+    @if (count($checkboxticked) == 1)
+        <div class="fixed rounded-md bottom-0 bg-white p-3 bg-shadow w-full">
             <div class="flex justify-center space-x-3 lg:space-x-8">
                 <button type="button" class="sc-btn-ghost"><a href="{{ url('shopper/view/' . $checkboxticked[0]) }}"><i class="fa-solid fa-eye"></i>&nbsp;View</a></button>
                 @if ($this->list_is_completed())
@@ -161,7 +201,7 @@
             </div>
         </div>
         @elseif (count($checkboxticked) >= 2)
-        <div class="sticky rounded-md bottom-0 bg-white p-3 bg-shadow w-full">
+        <div class="fixed rounded-md bottom-0 bg-white p-3 bg-shadow w-full">
             <div class="flex justify-center space-x-3 lg:space-x-8">
                 <button type="button" class="sc-btn-disabled" disabled><span><i class="fa-solid fa-eye-slash"></i>&nbsp;View</span></button>
                 <button type="button" class="sc-btn-disabled" disabled><span><i class="fa-solid fa-pen-to-square"></i>&nbsp;Edit</span></button>
@@ -179,5 +219,4 @@
             </div>
         </div>
         @endif
-    </div>
 </div>

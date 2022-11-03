@@ -128,16 +128,16 @@
                 @if ($detail->is_checked == 1)
                 <tr>
                     <td style="background-color:#bbf7d0">{{ $detail->product_name }}</td>
-                    <td style="background-color:#bbf7d0; text-align: center;">PHP {{ $detail->price }}</td>
+                    <td style="background-color:#bbf7d0; text-align: center;">PHP {{ $detail->current_price }}</td>
                     <td style="background-color:#bbf7d0; text-align: center;">×{{ $detail->quantity }}</td>
-                    <td style="background-color:#bbf7d0; text-align: center;">PHP {{ number_format($detail->price * $detail->quantity, 2) }}</td>
+                    <td style="background-color:#bbf7d0; text-align: center;">PHP {{ number_format($detail->current_price * $detail->quantity, 2) }}</td>
                 </tr>
                 @else
                 <tr>
                     <td style="background-color:#fecaca;">{{ $detail->product_name }}</td>
-                    <td style="background-color:#fecaca; text-align: center;">PHP {{ $detail->price }}</td>
+                    <td style="background-color:#fecaca; text-align: center;">PHP {{ $detail->current_price }}</td>
                     <td style="background-color:#fecaca; text-align: center;">×{{ $detail->quantity }}</td>
-                    <td style="background-color:#fecaca; text-align: center;">PHP {{ number_format($detail->price * $detail->quantity, 2) }}</td>
+                    <td style="background-color:#fecaca; text-align: center;">PHP {{ number_format($detail->current_price * $detail->quantity, 2) }}</td>
                 </tr>
                 @endif
                 @endforeach
