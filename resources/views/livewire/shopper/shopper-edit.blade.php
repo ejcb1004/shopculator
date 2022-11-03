@@ -63,6 +63,10 @@
             </x-slot>
 
             <x-slot name="content">
+                @if ($price_updated)
+                <span class="text-red-600">Prices have been updated in the background.</span>
+                @endif
+                <br>
                 Are you sure you want to save this list?
             </x-slot>
 
@@ -83,9 +87,13 @@
             </x-slot>
 
             <x-slot name="content">
-                Are you sure you want to mark this list as completed?
+                @if ($price_updated)
+                <span class="text-red-600">Prices have been updated in the background.</span>
+                @endif
                 <br>
                 <span class="text-red-600">This list cannot be edited afterwards, and these changes cannot be undone.</span>
+                <br>
+                Are you sure you want to mark this list as complete?
             </x-slot>
 
             <x-slot name="footer">
@@ -93,7 +101,7 @@
                     <span>No</span>
                 </button>
                 <button class="sc-btn-primary ml-3" type="submit" wire:target="store" wire:loading.attr="disabled">
-                    <span>Save</span>
+                    <span>Mark as complete</span>
                 </button>
             </x-slot>
         </x-jet-confirmation-modal>
@@ -164,7 +172,7 @@
                                                 <span><img src="{{ $list_detail['image_path'] }}" width="100" alt="Image" /></span>
                                             </div>
                                             <div class="flex w-full justify-between">
-                                                <div class="flex flex-col">
+                                                <div class="flex flex-col text-gray-700">
                                                     <span>{{ $list_detail['product_name'] }}</span>
                                                     <div class="flex flex-row items-center space-x-2">
                                                         <button type="button" wire:click="quantity_sub( {{ $list_detail['list_index'] }} )">
@@ -180,7 +188,12 @@
                                                     <button type="button" wire:click="remove_item( {{ $list_detail['list_index'] }} )">
                                                         <i class="fa-solid fa-xmark text-emerald-500"></i>
                                                     </button>
-                                                    <span>₱&nbsp;{{ number_format($list_detail['price'] * $list_detail['quantity'], 2, '.', ',') }}</span>
+                                                    @if ($list_detail['price'] != $list_detail['current_price'])
+                                                    <span class="text-red-700">₱&nbsp;{{ number_format($list_detail['price'] * $list_detail['quantity'], 2, '.', ',') }}</span>
+                                                    <s><span class="text-xs text-stone-400">₱&nbsp;{{ number_format($list_detail['current_price'], 2, '.', ',') }}</span></s>
+                                                    @else
+                                                    <span class="text-gray-700">₱&nbsp;{{ number_format($list_detail['price'] * $list_detail['quantity'], 2, '.', ',') }}</span>
+                                                    @endif
                                                 </div>
                                             </div>
                                         </div>
@@ -388,7 +401,7 @@
                                 <img src="{{ '../../storage/' . $this->logo($product->market_id) }}" width="35" />
                             </div>
                             <div class="flex mx-auto">
-                                <img src="{{ $product->image_path }}" alt="{{ $product->product_name }}" width="100" />
+                                <img src="{{ $product->image_path }}" alt="{{ $product->product_name }}" class="max-w-[65px] xl:max-w-[130px]" />
                             </div>
                             <div class="flex flex-col py-5 px-4 space-y-1 items-center">
 

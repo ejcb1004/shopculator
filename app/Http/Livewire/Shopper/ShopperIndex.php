@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\Shopper;
 
 use App\Models\ListDetail;
+use App\Models\Product;
 use App\Models\ShoppingList;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -25,12 +26,16 @@ class ShopperIndex extends Component
     public $to_confirm;
     public $to_confirm_delete;
 
+    // list details (temporary)
+    public $list_details;
+
     // Livewire lifecycle hooks
     public function mount()
     {
         $this->checkboxticked = [];
         $this->to_confirm_delete = false;
         $this->to_confirm = false;
+        $this->list_details = ListDetail::pluck('product_id')->toArray();
     }
 
     public function updatedSelectAll($value)
@@ -48,11 +53,13 @@ class ShopperIndex extends Component
                 ->where('email', Auth::user()->email)
                 ->where('status', 1)
                 ->orWhere('status', 2)
+                ->where('email', Auth::user()->email)
                 ->orderBy('updated_at', 'desc')
                 ->paginate(10)
         ]);
     }
 
+    // methods
     public function list_is_completed()
     {
         switch (count($this->checkboxticked)) {
@@ -103,6 +110,18 @@ class ShopperIndex extends Component
     {
         $this->status = $status;
         $this->to_confirm = true;
+    }
+
+    public function register_prices()
+    {
+        for ($i = 1650; $i < count($this->list_details); $i++) {
+            ListDetail::where('product_id', $this->list_details[$i])->update([
+                'current_price' => Product::where('product_id', $this->list_details[$i])->pluck('price')[0]
+            ]);
+        }
+        session()->flash('flash.banner', 'Prices successfully registered!');
+        session()->flash('flash.bannerStyle', 'success');
+        return redirect('shopper');
     }
 
     public function mark_complete()

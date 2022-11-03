@@ -29,6 +29,7 @@ class ShopperEdit extends Component
     public $to_confirm;
     public $product_added;
     public $comp_added;
+    public $price_updated;
 
     // array
     public $db_details = [];
@@ -95,7 +96,13 @@ class ShopperEdit extends Component
         $this->list_name = ShoppingList::where('list_id', $this->list_id)->pluck('list_name')[0];
         $this->budget = ShoppingList::where('list_id', $this->list_id)->pluck('budget')[0];
         $this->items = count($this->list_details);
-        $this->total = ShoppingList::where('list_id', $this->list_id)->pluck('total')[0];
+        $this->price_updated = false;
+        foreach ($this->list_details as $detail) {
+            if ($detail['is_checked'] == 1) $this->total = $this->total + ($detail['price'] * $detail['quantity']);
+            if ($detail['current_price'] != $detail['price']) {
+                $this->price_updated = true;
+            }
+        }
         $this->compitems = 0;
         $this->complow = [];
         $this->product_added = false;
@@ -154,6 +161,7 @@ class ShopperEdit extends Component
                         'is_checked' => (in_array($detail['product_id'], $this->productchecked)) ? 1 : 0,
                         'list_index' => $detail['list_index'],
                         'product_id' => $detail['product_id'],
+                        'current_price' => $detail['price'],
                         'is_deleted' => $detail['is_deleted'],
                         'quantity' => $detail['quantity']
                     ]);

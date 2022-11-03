@@ -83,9 +83,9 @@
             </x-slot>
 
             <x-slot name="content">
-                Are you sure you want to mark this list as completed?
-                <br>
                 <span class="text-red-600">This list cannot be edited afterwards, and these changes cannot be undone.</span>
+                <br>
+                Are you sure you want to mark this list as complete?
             </x-slot>
 
             <x-slot name="footer">
@@ -93,7 +93,7 @@
                     <span>No</span>
                 </button>
                 <button class="sc-btn-primary ml-3" type="submit" wire:target="store" wire:loading.attr="disabled">
-                    <span>Save</span>
+                    <span>Mark as complete</span>
                 </button>
             </x-slot>
         </x-jet-confirmation-modal>
@@ -387,7 +387,7 @@
                                 <img src="{{ '../storage/' . $this->logo($product->market_id) }}" width="35" />
                             </div>
                             <div class="flex mx-auto">
-                                <img src="{{ $product->image_path }}" alt="{{ $product->product_name }}" width="100" />
+                                <img src="{{ $product->image_path }}" alt="{{ $product->product_name }}" class="max-w-[65px] xl:max-w-[130px]" />
                             </div>
                             <div class="flex flex-col py-5 px-4 space-y-1 items-center">
                                 <span class="text-black text-center">{{ $product->product_name }}</span>
