@@ -20,7 +20,7 @@
 </head>
 
 <body class="font-sans antialiased">
-    <x-jet-banner />
+    <x-banner />
 
     <div class="min-h-screen bg-[url('../../public/img/shopculator-bg.png')] bg-cover">
         <livewire:navigation-menu />
