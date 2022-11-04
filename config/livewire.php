@@ -54,7 +54,7 @@ return [
     |
     */
 
-    'asset_url' => 'https://shopculator.herokuapp.com',
+    'asset_url' => 'https://shopculator.herokuapp.com/public/',
 
     /*
     |--------------------------------------------------------------------------
