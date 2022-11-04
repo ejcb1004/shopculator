@@ -52,7 +52,7 @@ select:focus {
 }
 
 .sc-btn-disabled {
-    @apply flex items-center bg-gray-300 text-gray-600 border-none rounded-full transition duration-300;
+    @apply flex items-center bg-gray-300 text-gray-600 border-none rounded-full;
 }
 
 .sc-btn-archive {
@@ -71,6 +71,10 @@ select:focus {
     @apply flex items-center border-2 border-emerald-600 rounded-full text-emerald-600 hover:bg-emerald-100 hover:opacity-75 transition duration-300;
 }
 
+.sc-span-ghost {
+    @apply flex items-center border-2 border-emerald-600 rounded-full text-emerald-600;
+}
+
 .sc-btn-wisp {
     @apply flex items-center border-2 border-emerald-300 rounded-full text-emerald-300 hover:bg-emerald-900 hover:opacity-75 transition duration-300;
 }
@@ -86,7 +90,8 @@ select:focus {
 .sc-btn-ghost > *,
 .sc-btn-wisp > *,
 .sc-btn-red-ghost > *,
-.sc-btn-indighost > *
+.sc-btn-indighost > *,
+.sc-span-ghost > *
 {
     @apply px-6 py-0.5;
 }
@@ -98,3 +103,8 @@ select:focus {
 .sc-btn-action > * {
     @apply px-6 py-1;
 }
+
+[data-theme="mytheme"] .table td {
+    border: none;
+}
+

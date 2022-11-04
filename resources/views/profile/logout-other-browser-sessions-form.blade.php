@@ -54,7 +54,7 @@
         @endif
 
         <div class="flex items-center mt-5">
-            <button wire:click="confirmLogout" wire:loading.attr="disabled" class="flex ml-1 px-6 py-1.5 rounded-full text-white bg-teal-600 hover:bg-teal-700 hover:transition hover:duration-300">
+            <button wire:click="confirmLogout" wire:loading.attr="disabled" class="flex ml-1 px-6 py-1.5 rounded-full text-white bg-emerald-600 hover:bg-emerald-700 hover:transition hover:duration-300">
                 {{ __('Log Out Other Browser Sessions') }}
             </button>
 
@@ -84,7 +84,7 @@
                     {{ __('Cancel') }}
                 </button>
 
-                <button wire:click="logoutOtherBrowserSessions" wire:loading.attr="disabled" class="flex ml-1 px-6 py-2 rounded-full text-white bg-teal-600 hover:bg-teal-700 hover:transition hover:duration-300">
+                <button wire:click="logoutOtherBrowserSessions" wire:loading.attr="disabled" class="flex ml-1 px-6 py-2 rounded-full text-white bg-emerald-600 hover:bg-emerald-700 hover:transition hover:duration-300">
                     {{ __('Confirm') }}
                 </button>
             </x-slot>

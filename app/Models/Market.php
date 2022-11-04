@@ -20,6 +20,8 @@ class Market extends Model
     protected $fillable = [
         'market_id',
         'market_name',
+        'email',
+        'is_deleted'
     ];
 
     /**

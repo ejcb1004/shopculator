@@ -31,4 +31,9 @@ class Category extends Model
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];
+
+    public function subcategory()
+    {
+        return $this->hasMany(Subcategory::class, 'subcategory_id');
+    }
 }

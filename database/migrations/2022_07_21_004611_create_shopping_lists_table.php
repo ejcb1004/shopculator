@@ -15,10 +15,12 @@ return new class extends Migration
     {
         Schema::create('shopping_lists', function (Blueprint $table) {
             $table->id();
-            $table->string('list_id');
+            $table->string('list_id')->unique();
+            $table->string('email');
             $table->string('list_name');
             $table->decimal('budget', 9, 2);
             $table->decimal('total', 9, 2);
+            $table->tinyInteger('is_deleted');
             $table->timestamps();
         });
     }

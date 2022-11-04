@@ -16,12 +16,13 @@
 
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
 </head>
 
 <body class="font-sans antialiased">
     <x-jet-banner />
 
-    <div class="min-h-screen bg-gray-100">
+    <div class="min-h-screen bg-[url('../../public/img/shopculator-bg.png')] bg-cover">
         <livewire:navigation-menu />
 
         <!-- Page Heading -->

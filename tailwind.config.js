@@ -25,7 +25,7 @@ module.exports = {
           {
             mytheme: {
                 "base-100":"#ffffff",
-                "base-200":"#047857",
+                "base-200":"#059669",
                 "base-300":"#C8E9DF",
             },
           },

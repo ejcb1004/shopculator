@@ -1,23 +1,70 @@
 <nav x-data="{ open: false }" class="sticky top-0 bg-white border-b border-gray-100 z-99">
     <!-- Primary Navigation Menu -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between h-16 w-full">
-            <div class="flex justify-between w-4/5">
+        <div class="flex h-16 w-full">
+            <div class="flex justify-between w-full">
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
                     <a href="/">
                         <x-jet-application-mark class="block h-9 w-auto" />
                     </a>
+                    @if (Route::has('login'))
+                    @auth
+                    <a href="/">
+                        <img src="../../../img/shopculator-title.svg" alt="Shopculator" width="175" />
+                    </a>
+                    @else
+                    <a href="/">
+                        <img src="img/shopculator-title.svg" alt="Shopculator" width="175" />
+                    </a>
+                    @endauth
+                    @endif
                 </div>
 
                 @if (Route::has('login'))
                 @auth
-                <!-- Navigation Links -->
+                @if (Auth::user()->role_id == 'R1')
+                <!-- Navigation Links for Admin -->
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 md:flex">
-                    <x-jet-nav-link href="{{ route('shopping-lists') }}" :active="request()->routeIs('shopping-lists')">
-                        <b>{{ __('Your Lists') }}</b>
+                    <x-jet-nav-link href="{{ route('admin/users') }}" :active="request()->routeIs('admin/users')">
+                        <b>{{ __('Users') }}</b>
+                    </x-jet-nav-link>
+                    <x-jet-nav-link href="{{ route('admin/markets') }}" :active="request()->routeIs('admin/markets')">
+                        <b>{{ __('Markets') }}</b>
+                    </x-jet-nav-link>
+                    <x-jet-nav-link href="{{ route('admin/categories') }}" :active="request()->routeIs('admin/categories')">
+                        <b>{{ __('Categories') }}</b>
+                    </x-jet-nav-link>
+                    <x-jet-nav-link href="{{ route('admin/subcategories') }}" :active="request()->routeIs('admin/subcategories')">
+                        <b>{{ __('Subcategories') }}</b>
+                    </x-jet-nav-link>
+                    <x-jet-nav-link href="{{ route('admin') }}" :active="request()->routeIs('admin')">
+                        <b>{{ __('Analytics') }}</b>
                     </x-jet-nav-link>
                 </div>
+                @endif
+                @if (Auth::user()->role_id == 'R2')
+                <!-- Navigation Links for Markets -->
+                <div class="hidden space-x-8 sm:-my-px sm:ml-10 md:flex">
+                    <x-jet-nav-link href="{{ route('market') }}" :active="request()->routeIs('market')">
+                        <b>{{ __('Products') }}</b>
+                    </x-jet-nav-link>
+                    <x-jet-nav-link href="{{ route('market/analytics') }}" :active="request()->routeIs('market/analytics')">
+                        <b>{{ __('Analytics') }}</b>
+                    </x-jet-nav-link>
+                </div>
+                @endif
+                @if (Auth::user()->role_id == 'R3')
+                <!-- Navigation Links for Shoppers -->
+                <div class="hidden space-x-8 sm:-my-px sm:ml-10 md:flex">
+                    <x-jet-nav-link href="{{ route('shopper') }}" :active="request()->routeIs('shopper')">
+                        <b>{{ __('Your Lists') }}</b>
+                    </x-jet-nav-link>
+                    <x-jet-nav-link href="{{ route('shopper/create') }}" :active="request()->routeIs('shopper/create')">
+                        <b>{{ __('New List') }}</b>
+                    </x-jet-nav-link>
+                </div>
+                @endif
                 @endauth
                 @endif
             </div>
@@ -127,13 +174,13 @@
                 </div>
             </div>
             @else
-            <div class="flex justify-items-end">
-                <div class="flex px-4 items-center">
+            <div class="flex justify-end w-1/4">
+                <div class="flex px-4 items-center space-x-2">
                     <button class="sc-btn-ghost">
                         <a class="px-6 py-1.5" href="{{ route('login') }}">Log in</a>
                     </button>
-                    <button class="flex ml-1 rounded-full text-white bg-gradient-to-r from-emerald-300 to-teal-700 hover:bg-gradient-to-r hover:from-emerald-400 hover:to-teal-800">
-                        <a class="px-6 py-2" href="{{ route('register') }}">Sign up</a>
+                    <button class="sc-btn-action">
+                        <a href="{{ route('register') }}">Sign up</a>
                     </button>
                 </div>
             </div>
@@ -175,7 +222,7 @@
             </div>
 
             <div class="mt-3 space-y-1">
-                <x-jet-responsive-nav-link href="{{ route('shopping-lists') }}" :active="request()->routeIs('shopping-lists')">
+                <x-jet-responsive-nav-link href="{{ route('shopper') }}" :active="request()->routeIs('shopper')">
                     {{ __('Your Lists') }}
                 </x-jet-responsive-nav-link>
                 <hr />
