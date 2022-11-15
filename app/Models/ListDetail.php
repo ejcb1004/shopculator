@@ -23,6 +23,7 @@ class ListDetail extends Model
         'detail_id',
         'list_id',
         'product_id',
+        'current_price',
         'image_path',
         'quantity',
         'is_deleted'

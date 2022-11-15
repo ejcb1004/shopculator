@@ -132,6 +132,7 @@ class ShopperCreate extends Component
                     'detail_id' => '',
                     'list_id' => $list->list_id,
                     'product_id' => $detail['product_id'],
+                    'current_price' => $detail['price'],
                     'is_deleted' => $detail['is_deleted'],
                     'quantity' => $detail['quantity']
                 ]);
