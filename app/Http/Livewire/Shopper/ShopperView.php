@@ -51,14 +51,14 @@ class ShopperView extends Component
         $this->list_details = array_values($this->list_details);
         for ($i = 0; $i < count($this->list_details); $i++) $this->list_details[$i]['list_index'] = $i;
 
-        $this->list = ShoppingList::where('list_id', $this->list_id)->select('list_name', 'budget', 'total', 'status', 'created_at', 'updated_at')->get()[0];
+        $this->list = ShoppingList::where('list_id', $this->list_id)->select('list_name', 'budget', 'total', 'list_status', 'created_at', 'updated_at')->get()[0];
     }
 
     public function render()
     {
         if (Auth::user()->role_id != 'R3' || 
         Auth::user()->email != ShoppingList::where('list_id', $this->list_id)->pluck('email')->first() || 
-        ShoppingList::where('list_id', $this->list_id)->pluck('status')->first() == 0) abort(403);
+        ShoppingList::where('list_id', $this->list_id)->pluck('list_status')->first() == 0) abort(403);
         else return view('livewire.shopper.shopper-view');
     }
 }

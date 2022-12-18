@@ -16,7 +16,7 @@ class ShopperIndex extends Component
     use WithPagination;
 
     // int
-    public $status;
+    public $list_status;
 
     public $searchterm = '';
     public $selectall = false;
@@ -24,6 +24,7 @@ class ShopperIndex extends Component
     public $list_count;
     public $active_list_count;
     public $completed_list_count;
+    public $spendings;
 
     // boolean
     public $to_confirm;
@@ -44,11 +45,11 @@ class ShopperIndex extends Component
         $this->db_trending = DB::table('list_details')
             ->join('products', 'list_details.product_id', '=', 'products.product_id')
             ->join('shopping_lists', 'list_details.list_id', '=', 'shopping_lists.list_id')
-            ->select('products.product_name', 'products.image_path')
+            ->select('products.product_name', 'products.image_path', DB::raw('COUNT(*) as count'))
             ->where('shopping_lists.email', Auth::user()->email)
             ->limit(5)
             ->groupBy('products.product_name', 'products.image_path')
-            ->orderBy(DB::raw('count(*)'), 'desc')
+            ->orderBy('count', 'desc')
             ->get()
             ->toArray();
         $this->top_trending = [];
@@ -57,24 +58,54 @@ class ShopperIndex extends Component
         }
 
         $this->list_count = count(ShoppingList::where('email', Auth::user()->email)
-        ->where('status', 1)
-        ->orWhere('status', 2)
-        ->where('email', Auth::user()->email)
-        ->pluck('list_id')->toArray());
+            ->where('list_status', 1)
+            ->orWhere('list_status', 2)
+            ->where('email', Auth::user()->email)
+            ->pluck('list_id')->toArray());
 
-        $this->active_list_count = count(ShoppingList::where('email', Auth::user()->email)
-        ->where('status', 1)
-        ->pluck('list_id')->toArray());
+        $this->active_list_count = [
+            'total' => count(ShoppingList::where('email', Auth::user()->email)
+                ->where('list_status', 1)
+                ->pluck('list_id')->toArray()),
+            'this_month' => count(ShoppingList::where('email', Auth::user()->email)
+                ->where('list_status', 1)
+                ->whereYear('created_at', now()->year)
+                ->whereMonth('created_at', now()->month)
+                ->pluck('list_id')->toArray())
+        ];
 
-        $this->completed_list_count = count(ShoppingList::where('email', Auth::user()->email)
-        ->where('status', 2)
-        ->pluck('list_id')->toArray());
+        $this->completed_list_count = [
+            'total' => count(ShoppingList::where('email', Auth::user()->email)
+                ->where('list_status', 2)
+                ->pluck('list_id')->toArray()),
+            'this_month' => count(ShoppingList::where('email', Auth::user()->email)
+                ->where('list_status', 2)
+                ->whereYear('created_at', now()->year)
+                ->whereMonth('created_at', now()->month)
+                ->pluck('list_id')->toArray())
+        ];
+
+        $this->spendings = [
+            'total' => ShoppingList::where('email', Auth::user()->email)
+                ->where('list_status', 2)
+                ->sum('total'),
+            'this_month' => ShoppingList::where('email', Auth::user()->email)
+                ->where('list_status', 2)
+                ->whereYear('created_at', now()->year)
+                ->whereMonth('created_at', now()->month)
+                ->sum('total'),
+            'last_month' => ShoppingList::where('email', Auth::user()->email)
+                ->where('list_status', 2)
+                ->whereYear('created_at', now()->year)
+                ->whereMonth('created_at', now()->month - 1)
+                ->sum('total')
+        ];
     }
 
     public function updatedSelectAll($value)
     {
         $value ? $this->checkboxticked = ShoppingList::where('email', Auth::user()->email)
-            ->where('status', 1)
+            ->where('list_status', 1)
             ->pluck('list_id')->toArray() : $this->checkboxticked = [];
     }
 
@@ -85,8 +116,8 @@ class ShopperIndex extends Component
         else return view('livewire.shopper.shopper-index', [
             'lists' => ShoppingList::where('list_name', 'like', '%' . $this->searchterm . '%')
                 ->where('email', Auth::user()->email)
-                ->where('status', 1)
-                ->orWhere('status', 2)
+                ->where('list_status', 1)
+                ->orWhere('list_status', 2)
                 ->where('email', Auth::user()->email)
                 ->orderBy('updated_at', 'desc')
                 ->paginate(10)
@@ -98,12 +129,12 @@ class ShopperIndex extends Component
     {
         switch (count($this->checkboxticked)) {
             case 1:
-                if (ShoppingList::where('list_id', $this->checkboxticked[0])->pluck('status')->first() == 2) return true;
+                if (ShoppingList::where('list_id', $this->checkboxticked[0])->pluck('list_status')->first() == 2) return true;
                 break;
             default:
                 $completed = false;
                 foreach ($this->checkboxticked as $list_id) {
-                    if (ShoppingList::where('list_id', $list_id)->pluck('status')->first() == 2) {
+                    if (ShoppingList::where('list_id', $list_id)->pluck('list_status')->first() == 2) {
                         $completed = true;
                         break;
                     }
@@ -140,9 +171,9 @@ class ShopperIndex extends Component
         $this->to_confirm_delete = true;
     }
 
-    public function confirm($status)
+    public function confirm($list_status)
     {
-        $this->status = $status;
+        $this->list_status = $list_status;
         $this->to_confirm = true;
     }
 
@@ -163,7 +194,7 @@ class ShopperIndex extends Component
         switch (count($this->checkboxticked)) {
             case 1:
                 ShoppingList::where('list_id', $this->checkboxticked[0])->update([
-                    'status' => 2
+                    'list_status' => 2
                 ]);
                 session()->flash('flash.banner', 'List successfully marked complete!');
                 session()->flash('flash.bannerStyle', 'success');
@@ -171,7 +202,7 @@ class ShopperIndex extends Component
             default:
                 foreach ($this->checkboxticked as $list_id) {
                     ShoppingList::where('list_id', $list_id)->update([
-                        'status' => 2
+                        'list_status' => 2
                     ]);
                 }
                 session()->flash('flash.banner', 'Lists successfully marked complete!');
@@ -184,7 +215,7 @@ class ShopperIndex extends Component
     {
         if (count($this->checkboxticked) == 1) {
             ShoppingList::where('list_id', $this->checkboxticked[0])->update([
-                'status' => 0
+                'list_status' => 0
             ]);
             ListDetail::where('list_id', $this->checkboxticked[0])->update([
                 'is_deleted' => 1
@@ -194,7 +225,7 @@ class ShopperIndex extends Component
         } elseif (count($this->checkboxticked) > 1) {
             foreach ($this->checkboxticked as $list_id) {
                 ShoppingList::where('list_id', $list_id)->update([
-                    'status' => 0
+                    'list_status' => 0
                 ]);
                 ListDetail::where('list_id', $list_id)->update([
                     'is_deleted' => 1

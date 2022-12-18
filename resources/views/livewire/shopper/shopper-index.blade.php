@@ -61,48 +61,9 @@
     </form>
 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="grid grid-cols-3 gap-2 mb-12">
-            <div class="mx-auto w-full text-center text-gray-600 px-6 py-4 mt-8 bg-white shadow-md h-full sm:rounded-xl">
-                <div class="flex flex-col h-full justify-between">
-                    <div class="rounded-lg bg-emerald-600 p-2"><span class="text-white text-xl">Most added product</span></div>
-                    <img src="{{ $top_trending[0]['image_path'] }}" class="w-[175px] mx-auto"/>
-                    <span class="text-2xl">1.&nbsp;&nbsp;{{ $top_trending[0]['product_name'] }}</span>
-                </div>
-            </div>
-            <div class="grid grid-cols-2 gap-2 mt-8 h-full col-span-2">
-                @for ($i = 1; $i < count($top_trending); $i++)
-                <div class="mx-auto w-full text-center text-gray-600 px-6 py-4 bg-white shadow-md sm:rounded-xl">
-                    <div class="flex flex-col h-full justify-between">
-                        <img src="{{ $top_trending[$i]['image_path'] }}" class="w-[100px] mx-auto"/>
-                        <span class="text-lg">{{ $i + 1 }}.&nbsp;&nbsp;{{ $top_trending[$i]['product_name'] }}</span>
-                    </div>
-                </div>
-                @endfor
-            </div>
-        </div>
-        <div class="grid grid-cols-3 gap-2 mb-12">
-            <div class="mx-auto w-full text-center text-gray-600 px-6 py-4 mt-8 bg-white shadow-md h-full sm:rounded-xl">
-                <div class="flex flex-col h-full justify-center">
-                    <span class="text-[100px]">{{ $list_count }}</span>
-                    <span class="text-2xl">total lists</span>
-                </div>
-            </div>
-            <div class="mx-auto w-full text-center text-gray-600 px-6 py-4 mt-8 bg-white shadow-md h-full sm:rounded-xl">
-                <div class="flex flex-col h-full justify-center">
-                    <span class="text-[100px]">{{ $active_list_count }}</span>
-                    <span class="text-2xl">active lists</span>
-                </div>
-            </div>
-            <div class="mx-auto w-full text-center text-gray-600 px-6 py-4 mt-8 bg-white shadow-md h-full sm:rounded-xl">
-                <div class="flex flex-col h-full justify-center">
-                    <span class="text-[100px]">{{ $completed_list_count }}</span>
-                    <span class="text-2xl">completed lists</span>
-                </div>
-            </div>
-        </div>
         <!-- Search and Add Button -->
-        <div class="flex flex-row-reverse pt-12">
-            <div class="flex space-x-4 min-w-full pb-6 pt-2 justify-end">
+        <div class="flex flex-row-reverse pt-8">
+            <div class="flex space-x-4 min-w-full justify-end">
                 <div class="flex rounded-full bg-white w-full max-w-xs h-10 items-center">
                     <i class="fa-solid fa-magnifying-glass z-1 pl-4 absolute"></i>
                     <input type="text" placeholder="Search" class="input bg-white pl-10 w-full rounded-full h-10" wire:model='searchterm' />
@@ -112,6 +73,59 @@
                         <i class="fa-solid fa-plus"></i>&nbsp;Add List
                     </a>
                 </button>
+            </div>
+        </div>
+        <!-- Summary of Trends -->
+        <div class="grid grid-cols-5 gap-4 mb-12">
+            <div class="grid grid-cols-3 mx-auto w-full text-left text-blue-500 px-6 py-4 mt-8 bg-white shadow-md h-full sm:rounded-xl">
+                <div class="col-span-2 flex flex-col h-full justify-center">
+                    <span class="text-3xl">{{ $list_count }}</span>
+                    <span class="font-bold text-md">Total Lists</span>
+                </div>
+                <div class="flex justify-end items-center">
+                    <i class="fa-solid fa-list text-[40px]"></i>
+                </div>
+            </div>
+            <div class="grid grid-cols-3 mx-auto w-full text-left text-emerald-500 px-6 py-4 mt-8 bg-white shadow-md h-full sm:rounded-xl">
+                <div class="col-span-2 flex flex-col h-full justify-center">
+                    <span class="text-3xl">{{ $active_list_count['total'] }}</span>
+                    <span class="font-bold text-md">Active Lists</span>
+                    <span class="text-sm">{{ $active_list_count['this_month'] }}&nbsp;this month</span>
+                </div>
+                <div class="flex justify-end items-center">
+                    <i class="fa-solid fa-list-ul text-[40px]"></i>
+                </div>
+            </div>
+            <div class="grid grid-cols-3 mx-auto w-full text-left text-indigo-500 px-6 py-4 mt-8 bg-white shadow-md h-full sm:rounded-xl">
+                <div class="col-span-2 flex flex-col h-full justify-center">
+                    <span class="text-3xl">{{ $completed_list_count['total'] }}</span>
+                    <span class="font-bold text-md">Completed Lists</span>
+                    <span class="text-sm">{{ $completed_list_count['this_month'] }}&nbsp;this month</span>
+                </div>
+                <div class="flex justify-end items-center">
+                    <i class="fa-solid fa-list-check text-[40px]"></i>
+                </div>
+            </div>
+            <div class="grid grid-cols-3 col-span-2 mx-auto w-full px-6 py-4 mt-8 bg-white shadow-md h-full sm:rounded-xl">
+                <div class="col-span-2 flex flex-col h-full justify-center">
+                    <span class="text-yellow-500 text-3xl">₱&nbsp;{{ number_format($spendings['total'], 2, '.', ',') }}</span>
+                    <span class="text-yellow-500 font-bold text-md">Total Spendings</span>
+                    <div class="flex flex-row text-sm">
+                        <span class="text-yellow-500 text-sm">₱&nbsp;{{ number_format($spendings['this_month'], 2, '.', ',') }}&nbsp;this month</span>
+                        @if ( $spendings['this_month'] < $spendings['last_month'] )
+                        <span class="text-green-600">&nbsp;
+                            <i class="fa-solid fa-caret-down"></i>
+                        </span>
+                        @elseif ( $spendings['this_month'] > $spendings['last_month'] )
+                        <span class="text-red-600">&nbsp;
+                            <i class="fa-solid fa-caret-up"></i>
+                        </span>
+                        @endif
+                    </div>
+                </div>
+                <div class="flex justify-end items-center text-yellow-500">
+                    <i class="fa-solid fa-coins text-[40px]"></i>
+                </div>
             </div>
         </div>
         <!-- List Management Table -->
@@ -143,7 +157,7 @@
                                     <input type="checkbox" value="{{ $list->list_id }}" class="checkbox checkbox-sm checkbox-accent" wire:model="checkboxticked" />
                                 </td>
                                 <td class="table-item">
-                                    @switch ($list->status)
+                                    @switch ($list->list_status)
                                     @case(1)
                                     Active
                                     @break
@@ -182,41 +196,41 @@
     </div>
     <!-- Options Menu when Checkbox Ticked -->
     @if (count($checkboxticked) == 1)
-        <div class="fixed rounded-md bottom-0 bg-white p-3 bg-shadow w-full">
-            <div class="flex justify-center space-x-3 lg:space-x-8">
-                <button type="button" class="sc-btn-ghost"><a href="{{ url('shopper/view/' . $checkboxticked[0]) }}"><i class="fa-solid fa-eye"></i>&nbsp;View</a></button>
-                @if ($this->list_is_completed())
-                <button type="button" class="sc-btn-disabled" disabled><span><i class="fa-solid fa-pen-to-square"></i>&nbsp;Edit</span></button>
-                <button type="button" class="sc-btn-disabled" disabled><span><i class="fa-solid fa-check"></i>&nbsp;Mark as completed</span></button>
-                @else
-                <button type="button" class="sc-btn-ghost"><a href="{{ url('shopper/edit/' . $checkboxticked[0]) }}"><i class="fa-solid fa-pen-to-square"></i>&nbsp;Edit</a></button>
-                <button type="button" class="sc-btn-ghost" wire:click="confirm(2)"><span><i class="fa-solid fa-check"></i>&nbsp;Mark as completed</span></button>
-                @endif
-                <button type="button" class="sc-btn-red-ghost"><a href="{{ url('shopper/download/'. $checkboxticked[0]) }}"><i class="fa-solid fa-file-pdf"></i>&nbsp;Save PDF</a></button>
-                @if ($this->list_is_completed())
-                <button type="button" class="sc-btn-disabled" disabled><span><i class="fa-solid fa-trash"></i>&nbsp;Delete</span></button>
-                @else
-                <button type="button" class="sc-btn-danger" wire:click="confirm_delete"><span><i class="fa-solid fa-trash"></i>&nbsp;Delete</span></button>
-                @endif
-            </div>
+    <div class="fixed rounded-md bottom-0 bg-white p-3 bg-shadow w-full">
+        <div class="flex justify-center space-x-3 lg:space-x-8">
+            <button type="button" class="sc-btn-ghost"><a href="{{ url('shopper/view/' . $checkboxticked[0]) }}"><i class="fa-solid fa-eye"></i>&nbsp;View</a></button>
+            @if ($this->list_is_completed())
+            <button type="button" class="sc-btn-disabled" disabled><span><i class="fa-solid fa-pen-to-square"></i>&nbsp;Edit</span></button>
+            <button type="button" class="sc-btn-disabled" disabled><span><i class="fa-solid fa-check"></i>&nbsp;Mark as completed</span></button>
+            @else
+            <button type="button" class="sc-btn-ghost"><a href="{{ url('shopper/edit/' . $checkboxticked[0]) }}"><i class="fa-solid fa-pen-to-square"></i>&nbsp;Edit</a></button>
+            <button type="button" class="sc-btn-ghost" wire:click="confirm(2)"><span><i class="fa-solid fa-check"></i>&nbsp;Mark as completed</span></button>
+            @endif
+            <button type="button" class="sc-btn-red-ghost"><a href="{{ url('shopper/download/'. $checkboxticked[0]) }}"><i class="fa-solid fa-file-pdf"></i>&nbsp;Save PDF</a></button>
+            @if ($this->list_is_completed())
+            <button type="button" class="sc-btn-disabled" disabled><span><i class="fa-solid fa-trash"></i>&nbsp;Delete</span></button>
+            @else
+            <button type="button" class="sc-btn-danger" wire:click="confirm_delete"><span><i class="fa-solid fa-trash"></i>&nbsp;Delete</span></button>
+            @endif
         </div>
-        @elseif (count($checkboxticked) >= 2)
-        <div class="fixed rounded-md bottom-0 bg-white p-3 bg-shadow w-full">
-            <div class="flex justify-center space-x-3 lg:space-x-8">
-                <button type="button" class="sc-btn-disabled" disabled><span><i class="fa-solid fa-eye-slash"></i>&nbsp;View</span></button>
-                <button type="button" class="sc-btn-disabled" disabled><span><i class="fa-solid fa-pen-to-square"></i>&nbsp;Edit</span></button>
-                @if ($this->list_is_completed())
-                <button type="button" class="sc-btn-disabled" disabled><span><i class="fa-solid fa-check"></i>&nbsp;Mark as completed</span></button>
-                @else
-                <button type="button" class="sc-btn-ghost" wire:click="confirm(2)"><span><i class="fa-solid fa-check"></i>&nbsp;Mark as completed</span></button>
-                @endif
-                <button type="button" class="sc-btn-disabled" disabled><span><i class="fa-solid fa-file-pdf"></i>&nbsp;Save PDF</span></button>
-                @if ($this->list_is_completed())
-                <button type="button" class="sc-btn-disabled" disabled><span><i class="fa-solid fa-trash"></i>&nbsp;Delete</span></button>
-                @else
-                <button type="button" class="sc-btn-danger" wire:click="confirm_delete"><span><i class="fa-solid fa-trash"></i>&nbsp;Delete</span></button>
-                @endif
-            </div>
+    </div>
+    @elseif (count($checkboxticked) >= 2)
+    <div class="fixed rounded-md bottom-0 bg-white p-3 bg-shadow w-full">
+        <div class="flex justify-center space-x-3 lg:space-x-8">
+            <button type="button" class="sc-btn-disabled" disabled><span><i class="fa-solid fa-eye-slash"></i>&nbsp;View</span></button>
+            <button type="button" class="sc-btn-disabled" disabled><span><i class="fa-solid fa-pen-to-square"></i>&nbsp;Edit</span></button>
+            @if ($this->list_is_completed())
+            <button type="button" class="sc-btn-disabled" disabled><span><i class="fa-solid fa-check"></i>&nbsp;Mark as completed</span></button>
+            @else
+            <button type="button" class="sc-btn-ghost" wire:click="confirm(2)"><span><i class="fa-solid fa-check"></i>&nbsp;Mark as completed</span></button>
+            @endif
+            <button type="button" class="sc-btn-disabled" disabled><span><i class="fa-solid fa-file-pdf"></i>&nbsp;Save PDF</span></button>
+            @if ($this->list_is_completed())
+            <button type="button" class="sc-btn-disabled" disabled><span><i class="fa-solid fa-trash"></i>&nbsp;Delete</span></button>
+            @else
+            <button type="button" class="sc-btn-danger" wire:click="confirm_delete"><span><i class="fa-solid fa-trash"></i>&nbsp;Delete</span></button>
+            @endif
         </div>
-        @endif
+    </div>
+    @endif
 </div>

@@ -18,7 +18,7 @@ class ShopperCreate extends Component
     use WithPagination;
 
     // int
-    public $budget, $total, $status, $items, $compitems;
+    public $budget, $total, $list_status, $items, $compitems;
 
     // string
     public $list_name;
@@ -120,7 +120,7 @@ class ShopperCreate extends Component
                 'list_name'     => $this->list_name,
                 'budget'        => $this->budget,
                 'total'         => $this->total,
-                'status'        => $this->status
+                'list_status'   => $this->list_status
             ]);
 
             $list->list_id = "L" . str_pad($list->id, 8, "0", STR_PAD_LEFT);
@@ -424,9 +424,9 @@ class ShopperCreate extends Component
         $this->totalize();
     }
 
-    public function confirm($status)
+    public function confirm($list_status)
     {
-        $this->status = $status;
+        $this->list_status = $list_status;
         $this->to_confirm = true;
     }
 

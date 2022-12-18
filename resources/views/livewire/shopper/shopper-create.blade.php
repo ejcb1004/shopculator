@@ -55,7 +55,7 @@
     @endif
     <form wire:submit.prevent="store" enctype="multipart/form-data">
         @csrf
-        @switch ($status)
+        @switch ($list_status)
         @case (1)
         <x-jet-confirmation-modal wire:model="to_confirm">
             <x-slot name="title">

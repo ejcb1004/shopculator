@@ -49,14 +49,17 @@
                     <x-jet-nav-link href="{{ route('market') }}" :active="request()->routeIs('market')">
                         <b>{{ __('Products') }}</b>
                     </x-jet-nav-link>
-                    <x-jet-nav-link href="{{ route('market/analytics') }}" :active="request()->routeIs('market/analytics')">
-                        <b>{{ __('Analytics') }}</b>
+                    <x-jet-nav-link href="{{ route('market/stats') }}" :active="request()->routeIs('market/stats')">
+                        <b>{{ __('Stats') }}</b>
                     </x-jet-nav-link>
                 </div>
                 @endif
                 @if (Auth::user()->role_id == 'R3')
                 <!-- Navigation Links for Shoppers -->
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 md:flex">
+                    <x-jet-nav-link href="{{ route('shopper/stats') }}" :active="request()->routeIs('shopper/stats')">
+                        <b>{{ __('Stats') }}</b>
+                    </x-jet-nav-link>
                     <x-jet-nav-link href="{{ route('shopper') }}" :active="request()->routeIs('shopper')">
                         <b>{{ __('Your Lists') }}</b>
                     </x-jet-nav-link>

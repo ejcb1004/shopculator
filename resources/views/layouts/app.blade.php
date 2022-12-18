@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="bg-[url('../../public/img/shopculator-bg.png')] bg-cover bg-fixed">
 
 <head>
     <meta charset="utf-8">
@@ -22,7 +22,7 @@
 <body class="font-sans antialiased">
     <x-jet-banner />
 
-    <div class="min-h-screen bg-[url('../../public/img/shopculator-bg.png')] bg-cover">
+    <div class="min-h-screen">
         <livewire:navigation-menu />
 
         <!-- Page Heading -->

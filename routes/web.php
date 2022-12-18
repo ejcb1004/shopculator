@@ -18,10 +18,12 @@ use App\Http\Livewire\Market\Analytics;
 use App\Http\Livewire\Market\MarketCreate;
 use App\Http\Livewire\Market\MarketEdit;
 use App\Http\Livewire\Market\MarketIndex;
+use App\Http\Livewire\Market\MarketStats;
 use App\Http\Livewire\Shopper\ShopperView;
 use App\Http\Livewire\Shopper\ShopperCreate;
 use App\Http\Livewire\Shopper\ShopperEdit;
 use App\Http\Livewire\Shopper\ShopperIndex;
+use App\Http\Livewire\Shopper\ShopperStats;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -73,7 +75,7 @@ Route::middleware([
     Route::get('market', MarketIndex::class)->name('market');
     Route::get('market/create', MarketCreate::class)->name('market/create');
     Route::get('market/edit/{product_id}', MarketEdit::class);
-    Route::get('market/analytics', Analytics::class)->name('market/analytics');
+    Route::get('market/stats', MarketStats::class)->name('market/stats');
     Route::get('market/export/{market_id}', [MarketIndex::class, 'export']);
     Route::get('market/template/{market_id}', [MarketIndex::class, 'template']);
     Route::post('market/import', [MarketIndex::class, 'import'])->name('market/import');
@@ -84,4 +86,5 @@ Route::middleware([
     Route::get('shopper/edit/{list_id}', ShopperEdit::class);
     Route::get('shopper/view/{list_id}', ShopperView::class);
     Route::get('shopper/download/{list_id}', [ShopperIndex::class, 'generatepdf']);
+    Route::get('shopper/stats', ShopperStats::class)->name('shopper/stats');
 });

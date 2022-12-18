@@ -18,7 +18,7 @@ class ShopperEdit extends Component
     use WithPagination;
 
     // int
-    public $budget, $total, $status, $items, $compitems;
+    public $budget, $total, $list_status, $items, $compitems;
 
     // string
     public $list_name;
@@ -115,7 +115,7 @@ class ShopperEdit extends Component
     {
         if (Auth::user()->role_id != 'R3' || 
         Auth::user()->email != ShoppingList::where('list_id', $this->list_id)->pluck('email')->first() || 
-        ShoppingList::where('list_id', $this->list_id)->pluck('status')->first() != 1) abort(403);
+        ShoppingList::where('list_id', $this->list_id)->pluck('list_status')->first() != 1) abort(403);
         else return view('livewire.shopper.shopper-edit', [
             'products' => Product::with(['market', 'subcategory'])
                 ->when($this->selectedmarket, function ($query) {
@@ -147,7 +147,7 @@ class ShopperEdit extends Component
                 'list_name' => $this->list_name,
                 'budget'    => $this->budget,
                 'total'     => $this->total,
-                'status'    => $this->status
+                'list_status'    => $this->list_status
             ]);
 
             foreach ($this->list_details as $detail) {
@@ -502,9 +502,9 @@ class ShopperEdit extends Component
         $this->totalize();
     }
 
-    public function confirm($status)
+    public function confirm($list_status)
     {
-        $this->status = $status;
+        $this->list_status = $list_status;
         $this->to_confirm = true;
     }
 

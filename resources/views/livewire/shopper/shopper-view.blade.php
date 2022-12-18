@@ -22,7 +22,7 @@
                     @endphp
                 </i>
                 <br>
-                @switch($list->status)
+                @switch($list->list_status)
                 @case(1)
                 <span class="py-0.5 px-4 rounded-full bg-emerald-200 text-emerald-700">Active</span>
                 @break
