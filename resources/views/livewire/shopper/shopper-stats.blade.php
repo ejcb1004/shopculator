@@ -1,15 +1,6 @@
 <div>
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex flex-row-reverse mt-8 mb-4">
-            <div class="flex min-w-full justify-end">
-                <button class="sc-btn-red-ghost">
-                    <a href="{{ route('shopper/create') }}">
-                        <i class="fa-solid fa-file-pdf"></i>&nbsp;Export PDF
-                    </a>
-                </button>
-            </div>
-        </div>
-        <section class="mb-6">
+        <section class="mb-6 mt-8">
             <div class="bg-gradient-to-r from-teal-600 to-emerald-400 py-1 rounded-lg text-center">
                 <span class="text-2xl text-white font-bold">Frequently Bought Products</span>
             </div>
@@ -316,21 +307,21 @@
                                                 </td>
                                             </tr>
                                             @endforeach
-                                            <tr class="table-group even:bg-emerald-100 odd:bg-white">
+                                            <tr class="table-group bg-emerald-500 text-white">
                                                 <td></td>
                                                 <td class="font-bold">Active</td>
                                                 <td class="table-item">
                                                     {{ $this->yearly_active_list_sum($total_lists_yearly) }}
                                                 </td>
                                             </tr>
-                                            <tr class="table-group even:bg-emerald-100 odd:bg-white">
+                                            <tr class="table-group bg-blue-600 text-white">
                                                 <td></td>
                                                 <td class="font-bold">Completed</td>
                                                 <td class="table-item">
                                                     {{ $this->yearly_completed_list_sum($total_lists_yearly) }}
                                                 </td>
                                             </tr>
-                                            <tr class="table-group even:bg-emerald-100 odd:bg-white">
+                                            <tr class="table-group bg-gray-700 text-white">
                                                 <td></td>
                                                 <td class="font-bold">Total</td>
                                                 <td class="table-item">
