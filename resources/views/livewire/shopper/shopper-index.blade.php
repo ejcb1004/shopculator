@@ -110,17 +110,37 @@
                 <div class="col-span-2 flex flex-col h-full justify-center">
                     <span class="text-yellow-500 text-3xl">₱&nbsp;{{ number_format($spendings['total'], 2, '.', ',') }}</span>
                     <span class="text-yellow-500 font-bold text-md">Total Spendings</span>
-                    <div class="flex flex-row text-sm">
-                        <span class="text-yellow-500 text-sm">₱&nbsp;{{ number_format($spendings['this_month'], 2, '.', ',') }}&nbsp;this month</span>
-                        @if ( $spendings['this_month'] < $spendings['last_month'] )
-                        <span class="text-green-600">&nbsp;
-                            <i class="fa-solid fa-caret-down"></i>
-                        </span>
-                        @elseif ( $spendings['this_month'] > $spendings['last_month'] )
-                        <span class="text-red-600">&nbsp;
-                            <i class="fa-solid fa-caret-up"></i>
-                        </span>
-                        @endif
+                    <div class="flex flex-col text-sm">
+                        <div>
+                            <span class="text-yellow-500 text-sm">₱&nbsp;{{ number_format($spendings['this_month'], 2, '.', ',') }}&nbsp;this month</span>
+                            @if ( $spendings['this_month'] < $spendings['last_month'] )
+                            <span class="text-green-600">&nbsp;
+                                <i class="fa-solid fa-caret-down"></i>
+                                <span>{{ number_format(($spendings['this_month'] / $spendings['last_month']) * 100 - 100, 2) }}</span>
+                            </span>
+                            @elseif ( $spendings['this_month'] > $spendings['last_month'] )
+                            <span class="text-red-600">&nbsp;
+                                <i class="fa-solid fa-caret-up"></i>
+                                <span>{{ number_format(($spendings['this_month'] / $spendings['last_month']) * 100 - 100, 2) }}</span>
+                            </span>
+                            @else
+                            @endif
+                        </div>
+                        <div>
+                            <span class="text-yellow-500 text-sm">₱&nbsp;{{ number_format($spendings['this_year'], 2, '.', ',') }}&nbsp;this year</span>
+                            @if ( $spendings['this_year'] < $spendings['last_year'] )
+                            <span class="text-green-600">&nbsp;
+                                <i class="fa-solid fa-caret-down"></i>
+                                <span>{{ number_format(($spendings['this_year'] / $spendings['last_year']) * 100 - 100, 2) }}</span>
+                            </span>
+                            @elseif ( $spendings['this_year'] > $spendings['last_year'] )
+                            <span class="text-red-600">&nbsp;
+                                <i class="fa-solid fa-caret-up"></i>
+                                <span>{{ number_format(($spendings['this_year'] / $spendings['last_year']) * 100 - 100, 2) }}</span>
+                            </span>
+                            @else
+                            @endif
+                        </div>
                     </div>
                 </div>
                 <div class="flex justify-end items-center text-yellow-500">

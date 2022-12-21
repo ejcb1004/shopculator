@@ -39,7 +39,7 @@
                         <b>{{ __('Subcategories') }}</b>
                     </x-jet-nav-link>
                     <x-jet-nav-link href="{{ route('admin') }}" :active="request()->routeIs('admin')">
-                        <b>{{ __('Analytics') }}</b>
+                        <b>{{ __('Stats') }}</b>
                     </x-jet-nav-link>
                 </div>
                 @endif

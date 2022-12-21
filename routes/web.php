@@ -14,7 +14,6 @@ use App\Http\Livewire\Admin\Subcategories\AdminSubcategoryIndex;
 use App\Http\Livewire\Admin\Users\AdminUserCreate;
 use App\Http\Livewire\Admin\Users\AdminUserEdit;
 use App\Http\Livewire\Admin\Users\AdminUserIndex;
-use App\Http\Livewire\Market\Analytics;
 use App\Http\Livewire\Market\MarketCreate;
 use App\Http\Livewire\Market\MarketEdit;
 use App\Http\Livewire\Market\MarketIndex;

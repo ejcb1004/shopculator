@@ -235,7 +235,7 @@
                                                         </thead>
                                                         <tbody class="text-gray-600">
                                                             @foreach ($total_lists_monthly[array_search($year, $an_years)] as $item)
-                                                            <tr class="table-group">
+                                                            <tr class="table-group even:bg-emerald-100 odd:bg-white">
                                                                 <td class="table-item">
                                                                     {{ DateTime::createFromFormat('!m', $item['month'])->format('M') }}
                                                                 </td>
@@ -283,7 +283,7 @@
                                 <div class="mx-auto min-w-[475px] col-span-2">
                                     <canvas id="total-lists-yearly"></canvas>
                                 </div>
-                                <div class="mx-auto min-w-full my-auto">
+                                <div class="overflow-auto rounded-sm">
                                     <table class="table-auto w-full">
                                         <!-- head -->
                                         <thead class="bg-emerald-400 text-white p-2">
@@ -299,7 +299,7 @@
                                                 <td class="table-item">
                                                     {{ $item['year'] }}
                                                 </td>
-                                                <td class="table-item">
+                                                <td class="table-item {{ $item['list_status'] == 1 ? 'text-emerald-700' : 'text-blue-700' }}">
                                                     {{ $item['list_status'] == 1 ? 'Active' : 'Completed' }}
                                                 </td>
                                                 <td class="table-item">
@@ -379,7 +379,9 @@
             $labels = [];
             foreach ($total_lists_monthly[$i] as $item) {
                 $dateObj = DateTime::createFromFormat('!m', $item['month']);
-                array_push($labels, $dateObj->format('F'));
+                if (!in_array($dateObj->format('F'), $labels, true)){
+                    array_push($labels, $dateObj->format('F'));
+                }
             }
             echo json_encode($labels);
             echo ",
@@ -387,11 +389,12 @@
                             label: 'Active',
                             backgroundColor: '#10b981',
                             data: ";
-            $active_data = [];
-            foreach ($total_lists_monthly[$i] as $item) {
-                if ($item['list_status'] == 1)
-                    array_push($active_data, $item['month_count']);
-                else array_push($active_data, 0);
+            $active_data = array_fill(0, 12, 0);
+            for ($j = 0; $j < count($active_data); $j++) {
+                foreach ($total_lists_monthly[$i] as $item) {
+                    if ($item['list_status'] == 1 && $item['month'] == ($j + 1))
+                        $active_data[$j] = $item['month_count'];
+                }
             }
             echo json_encode($active_data);
             echo "},
@@ -399,11 +402,12 @@
                             label: 'Completed',
                             backgroundColor: '#3b82f6',
                             data: ";
-            $completed_data = [];
-            foreach ($total_lists_monthly[$i] as $item) {
-                if ($item['list_status'] == 2)
-                    array_push($completed_data, $item['month_count']);
-                else array_push($completed_data, 0);
+            $completed_data = array_fill(0, 12, 0);
+            for ($j = 0; $j < count($completed_data); $j++) {
+                foreach ($total_lists_monthly[$i] as $item) {
+                    if ($item['list_status'] == 2 && $item['month'] == ($j + 1))
+                        $completed_data[$j] = $item['month_count'];
+                }
             }
             echo json_encode($completed_data);
             echo "}
@@ -433,7 +437,9 @@
                 labels: ";
         $labels = [];
         for ($i = count($total_lists_yearly) - 1; $i > -1; $i--) {
-            array_push($labels, $total_lists_yearly[$i]['year']);
+            if (!in_array($total_lists_yearly[$i]['year'], $labels, true)){
+                array_push($labels, $total_lists_yearly[$i]['year']);
+            }
         }
         echo json_encode($labels);
         echo ",
@@ -442,25 +448,28 @@
                         label: 'Active',
                         backgroundColor: '#10b981',
                         data: ";
-        $active_data = [];
-        for ($i = count($total_lists_yearly) - 1; $i > -1; $i--) {
-            if ($total_lists_yearly[$i]['list_status'] == 1)
-                array_push($active_data, $total_lists_yearly[$i]['year_count']);
-            else array_push($active_data, 0);
+        $active_data = array_fill(0, count($an_years), 0);
+        for ($j = 0; $j < count($active_data); $j++) {
+            foreach ($total_lists_yearly as $item) {
+                if ($item['list_status'] == 1 && $item['year'] == $an_years[$j])
+                    $active_data[$j] = $item['year_count'];
+            }
         }
-        echo json_encode($active_data);
+        echo json_encode(array_reverse($active_data));
         echo "},
                     {
                         label: 'Completed',
                         backgroundColor: '#3b82f6',
                         data: ";
-        $completed_data = [];
-        for ($i = count($total_lists_yearly) - 1; $i > -1; $i--) {
-            if ($total_lists_yearly[$i]['list_status'] == 2)
-                array_push($completed_data, $total_lists_yearly[$i]['year_count']);
-            else array_push($completed_data, 0);
+        
+        $completed_data = array_fill(0, count($an_years), 0);
+        for ($j = 0; $j < count($completed_data); $j++) {
+            foreach ($total_lists_yearly as $item) {
+                if ($item['list_status'] == 2 && $item['year'] == $an_years[$j])
+                    $completed_data[$j] = $item['year_count'];
+            }
         }
-        echo json_encode($completed_data);
+        echo json_encode(array_reverse($completed_data));
         echo "}
                 ]
             },

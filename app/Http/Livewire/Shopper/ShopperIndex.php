@@ -98,6 +98,14 @@ class ShopperIndex extends Component
                 ->where('list_status', 2)
                 ->whereYear('created_at', now()->year)
                 ->whereMonth('created_at', now()->month - 1)
+                ->sum('total'),
+            'this_year' => ShoppingList::where('email', Auth::user()->email)
+                ->where('list_status', 2)
+                ->whereYear('created_at', now()->year)
+                ->sum('total'),
+            'last_year' => ShoppingList::where('email', Auth::user()->email)
+                ->where('list_status', 2)
+                ->whereYear('created_at', now()->year - 1)
                 ->sum('total')
         ];
     }
