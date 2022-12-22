@@ -97,7 +97,7 @@
                                             </button>
                                         </div>
                                     </div>
-                                    <div class="grid grid-cols-2 px-6">
+                                    <div class="grid grid-cols-2 gap-6 px-6">
                                         <div>
                                             <canvas id="total-lists-monthly-{{ $year }}"></canvas>
                                         </div>
