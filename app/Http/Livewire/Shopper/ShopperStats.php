@@ -62,20 +62,52 @@ class ShopperStats extends Component
                     ->pluck('list_id')->toArray())
             ]
         ];
+
+        $total_lists_monthly = [];
         $this->total_lists_monthly = [];
+        $this->total_lists_yearly = [];
+
         $this->monthly_top_trending = [];
         $this->yearly_top_trending = [];
 
-        foreach ($this->an_years as $year) {
+        foreach ($this->an_years as $x => $year) {
+            $this->total_lists_monthly[$x] = [];
+            for ($j = 0; $j < 12; $j++) {
+                array_push($this->total_lists_monthly[$x], [
+                    'month' => $j + 1,
+                    'active_count' => 0,
+                    'completed_count' => 0,
+                    'month_count' => 0
+                ]);
+            }
+
+            array_push($this->total_lists_yearly, [
+                'year' => $year,
+                'active_count' => 0,
+                'completed_count' => 0,
+                'year_count' => 0
+            ]);
+
             array_push(
-                $this->total_lists_monthly,
+                $total_lists_monthly,
                 ShoppingList::where('email', Auth::user()->email)
                     ->whereYear('updated_at', $year)
-                    ->select(DB::raw('MONTH(updated_at) AS month'), 'list_status', DB::raw('COUNT(*) AS month_count'))
+                    ->select(
+                        DB::raw('MONTH(updated_at) AS month'),
+                        'list_status',
+                        DB::raw('COUNT(*) AS month_count')
+                    )
                     ->groupBy('month', 'list_status')
                     ->get()
                     ->toArray()
             );
+
+            foreach ($total_lists_monthly[$x] as $value) {
+                if ($value['list_status'] == 1) $this->total_lists_monthly[$x][$value['month'] - 1]['active_count'] = $value['month_count'];
+                elseif ($value['list_status'] == 2) $this->total_lists_monthly[$x][$value['month'] - 1]['completed_count'] = $value['month_count'];
+                $this->total_lists_monthly[$x][$value['month'] - 1]['month_count'] = $this->total_lists_monthly[$x][$value['month'] - 1]['active_count'] + $this->total_lists_monthly[$x][$value['month'] - 1]['completed_count'];
+            }
+
             array_push(
                 $this->yearly_top_trending,
                 ListDetail::select(
@@ -118,12 +150,18 @@ class ShopperStats extends Component
             );
         }
 
-        $this->total_lists_yearly = ShoppingList::where('email', Auth::user()->email)
+        $total_lists_yearly = ShoppingList::where('email', Auth::user()->email)
             ->select(DB::raw('YEAR(updated_at) AS year'), 'list_status', DB::raw('COUNT(*) AS year_count'))
             ->groupBy('year', 'list_status')
             ->orderBy('year', 'desc')
             ->get()
             ->toArray();
+
+        foreach ($total_lists_yearly as $value) {
+            if ($value['list_status'] == 1) $this->total_lists_yearly[array_search($value['year'], $this->an_years)]['active_count'] = $value['year_count'];
+            elseif ($value['list_status'] == 2) $this->total_lists_yearly[array_search($value['year'], $this->an_years)]['completed_count'] = $value['year_count'];
+            $this->total_lists_yearly[array_search($value['year'], $this->an_years)]['year_count'] = $this->total_lists_yearly[array_search($value['year'], $this->an_years)]['active_count'] + $this->total_lists_yearly[array_search($value['year'], $this->an_years)]['completed_count'];
+        }
 
         $this->list_count = count(ShoppingList::where('email', Auth::user()->email)
             ->where('list_status', 1)
@@ -142,7 +180,7 @@ class ShopperStats extends Component
 
     public function render()
     {
-        // dd($this->yearly_top_trending);
+        //dd($this->total_lists_yearly);
         if (Auth::user()->role_id != 'R3') abort(403);
         else return view('livewire.shopper.shopper-stats');
     }
@@ -156,26 +194,6 @@ class ShopperStats extends Component
         return $list_sum;
     }
 
-    public function monthly_active_list_sum($arr)
-    {
-        $list_sum = 0;
-        foreach ($arr as $item) {
-            if ($item['list_status'] == 1)
-                $list_sum += $item['month_count'];
-        }
-        return $list_sum;
-    }
-
-    public function monthly_completed_list_sum($arr)
-    {
-        $list_sum = 0;
-        foreach ($arr as $item) {
-            if ($item['list_status'] == 2)
-                $list_sum += $item['month_count'];
-        }
-        return $list_sum;
-    }
-
     public function yearly_list_sum($arr)
     {
         $list_sum = 0;
@@ -185,22 +203,20 @@ class ShopperStats extends Component
         return $list_sum;
     }
 
-    public function yearly_active_list_sum($arr)
+    public function active_list_sum($arr)
     {
         $list_sum = 0;
         foreach ($arr as $item) {
-            if ($item['list_status'] == 1)
-                $list_sum += $item['year_count'];
+            $list_sum += $item['active_count'];
         }
         return $list_sum;
     }
 
-    public function yearly_completed_list_sum($arr)
+    public function completed_list_sum($arr)
     {
         $list_sum = 0;
         foreach ($arr as $item) {
-            if ($item['list_status'] == 2)
-                $list_sum += $item['year_count'];
+            $list_sum += $item['completed_count'];
         }
         return $list_sum;
     }

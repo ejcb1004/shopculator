@@ -229,42 +229,33 @@
                                                         <thead class="bg-emerald-400 text-white p-2">
                                                             <tr>
                                                                 <th>Month</th>
-                                                                <th>Status</th>
-                                                                <th>No. of Lists</th>
+                                                                <th>Active</th>
+                                                                <th>Completed</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody class="text-gray-600">
                                                             @foreach ($total_lists_monthly[array_search($year, $an_years)] as $item)
-                                                            <tr class="table-group even:bg-emerald-100 odd:bg-white">
+                                                            <tr class="table-group">
                                                                 <td class="table-item">
-                                                                    {{ DateTime::createFromFormat('!m', $item['month'])->format('M') }}
+                                                                    {{ DateTime::createFromFormat('!m', $item['month'])->format('F') }}
                                                                 </td>
-                                                                <td class="table-item {{ $item['list_status'] == 1 ? 'text-emerald-700' : 'text-blue-700' }}">
-                                                                    {{ $item['list_status'] == 1 ? 'Active' : 'Completed' }}
+                                                                <td class="table-item text-end bg-emerald-100">
+                                                                    {{ $item['active_count'] }}
                                                                 </td>
-                                                                <td class="table-item">
-                                                                    {{ $item['month_count'] }}
+                                                                <td class="table-item text-end bg-blue-200">
+                                                                    {{ $item['completed_count'] }}
                                                                 </td>
                                                             </tr>
                                                             @endforeach
-                                                            <tr class="table-group bg-emerald-500 text-white">
-                                                                <td></td>
-                                                                <td class="font-bold">Active</td>
-                                                                <td class="table-item">
-                                                                    {{ $this->monthly_active_list_sum($total_lists_monthly[array_search($year, $an_years)]) }}
-                                                                </td>
-                                                            </tr>
-                                                            <tr class="table-group bg-blue-600 text-white">
-                                                                <td></td>
-                                                                <td class="font-bold">Completed</td>
-                                                                <td class="table-item">
-                                                                    {{ $this->monthly_completed_list_sum($total_lists_monthly[array_search($year, $an_years)]) }}
-                                                                </td>
+                                                            <tr class="table-group">
+                                                                <td class="table-item font-bold bg-gray-300">Sum</td>
+                                                                <td class="table-item text-end font-bold bg-emerald-300">{{ $this->active_list_sum($total_lists_monthly[array_search($year, $an_years)]) }}</td>
+                                                                <td class="table-item text-end font-bold bg-blue-400">{{ $this->completed_list_sum($total_lists_monthly[array_search($year, $an_years)]) }}</td>
                                                             </tr>
                                                             <tr class="table-group bg-gray-700 text-white">
-                                                                <td></td>
                                                                 <td class="font-bold">Total</td>
-                                                                <td class="table-item">
+                                                                <td></td>
+                                                                <td class="table-item text-end font-bold">
                                                                     {{ $this->monthly_list_sum($total_lists_monthly[array_search($year, $an_years)]) }}
                                                                 </td>
                                                             </tr>
@@ -289,42 +280,33 @@
                                         <thead class="bg-emerald-400 text-white p-2">
                                             <tr>
                                                 <th>Year</th>
-                                                <th>Status</th>
-                                                <th>No. of Lists</th>
+                                                <th>Active</th>
+                                                <th>Completed</th>
                                             </tr>
                                         </thead>
                                         <tbody class="text-gray-600">
                                             @foreach ($total_lists_yearly as $item)
-                                            <tr class="table-group even:bg-emerald-100 odd:bg-white">
+                                            <tr class="table-group">
                                                 <td class="table-item">
                                                     {{ $item['year'] }}
                                                 </td>
-                                                <td class="table-item {{ $item['list_status'] == 1 ? 'text-emerald-700' : 'text-blue-700' }}">
-                                                    {{ $item['list_status'] == 1 ? 'Active' : 'Completed' }}
+                                                <td class="table-item text-end bg-emerald-100">
+                                                    {{ $item['active_count'] }}
                                                 </td>
-                                                <td class="table-item">
-                                                    {{ $item['year_count'] }}
+                                                <td class="table-item text-end bg-blue-200">
+                                                    {{ $item['completed_count'] }}
                                                 </td>
                                             </tr>
                                             @endforeach
-                                            <tr class="table-group bg-emerald-500 text-white">
-                                                <td></td>
-                                                <td class="font-bold">Active</td>
-                                                <td class="table-item">
-                                                    {{ $this->yearly_active_list_sum($total_lists_yearly) }}
-                                                </td>
-                                            </tr>
-                                            <tr class="table-group bg-blue-600 text-white">
-                                                <td></td>
-                                                <td class="font-bold">Completed</td>
-                                                <td class="table-item">
-                                                    {{ $this->yearly_completed_list_sum($total_lists_yearly) }}
-                                                </td>
+                                            <tr class="table-group">
+                                                <td class="table-item font-bold bg-gray-300">Sum</td>
+                                                <td class="table-item text-end font-bold bg-emerald-300">{{ $this->active_list_sum($total_lists_yearly) }}</td>
+                                                <td class="table-item text-end font-bold bg-blue-400">{{ $this->completed_list_sum($total_lists_yearly) }}</td>
                                             </tr>
                                             <tr class="table-group bg-gray-700 text-white">
-                                                <td></td>
                                                 <td class="font-bold">Total</td>
-                                                <td class="table-item">
+                                                <td></td>
+                                                <td class="table-item text-end font-bold">
                                                     {{ $this->yearly_list_sum($total_lists_yearly) }}
                                                 </td>
                                             </tr>
@@ -387,27 +369,23 @@
             echo ",
                     datasets: [{
                             label: 'Active',
+                            borderColor: '#10b981',
                             backgroundColor: '#10b981',
                             data: ";
             $active_data = array_fill(0, 12, 0);
             for ($j = 0; $j < count($active_data); $j++) {
-                foreach ($total_lists_monthly[$i] as $item) {
-                    if ($item['list_status'] == 1 && $item['month'] == ($j + 1))
-                        $active_data[$j] = $item['month_count'];
-                }
+                $active_data[$j] = $total_lists_monthly[$i][$j]['active_count'];
             }
             echo json_encode($active_data);
             echo "},
                         {
                             label: 'Completed',
+                            borderColor: '#3b82f6',
                             backgroundColor: '#3b82f6',
                             data: ";
             $completed_data = array_fill(0, 12, 0);
             for ($j = 0; $j < count($completed_data); $j++) {
-                foreach ($total_lists_monthly[$i] as $item) {
-                    if ($item['list_status'] == 2 && $item['month'] == ($j + 1))
-                        $completed_data[$j] = $item['month_count'];
-                }
+                $completed_data[$j] = $total_lists_monthly[$i][$j]['completed_count'];
             }
             echo json_encode($completed_data);
             echo "}
@@ -446,28 +424,24 @@
                 datasets: [
                     {
                         label: 'Active',
+                        borderColor: '#10b981',
                         backgroundColor: '#10b981',
                         data: ";
         $active_data = array_fill(0, count($an_years), 0);
         for ($j = 0; $j < count($active_data); $j++) {
-            foreach ($total_lists_yearly as $item) {
-                if ($item['list_status'] == 1 && $item['year'] == $an_years[$j])
-                    $active_data[$j] = $item['year_count'];
-            }
+            $active_data[$j] = $total_lists_yearly[$j]['active_count'];
         }
         echo json_encode(array_reverse($active_data));
         echo "},
                     {
                         label: 'Completed',
+                        borderColor: '#3b82f6',
                         backgroundColor: '#3b82f6',
                         data: ";
         
         $completed_data = array_fill(0, count($an_years), 0);
         for ($j = 0; $j < count($completed_data); $j++) {
-            foreach ($total_lists_yearly as $item) {
-                if ($item['list_status'] == 2 && $item['year'] == $an_years[$j])
-                    $completed_data[$j] = $item['year_count'];
-            }
+            $completed_data[$j] = $total_lists_yearly[$j]['completed_count'];
         }
         echo json_encode(array_reverse($completed_data));
         echo "}

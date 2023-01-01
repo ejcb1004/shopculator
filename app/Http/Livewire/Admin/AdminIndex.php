@@ -40,23 +40,50 @@ class AdminIndex extends Component
         ];
 
         $this->list_statuses = ['Active', 'Completed'];
-        $this->total_lists_monthly = [];
 
-        foreach ($this->years as $year) {
+        $total_lists_monthly = [];
+        $this->total_lists_monthly = [];
+        $this->total_lists_yearly = [];
+
+        foreach ($this->years as $x => $year) {
+            $this->total_lists_monthly[$x] = [];
+            for ($j = 0; $j < 12; $j++) {
+                array_push($this->total_lists_monthly[$x], [
+                    'month' => $j + 1,
+                    'active_count' => 0,
+                    'completed_count' => 0,
+                    'month_count' => 0
+                ]);
+            }
+
+            array_push($this->total_lists_yearly, [
+                'year' => $year,
+                'active_count' => 0,
+                'completed_count' => 0,
+                'year_count' => 0
+            ]);
+
             array_push(
-                $this->total_lists_monthly,
+                $total_lists_monthly,
                 ShoppingList::whereYear('updated_at', $year)
                     ->select(
-                        DB::raw('MONTH(updated_at) AS month'), 
+                        DB::raw('MONTH(updated_at) AS month'),
                         'list_status',
-                        DB::raw('COUNT(*) AS month_count'))
+                        DB::raw('COUNT(*) AS month_count')
+                    )
                     ->groupBy('month', 'list_status')
                     ->get()
                     ->toArray()
             );
+
+            foreach ($total_lists_monthly[$x] as $value) {
+                if ($value['list_status'] == 1) $this->total_lists_monthly[$x][$value['month'] - 1]['active_count'] = $value['month_count'];
+                elseif ($value['list_status'] == 2) $this->total_lists_monthly[$x][$value['month'] - 1]['completed_count'] = $value['month_count'];
+                $this->total_lists_monthly[$x][$value['month'] - 1]['month_count'] = $this->total_lists_monthly[$x][$value['month'] - 1]['active_count'] + $this->total_lists_monthly[$x][$value['month'] - 1]['completed_count'];
+            }
         }
 
-        $this->total_lists_yearly = ShoppingList::select(
+        $total_lists_yearly = ShoppingList::select(
             DB::raw('YEAR(updated_at) AS year'),
             'list_status',
             DB::raw('COUNT(*) AS year_count')
@@ -65,6 +92,12 @@ class AdminIndex extends Component
             ->orderBy('year', 'desc')
             ->get()
             ->toArray();
+
+        foreach ($total_lists_yearly as $value) {
+            if ($value['list_status'] == 1) $this->total_lists_yearly[array_search($value['year'], $this->years)]['active_count'] = $value['year_count'];
+            elseif ($value['list_status'] == 2) $this->total_lists_yearly[array_search($value['year'], $this->years)]['completed_count'] = $value['year_count'];
+            $this->total_lists_yearly[array_search($value['year'], $this->years)]['year_count'] = $this->total_lists_yearly[array_search($value['year'], $this->years)]['active_count'] + $this->total_lists_yearly[array_search($value['year'], $this->years)]['completed_count'];
+        }
     }
 
     public function render()
@@ -83,26 +116,6 @@ class AdminIndex extends Component
         return $list_sum;
     }
 
-    public function monthly_active_list_sum($arr)
-    {
-        $list_sum = 0;
-        foreach ($arr as $item) {
-            if ($item['list_status'] == 1)
-                $list_sum += $item['month_count'];
-        }
-        return $list_sum;
-    }
-
-    public function monthly_completed_list_sum($arr)
-    {
-        $list_sum = 0;
-        foreach ($arr as $item) {
-            if ($item['list_status'] == 2)
-                $list_sum += $item['month_count'];
-        }
-        return $list_sum;
-    }
-
     public function yearly_list_sum($arr)
     {
         $list_sum = 0;
@@ -112,22 +125,20 @@ class AdminIndex extends Component
         return $list_sum;
     }
 
-    public function yearly_active_list_sum($arr)
+    public function active_list_sum($arr)
     {
         $list_sum = 0;
         foreach ($arr as $item) {
-            if ($item['list_status'] == 1)
-                $list_sum += $item['year_count'];
+            $list_sum += $item['active_count'];
         }
         return $list_sum;
     }
 
-    public function yearly_completed_list_sum($arr)
+    public function completed_list_sum($arr)
     {
         $list_sum = 0;
         foreach ($arr as $item) {
-            if ($item['list_status'] == 2)
-                $list_sum += $item['year_count'];
+            $list_sum += $item['completed_count'];
         }
         return $list_sum;
     }
