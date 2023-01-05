@@ -3,7 +3,6 @@
 namespace App\Http\Livewire\Shopper;
 
 use App\Models\ListDetail;
-use App\Models\Product;
 use App\Models\ShoppingList;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -24,7 +23,10 @@ class ShopperIndex extends Component
     public $list_count;
     public $active_list_count;
     public $completed_list_count;
+    public $expired_list_count;
     public $spendings;
+    public $list_details;
+    public $active_b4_7d;
 
     // boolean
     public $to_confirm;
@@ -42,6 +44,12 @@ class ShopperIndex extends Component
         $this->to_confirm = false;
         $this->list_details = ListDetail::pluck('product_id')->toArray();
 
+        $this->active_b4_7d = ShoppingList::where('updated_at', '<=', DB::raw('NOW()'))
+        ->where('updated_at', '>', DB::raw('NOW() - INTERVAL 7 DAY'))
+        ->where('list_status', 1)
+        ->where('email', Auth::user()->email)
+        ->count();
+
         $this->db_trending = DB::table('list_details')
             ->join('products', 'list_details.product_id', '=', 'products.product_id')
             ->join('shopping_lists', 'list_details.list_id', '=', 'shopping_lists.list_id')
@@ -52,7 +60,9 @@ class ShopperIndex extends Component
             ->orderBy('count', 'desc')
             ->get()
             ->toArray();
+            
         $this->top_trending = [];
+
         foreach ($this->db_trending as $trend) {
             array_push($this->top_trending, get_object_vars($trend));
         }
@@ -60,6 +70,8 @@ class ShopperIndex extends Component
         $this->list_count = count(ShoppingList::where('email', Auth::user()->email)
             ->where('list_status', 1)
             ->orWhere('list_status', 2)
+            ->where('email', Auth::user()->email)
+            ->orWhere('list_status', 3)
             ->where('email', Auth::user()->email)
             ->pluck('list_id')->toArray());
 
@@ -80,6 +92,17 @@ class ShopperIndex extends Component
                 ->pluck('list_id')->toArray()),
             'this_month' => count(ShoppingList::where('email', Auth::user()->email)
                 ->where('list_status', 2)
+                ->whereYear('created_at', now()->year)
+                ->whereMonth('created_at', now()->month)
+                ->pluck('list_id')->toArray())
+        ];
+
+        $this->expired_list_count = [
+            'total' => count(ShoppingList::where('email', Auth::user()->email)
+                ->where('list_status', 3)
+                ->pluck('list_id')->toArray()),
+            'this_month' => count(ShoppingList::where('email', Auth::user()->email)
+                ->where('list_status', 3)
                 ->whereYear('created_at', now()->year)
                 ->whereMonth('created_at', now()->month)
                 ->pluck('list_id')->toArray())
@@ -114,6 +137,8 @@ class ShopperIndex extends Component
     {
         $value ? $this->checkboxticked = ShoppingList::where('email', Auth::user()->email)
             ->where('list_status', 1)
+            ->orWhere('list_status', 2)
+            ->where('email', Auth::user()->email)
             ->pluck('list_id')->toArray() : $this->checkboxticked = [];
     }
 
@@ -126,6 +151,8 @@ class ShopperIndex extends Component
                 ->where('email', Auth::user()->email)
                 ->where('list_status', 1)
                 ->orWhere('list_status', 2)
+                ->where('email', Auth::user()->email)
+                ->orWhere('list_status', 3)
                 ->where('email', Auth::user()->email)
                 ->orderBy('updated_at', 'desc')
                 ->paginate(10)
@@ -151,6 +178,24 @@ class ShopperIndex extends Component
         }
     }
 
+    public function list_is_expired()
+    {
+        switch (count($this->checkboxticked)) {
+            case 1:
+                if (ShoppingList::where('list_id', $this->checkboxticked[0])->pluck('list_status')->first() == 3) return true;
+                break;
+            default:
+                $expired = false;
+                foreach ($this->checkboxticked as $list_id) {
+                    if (ShoppingList::where('list_id', $list_id)->pluck('list_status')->first() == 3) {
+                        $expired = true;
+                        break;
+                    }
+                }
+                return $expired;
+        }
+    }
+
     public function generatepdf($list_id)
     {
         $list_name = ShoppingList::where('list_id', $list_id)->pluck('list_name')[0];
@@ -164,7 +209,7 @@ class ShopperIndex extends Component
         $budget = ShoppingList::where('list_id', $list_id)->pluck('budget')[0];
         $total = ShoppingList::where('list_id', $list_id)->pluck('total')[0];
         $created_at = ShoppingList::where('list_id', $list_id)->pluck('created_at')[0];
-        return $pdf = PDF::loadView('livewire.shopper.page', [
+        return PDF::loadView('livewire.shopper.page', [
             'list_name' => $list_name,
             'list_id' => $list_id,
             'data' => $data,
@@ -184,19 +229,7 @@ class ShopperIndex extends Component
         $this->list_status = $list_status;
         $this->to_confirm = true;
     }
-
-    // public function register_prices()
-    // {
-    //     for ($i = 1650; $i < count($this->list_details); $i++) {
-    //         ListDetail::where('product_id', $this->list_details[$i])->update([
-    //             'current_price' => Product::where('product_id', $this->list_details[$i])->pluck('price')[0]
-    //         ]);
-    //     }
-    //     session()->flash('flash.banner', 'Prices successfully registered!');
-    //     session()->flash('flash.bannerStyle', 'success');
-    //     return redirect('shopper');
-    // }
-
+    
     public function mark_complete()
     {
         switch (count($this->checkboxticked)) {

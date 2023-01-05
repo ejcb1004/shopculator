@@ -20,6 +20,7 @@ class ShopperStats extends Component
     public $list_count;
     public $active_list_count;
     public $completed_list_count;
+    public $expired_list_count;
     public $monthly_top_trending;
     public $yearly_top_trending;
 
@@ -49,7 +50,8 @@ class ShopperStats extends Component
         $this->total_lists = [
             'labels' => [
                 'Active',
-                'Completed'
+                'Completed',
+                'Expired'
             ],
             'data' => [
                 count(ShoppingList::where('email', Auth::user()->email)
@@ -58,6 +60,10 @@ class ShopperStats extends Component
                     ->pluck('list_id')->toArray()),
                 count(ShoppingList::where('email', Auth::user()->email)
                     ->where('list_status', 2)
+                    ->where('email', Auth::user()->email)
+                    ->pluck('list_id')->toArray()),
+                count(ShoppingList::where('email', Auth::user()->email)
+                    ->where('list_status', 3)
                     ->where('email', Auth::user()->email)
                     ->pluck('list_id')->toArray())
             ]
@@ -77,6 +83,7 @@ class ShopperStats extends Component
                     'month' => $j + 1,
                     'active_count' => 0,
                     'completed_count' => 0,
+                    'expired_count' => 0,
                     'month_count' => 0
                 ]);
             }
@@ -85,6 +92,7 @@ class ShopperStats extends Component
                 'year' => $year,
                 'active_count' => 0,
                 'completed_count' => 0,
+                'expired_count' => 0,
                 'year_count' => 0
             ]);
 
@@ -105,7 +113,8 @@ class ShopperStats extends Component
             foreach ($total_lists_monthly[$x] as $value) {
                 if ($value['list_status'] == 1) $this->total_lists_monthly[$x][$value['month'] - 1]['active_count'] = $value['month_count'];
                 elseif ($value['list_status'] == 2) $this->total_lists_monthly[$x][$value['month'] - 1]['completed_count'] = $value['month_count'];
-                $this->total_lists_monthly[$x][$value['month'] - 1]['month_count'] = $this->total_lists_monthly[$x][$value['month'] - 1]['active_count'] + $this->total_lists_monthly[$x][$value['month'] - 1]['completed_count'];
+                elseif ($value['list_status'] == 3) $this->total_lists_monthly[$x][$value['month'] - 1]['expired_count'] = $value['month_count'];
+                $this->total_lists_monthly[$x][$value['month'] - 1]['month_count'] = $this->total_lists_monthly[$x][$value['month'] - 1]['active_count'] + $this->total_lists_monthly[$x][$value['month'] - 1]['completed_count'] + $this->total_lists_monthly[$x][$value['month'] - 1]['expired_count'];
             }
 
             array_push(
@@ -160,7 +169,8 @@ class ShopperStats extends Component
         foreach ($total_lists_yearly as $value) {
             if ($value['list_status'] == 1) $this->total_lists_yearly[array_search($value['year'], $this->an_years)]['active_count'] = $value['year_count'];
             elseif ($value['list_status'] == 2) $this->total_lists_yearly[array_search($value['year'], $this->an_years)]['completed_count'] = $value['year_count'];
-            $this->total_lists_yearly[array_search($value['year'], $this->an_years)]['year_count'] = $this->total_lists_yearly[array_search($value['year'], $this->an_years)]['active_count'] + $this->total_lists_yearly[array_search($value['year'], $this->an_years)]['completed_count'];
+            elseif ($value['list_status'] == 3) $this->total_lists_yearly[array_search($value['year'], $this->an_years)]['expired_count'] = $value['year_count'];
+            $this->total_lists_yearly[array_search($value['year'], $this->an_years)]['year_count'] = $this->total_lists_yearly[array_search($value['year'], $this->an_years)]['active_count'] + $this->total_lists_yearly[array_search($value['year'], $this->an_years)]['completed_count'] + $this->total_lists_yearly[array_search($value['year'], $this->an_years)]['expired_count'];
         }
 
         $this->list_count = count(ShoppingList::where('email', Auth::user()->email)
@@ -175,6 +185,10 @@ class ShopperStats extends Component
 
         $this->completed_list_count = count(ShoppingList::where('email', Auth::user()->email)
             ->where('list_status', 2)
+            ->pluck('list_id')->toArray());
+
+        $this->expired_list_count = count(ShoppingList::where('email', Auth::user()->email)
+            ->where('list_status', 3)
             ->pluck('list_id')->toArray());
     }
 
@@ -217,6 +231,15 @@ class ShopperStats extends Component
         $list_sum = 0;
         foreach ($arr as $item) {
             $list_sum += $item['completed_count'];
+        }
+        return $list_sum;
+    }
+
+    public function expired_list_sum($arr)
+    {
+        $list_sum = 0;
+        foreach ($arr as $item) {
+            $list_sum += $item['expired_count'];
         }
         return $list_sum;
     }

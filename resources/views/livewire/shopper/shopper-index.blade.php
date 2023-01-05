@@ -59,7 +59,24 @@
             </x-slot>
         </x-jet-confirmation-modal>
     </form>
-
+    @if ( !empty($active_b4_7d) )
+    <div class="bg-emerald-600">
+        <div class="max-w-screen-xl mx-auto py-2 px-3 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between flex-wrap">
+                <div class="w-0 flex-1 flex items-center min-w-0">
+                    <span class="flex p-2 rounded-full px-[0.8rem] bg-emerald-500">
+                        <i class="fa-solid fa-info text-white"></i>
+                    </span>
+                    <p class="ml-3 font-medium text-sm text-white truncate">
+                        <span>You have {{ $active_b4_7d }} active {{ $active_b4_7d == 1 ? 'list' : 'lists'}} set to expire within 7 days due to daily price changes. 
+                            Please mark {{ $active_b4_7d == 1 ? 'it' : 'them'}} as completed within the indicated period.
+                        </span>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    @endif
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <!-- Search and Add Button -->
         <div class="flex flex-row-reverse pt-8">
@@ -106,7 +123,17 @@
                     <i class="fa-solid fa-list-check text-[40px]"></i>
                 </div>
             </div>
-            <div class="grid grid-cols-3 col-span-2 mx-auto w-full px-6 py-4 mt-8 bg-white shadow-md h-full sm:rounded-xl">
+            <div class="grid grid-cols-3 mx-auto w-full text-left text-yellow-500 px-6 py-4 mt-8 bg-white shadow-md h-full sm:rounded-xl">
+                <div class="col-span-2 flex flex-col h-full justify-center">
+                    <span class="text-3xl">{{ $expired_list_count['total'] }}</span>
+                    <span class="font-bold text-md">Expired Lists</span>
+                    <span class="text-sm">{{ $expired_list_count['this_month'] }}&nbsp;this month</span>
+                </div>
+                <div class="flex justify-end items-center">
+                    <i class="fa-solid fa-list-check text-[40px]"></i>
+                </div>
+            </div>
+            <div class="grid grid-cols-3 mx-auto w-full px-6 py-4 mt-8 bg-white shadow-md h-full sm:rounded-xl">
                 <div class="col-span-2 flex flex-col h-full justify-center">
                     <span class="text-yellow-500 text-3xl">₱&nbsp;{{ number_format($spendings['total'], 2, '.', ',') }}</span>
                     <span class="text-yellow-500 font-bold text-md">Total Spendings</span>
@@ -179,11 +206,15 @@
                                 <td class="table-item">
                                     @switch ($list->list_status)
                                     @case(1)
-                                    Active
+                                    <span class="text-emerald-500">Active</span>
                                     @break
 
                                     @case(2)
-                                    Completed
+                                    <span class="text-blue-500">Completed</span>
+                                    @break
+
+                                    @case(3)
+                                    <span class="text-yellow-500">Expired</span>
                                     @break
 
                                     @default
@@ -218,6 +249,13 @@
     @if (count($checkboxticked) == 1)
     <div class="fixed rounded-md bottom-0 bg-white p-3 bg-shadow w-full">
         <div class="flex justify-center space-x-3 lg:space-x-8">
+            @if ($this->list_is_expired())
+            <button type="button" class="sc-btn-disabled" disabled><span><i class="fa-solid fa-eye"></i>&nbsp;View</span></button>
+            <button type="button" class="sc-btn-disabled" disabled><span><i class="fa-solid fa-pen-to-square"></i>&nbsp;Edit</span></button>
+            <button type="button" class="sc-btn-disabled" disabled><span><i class="fa-solid fa-check"></i>&nbsp;Mark as completed</span></button>
+            <button type="button" class="sc-btn-disabled" disabled><span><i class="fa-solid fa-file-pdf"></i>&nbsp;Save PDF</span></button>
+            <button type="button" class="sc-btn-disabled" disabled><span><i class="fa-solid fa-trash"></i>&nbsp;Delete</span></button>
+            @else
             <button type="button" class="sc-btn-ghost"><a href="{{ url('shopper/view/' . $checkboxticked[0]) }}"><i class="fa-solid fa-eye"></i>&nbsp;View</a></button>
             @if ($this->list_is_completed())
             <button type="button" class="sc-btn-disabled" disabled><span><i class="fa-solid fa-pen-to-square"></i>&nbsp;Edit</span></button>
@@ -232,11 +270,19 @@
             @else
             <button type="button" class="sc-btn-danger" wire:click="confirm_delete"><span><i class="fa-solid fa-trash"></i>&nbsp;Delete</span></button>
             @endif
+            @endif
         </div>
     </div>
     @elseif (count($checkboxticked) >= 2)
     <div class="fixed rounded-md bottom-0 bg-white p-3 bg-shadow w-full">
         <div class="flex justify-center space-x-3 lg:space-x-8">
+            @if ($this->list_is_expired())
+            <button type="button" class="sc-btn-disabled" disabled><span><i class="fa-solid fa-eye"></i>&nbsp;View</span></button>
+            <button type="button" class="sc-btn-disabled" disabled><span><i class="fa-solid fa-pen-to-square"></i>&nbsp;Edit</span></button>
+            <button type="button" class="sc-btn-disabled" disabled><span><i class="fa-solid fa-check"></i>&nbsp;Mark as completed</span></button>
+            <button type="button" class="sc-btn-disabled" disabled><span><i class="fa-solid fa-file-pdf"></i>&nbsp;Save PDF</span></button>
+            <button type="button" class="sc-btn-disabled" disabled><span><i class="fa-solid fa-trash"></i>&nbsp;Delete</span></button>
+            @else
             <button type="button" class="sc-btn-disabled" disabled><span><i class="fa-solid fa-eye-slash"></i>&nbsp;View</span></button>
             <button type="button" class="sc-btn-disabled" disabled><span><i class="fa-solid fa-pen-to-square"></i>&nbsp;Edit</span></button>
             @if ($this->list_is_completed())
@@ -249,6 +295,7 @@
             <button type="button" class="sc-btn-disabled" disabled><span><i class="fa-solid fa-trash"></i>&nbsp;Delete</span></button>
             @else
             <button type="button" class="sc-btn-danger" wire:click="confirm_delete"><span><i class="fa-solid fa-trash"></i>&nbsp;Delete</span></button>
+            @endif
             @endif
         </div>
     </div>

@@ -53,6 +53,7 @@ Route::middleware([
 
     // Admin
     Route::get('admin', AdminIndex::class)->name('admin');
+    Route::get('admin/download/{report}', [AdminIndex::class, 'generatepdf']);
 
     Route::get('admin/users', AdminUserIndex::class)->name('admin/users');
     Route::get('admin/users/create', AdminUserCreate::class)->name('admin/users/create');
@@ -78,6 +79,7 @@ Route::middleware([
     Route::get('market/export/{market_id}', [MarketIndex::class, 'export']);
     Route::get('market/template/{market_id}', [MarketIndex::class, 'template']);
     Route::post('market/import', [MarketIndex::class, 'import'])->name('market/import');
+    Route::get('market/download/{report}', [MarketStats::class, 'generatepdf']);
 
     // Shopper
     Route::get('shopper', ShopperIndex::class)->name('shopper');

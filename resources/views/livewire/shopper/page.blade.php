@@ -166,6 +166,6 @@
             </tbody>
         </table>
         @endif
-        <footer>Shopculator © 2022 Team W. All rights reserved.</footer>
+        <footer>Shopculator © {{ date("Y") }} Team W. All rights reserved.</footer>
     </div>
 </div>

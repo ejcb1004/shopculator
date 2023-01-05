@@ -3,8 +3,8 @@
         <div class="flex flex-row-reverse mt-8 mb-4">
             <div class="flex min-w-full justify-end">
                 <button class="sc-btn-red-ghost">
-                    <a href="{{ route('shopper/create') }}">
-                        <i class="fa-solid fa-file-pdf"></i>&nbsp;Export Summary
+                    <a href="{{ url('admin/download/all-reports') }}">
+                        <i class="fa-solid fa-file-pdf"></i>&nbsp;Export All
                     </a>
                 </button>
             </div>
@@ -49,7 +49,7 @@
                         @endif
                         @if (!empty($lists['yearly']))
                         <span class="text-sm text-gray-500">
-                            <span class="font-bold">{{ $lists['yearly'][0]['count'] }}</span> this month&nbsp;
+                            <span class="font-bold">{{ $lists['yearly'][0]['count'] }}</span> this year&nbsp;
                             @if (count($lists['yearly']) > 1)
                             @if ($lists['yearly'][0]['count'] > $lists['yearly'][1]['count'])
                             <i class="fa-solid fa-caret-up text-green-600"></i>
@@ -91,7 +91,7 @@
                                     <div class="flex flex-row-reverse my-3 mr-4">
                                         <div class="flex min-w-full justify-end">
                                             <button class="sc-btn-red-ghost">
-                                                <a href="{{ route('shopper/create') }}">
+                                                <a href="{{ url('admin/download/monthly-' . $year) }}">
                                                     <i class="fa-solid fa-file-pdf"></i>&nbsp;Export
                                                 </a>
                                             </button>
@@ -109,6 +109,7 @@
                                                         <th>Month</th>
                                                         <th>Active</th>
                                                         <th>Completed</th>
+                                                        <th>Expired</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody class="text-gray-600">
@@ -123,15 +124,20 @@
                                                         <td class="table-item text-end bg-blue-200">
                                                             {{ $item['completed_count'] }}
                                                         </td>
+                                                        <td class="table-item text-end bg-yellow-200">
+                                                            {{ $item['expired_count'] }}
+                                                        </td>
                                                     </tr>
                                                     @endforeach
                                                     <tr class="table-group">
                                                         <td class="table-item font-bold bg-gray-300">Sum</td>
                                                         <td class="table-item text-end font-bold bg-emerald-300">{{ $this->active_list_sum($total_lists_monthly[array_search($year, $years)]) }}</td>
                                                         <td class="table-item text-end font-bold bg-blue-400">{{ $this->completed_list_sum($total_lists_monthly[array_search($year, $years)]) }}</td>
+                                                        <td class="table-item text-end font-bold bg-yellow-400">{{ $this->expired_list_sum($total_lists_monthly[array_search($year, $years)]) }}</td>
                                                     </tr>
                                                     <tr class="table-group bg-gray-700 text-white">
                                                         <td class="font-bold">Total</td>
+                                                        <td></td>
                                                         <td></td>
                                                         <td class="table-item text-end font-bold">
                                                             {{ $this->monthly_list_sum($total_lists_monthly[array_search($year, $years)]) }}
@@ -150,7 +156,7 @@
                         <div class="flex flex-row-reverse my-3 mr-4">
                             <div class="flex min-w-full justify-end">
                                 <button class="sc-btn-red-ghost">
-                                    <a href="{{ route('shopper/create') }}">
+                                    <a href="{{ url('admin/download/yearly') }}">
                                         <i class="fa-solid fa-file-pdf"></i>&nbsp;Export
                                     </a>
                                 </button>
@@ -168,6 +174,7 @@
                                             <th>Year</th>
                                             <th>Active</th>
                                             <th>Completed</th>
+                                            <th>Expired</th>
                                         </tr>
                                     </thead>
                                     <tbody class="text-gray-600">
@@ -182,15 +189,20 @@
                                             <td class="table-item text-end bg-blue-200">
                                                 {{ $item['completed_count'] }}
                                             </td>
+                                            <td class="table-item text-end bg-yellow-200">
+                                                {{ $item['expired_count'] }}
+                                            </td>
                                         </tr>
                                         @endforeach
                                         <tr class="table-group">
                                             <td class="table-item font-bold bg-gray-300">Sum</td>
                                             <td class="table-item text-end font-bold bg-emerald-300">{{ $this->active_list_sum($total_lists_yearly) }}</td>
                                             <td class="table-item text-end font-bold bg-blue-400">{{ $this->completed_list_sum($total_lists_yearly) }}</td>
+                                            <td class="table-item text-end font-bold bg-yellow-400">{{ $this->expired_list_sum($total_lists_yearly) }}</td>
                                         </tr>
                                         <tr class="table-group bg-gray-700 text-white">
                                             <td class="font-bold">Total</td>
+                                            <td></td>
                                             <td></td>
                                             <td class="table-item text-end font-bold">
                                                 {{ $this->yearly_list_sum($total_lists_yearly) }}
@@ -219,112 +231,18 @@
         }
         // monthly lists
         <?php
-        for ($i = 0; $i < count($years); $i++) {
-            echo "var monthlyLists" . ($i + 1) . " = {
-                type: 'line',
-                data: {
-                    labels: ";
-            $labels = [];
-            foreach ($total_lists_monthly[$i] as $item) {
-                $dateObj = DateTime::createFromFormat('!m', $item['month']);
-                if (!in_array($dateObj->format('F'), $labels, true)){
-                    array_push($labels, $dateObj->format('F'));
-                }
-            }
-            echo json_encode($labels);
-            echo ",
-                    datasets: [{
-                            label: 'Active',
-                            borderColor: '#10b981',
-                            backgroundColor: '#10b981',
-                            data: ";
-            $active_data = array_fill(0, 12, 0);
-            for ($j = 0; $j < count($active_data); $j++) {
-                $active_data[$j] = $total_lists_monthly[$i][$j]['active_count'];
-            }
-            echo json_encode($active_data);
-            echo "},
-                        {
-                            label: 'Completed',
-                            borderColor: '#3b82f6',
-                            backgroundColor: '#3b82f6',
-                            data: ";
-            $completed_data = array_fill(0, 12, 0);
-            for ($j = 0; $j < count($completed_data); $j++) {
-                $completed_data[$j] = $total_lists_monthly[$i][$j]['completed_count'];
-            }
-            echo json_encode($completed_data);
-            echo "}
-                    ]
-                },
-                options: {
-                    scales: {
-                        y: {
-                            suggestedMin: 0,
-                            ticks: {
-                                stepSize: 1
-                            }
-                        }
-                    }
-                }
-            }
-            var ctx = document.getElementById('total-lists-monthly-" . $years[$i] . "').getContext('2d');
-            new Chart(ctx, monthlyLists" . ($i + 1) . ");";
+        foreach ($years as $key => $year) {
+            echo "var monthlyLists" . ($key + 1) . " = ";
+            echo $chart_config['monthly'][$key];
+            echo "; var ctx = document.getElementById('total-lists-monthly-" . $years[$key] . "').getContext('2d');
+            new Chart(ctx, monthlyLists" . ($key + 1) . ");";
         }
-        ?>
 
         // yearly lists
-        <?php
-        echo "var chartdata5 = {
-            type: 'line',
-            data: {
-                labels: ";
-        $labels = [];
-        for ($i = count($total_lists_yearly) - 1; $i > -1; $i--) {
-            if (!in_array($total_lists_yearly[$i]['year'], $labels, true)){
-                array_push($labels, $total_lists_yearly[$i]['year']);
-            }
-        }
-        echo json_encode($labels);
-        echo ",
-                datasets: [
-                    {
-                        label: 'Active',
-                        borderColor: '#10b981',
-                        backgroundColor: '#10b981',
-                        data: ";
-        $active_data = array_fill(0, count($years), 0);
-        for ($j = 0; $j < count($active_data); $j++) {
-            $active_data[$j] = $total_lists_yearly[$j]['active_count'];
-        }
-        echo json_encode(array_reverse($active_data));
-        echo "},
-                    {
-                        label: 'Completed',
-                        borderColor: '#3b82f6',
-                        backgroundColor: '#3b82f6',
-                        data: ";
-        $completed_data = array_fill(0, count($years), 0);
-        for ($j = 0; $j < count($completed_data); $j++) {
-            $completed_data[$j] = $total_lists_yearly[$j]['completed_count'];
-        }
-        echo json_encode(array_reverse($completed_data));
-        echo "}
-                ]
-            },
-            options: {
-                scales: {
-                    y: {
-                        suggestedMin: 0,
-                        ticks: {
-                            stepSize: 1
-                        }
-                    }
-                }
-            }
-        }
-        var ctx = document.getElementById('total-lists-yearly').getContext('2d');
-        new Chart(ctx, chartdata5);"
+        echo "var yearlyLists = ";
+        echo $chart_config['yearly'];
+        echo "; var ctx = document.getElementById('total-lists-yearly').getContext('2d');
+        new Chart(ctx, yearlyLists);"
         ?>
     </script>
 </div>
