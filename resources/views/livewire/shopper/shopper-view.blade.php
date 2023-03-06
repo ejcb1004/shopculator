@@ -43,7 +43,6 @@
                                 <th class="hidden lg:table-cell">Price</th>
                                 <th class="hidden lg:table-cell">Quantity</th>
                                 <th class="rounded-tr-lg lg:rounded-none">Net Price</th>
-                                <th class="hidden lg:table-cell">Updated at</th>
                             </tr>
                         </thead>
 
@@ -72,13 +71,6 @@
                                 </td>
                                 <td class="hidden lg:table-cell table-item">x {{ $detail['quantity'] }}</td>
                                 <td class="hidden lg:table-cell table-item"><i class="fa-solid fa-peso-sign text-black"></i>&nbsp;{{ number_format($detail['current_price'] * $detail['quantity'], 2, '.') }}</td>
-                                <td class="hidden lg:table-cell table-item">
-                                    @php
-                                    $dt = new DateTime($detail['updated_at']);
-                                    $dt->setTimezone(new DateTimeZone('Asia/Manila'));
-                                    echo $dt->format('h:i:s a, M d, Y');
-                                    @endphp
-                                </td>
                             </tr>
                             @empty
                             <tr>
