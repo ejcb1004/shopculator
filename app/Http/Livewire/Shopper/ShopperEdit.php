@@ -256,6 +256,7 @@ class ShopperEdit extends Component
             'is_deleted'    => 0,
             'product_name'  => $this->new_detail['product_name'],
             'price'         => $this->new_detail['price'],
+            'current_price' => $this->new_detail['price'],
         ];
         $this->items++;
     }
@@ -272,6 +273,7 @@ class ShopperEdit extends Component
             'is_deleted'    => 0,
             'product_name'  => $this->newcompare_detail['product_name'],
             'price'         => $this->newcompare_detail['price'],
+            'current_price' => $this->newcompare_detail['price'],
         ];
         $this->compitems++;
     }
@@ -288,6 +290,7 @@ class ShopperEdit extends Component
             'is_deleted'    => 0,
             'product_name'  => $this->new_detail['product_name'],
             'price'         => $this->new_detail['price'],
+            'current_price' => $this->new_detail['price'],
         ];
         $this->items++;
     }
